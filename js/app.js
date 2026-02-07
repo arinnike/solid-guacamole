@@ -87,6 +87,9 @@ body: `
 ]
 
 const container = document.getElementById("cards")
+const search = document.getElementById("search")
+const expandBtn = document.getElementById("expandBtn")
+const collapseBtn = document.getElementById("collapseBtn")
 
 function render() {
 container.innerHTML = ""
@@ -126,6 +129,13 @@ document.documentElement.classList.toggle("dark")
 localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light"
 }
 
-if(localStorage.theme==="dark") document.documentElement.classList.add("dark")
+search.addEventListener("input", filterCards)
+expandBtn.addEventListener("click", expandAll)
+collapseBtn.addEventListener("click", collapseAll)
+
+// Load theme
+if(localStorage.theme==="dark"){
+document.documentElement.classList.add("dark")
+}
 
 render()
