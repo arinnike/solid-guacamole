@@ -1,74 +1,86 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Daggerheart DM Tools</title>
-	<link rel="stylesheet" href="/css/main.css">
-    <script src=/js/main.js></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-	<div id="title">
-		<h1>Daggerheart DM Tools</h1>
-	</div>
-	<div id="top-nav" role="navigation" aria-label="Main navigation">
-        <ul class="menu">
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false" onclick="location.reload()">Home</button>
-            </li>
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false">Library</button>
-                <ul class="submenu" hidden>
-                    <li><a href="placeholder.html">Daggerheart Core</a></li>
-                </ul>
-            </li>
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false">Characters</button>
-                <ul class="submenu" hidden>
-                    <li><a href="placeholder.html">Classes</a></li>
-                    <li><a href="placeholder.html">Ancestries</a></li>
-                    <li><a href="placeholder.html">Communities</a></li>
-                </ul>
-            </li>
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false">Equipment</button>
-                <ul class="submenu" hidden>
-                    <li><a href="placeholder.html">Armor</a></li>
-                    <li><a href="placeholder.html">Weapons</a></li>
-                    <li><a href="placeholder.html">Currency</a></li>
-                    <li><a href="placeholder.html">Items</a></li>
-                </ul>
-            </li>
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false">Locales</button>
-                <ul class="submenu" hidden>
-                    <li><a href="placeholder.html">Age of Umbra</a></li>
-                 </ul>
-            </li>
-            <li class="menu-item">
-                <button class="menu-button" aria-expanded="false" a href="placeholder.html">Campaigns</button>
-            </li>
-      </ul>
+
+<body class="h-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200">
+
+<div class="flex h-screen">
+
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block">
+    <h1 class="text-xl font-bold mb-6">Daggerheart Tools</h1>
+
+    <nav class="space-y-4 text-sm">
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Reference</p>
+        <ul class="space-y-1">
+          <li class="font-semibold">GM Cheat Sheet</li>
+          <li>Characters</li>
+          <li>Equipment</li>
+          <li>Library</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Campaign</p>
+        <ul class="space-y-1">
+          <li>My Campaigns</li>
+          <li>Join Campaign</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Tools</p>
+        <ul class="space-y-1">
+          <li>Dice Roller</li>
+          <li>Fear / Hope</li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="absolute bottom-4">
+      <button onclick="toggleDark()" class="text-sm">🌗 Toggle Theme</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="flex-1 p-6 overflow-y-auto">
+
+    <div class="max-w-5xl mx-auto">
+
+      <h2 class="text-2xl font-bold mb-4">GM Cheat Sheet</h2>
+
+      <input id="search" placeholder="Search rules..."
+        class="w-full p-2 rounded bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 mb-4">
+
+      <div class="flex gap-2 mb-6">
+        <button id="expandBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Expand All</button>
+        <button id="collapseBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Collapse All</button>
+      </div>
+
+      <div id="cards" class="grid md:grid-cols-2 gap-4"></div>
+
     </div>
 
+  </main>
 
+</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script src="app.js"></script>
 
 </body>
 </html>
