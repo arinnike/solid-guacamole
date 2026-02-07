@@ -6,14 +6,8 @@
   <title>Daggerheart GM Tools</title>
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class'
-    }
-  </script>
-  <script src="/js/app.js"></script>
-  <link rel="stylesheet" href="/css/styles.css" />
+  <script src="js/app.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 
 <body class="h-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200">
@@ -52,31 +46,51 @@
         </ul>
       </div>
     </nav>
-
-    <div class="absolute bottom-4">
-      <button onclick="toggleDark()" class="text-sm">🌗 Toggle Theme</button>
-    </div>
   </aside>
 
   <!-- Main -->
-  <main class="flex-1 p-6 overflow-y-auto">
-
-    <div class="max-w-5xl mx-auto">
-
-      <h2 class="text-2xl font-bold mb-4">GM Cheat Sheet</h2>
-
-      <input id="search" placeholder="Search rules..."
+  <main class="flex-1 p-6 overflow-y-auto flex flex-col">
+    <div class="flex-1>
+      <div class="max-w-5xl mx-auto">
+  
+        <h2 class="text-2xl font-bold mb-4">Cheat Sheet</h2>
+  
+        <input id="search" oninput="filterCards()" placeholder="Search rules..."
         class="w-full p-2 rounded bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 mb-4">
-
-      <div class="flex gap-2 mb-6">
-        <button onclick="expandAll()" id="expandBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Expand All</button>
-        <button onclick="collapseAll()" id="collapseBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Collapse All</button>
+  
+        <div class="flex gap-2 mb-6">
+          <button onclick="expandAll()" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Expand All</button>
+          <button onclick="collapseAll()" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Collapse All</button>
+        </div>
+  
+        <div id="cards" class="grid md:grid-cols-2 gap-4"></div>
       </div>
-
-      <div id="cards" class="grid md:grid-cols-2 gap-4"></div>
-
     </div>
+    <footer class="mt-auto border-t border-zinc-200 dark:border-zinc-700 pt-6">
+    <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-start gap-4 text-xs text-zinc-500 dark:text-zinc-400">
 
+      <!-- Daggerheart compatibility image -->
+      <img
+        src="images/compatible_with_DH_logos-11.png"
+        alt="Compatible with Daggerheart"
+        class="w-32 shrink-0"
+      />
+  
+      <!-- License / attribution text -->
+      <p class="leading-relaxed">
+        This product includes materials from the Daggerheart System Reference Document 1.0,
+        © Critical Role, LLC. under the terms of the Darrington Press Community Gaming (DPCGL)
+        License. More information can be found at
+        <a href="https://www.daggerheart.com"
+           target="_blank"
+           class="underline hover:text-zinc-700 dark:hover:text-zinc-200">
+          https://www.daggerheart.com
+        </a>.
+        There are no previous modifications by others.
+      </p>
+      
+    </div>
+  
   </main>
 
 </div>
