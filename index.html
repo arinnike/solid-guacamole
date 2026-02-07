@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <title>Daggerheart GM Tools</title>
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -22,7 +22,7 @@
 
   <!-- Sidebar -->
   <aside class="w-64 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block">
-    <h1 class="text-xl font-bold mb-6">Daggerheart Tools</h1>
+    <h1 class="text-xl font-bold mb-6">Daggerheart GM Tools</h1>
 
     <nav class="space-y-4 text-sm">
       <div>
@@ -40,6 +40,7 @@
         <ul class="space-y-1">
           <li>My Campaigns</li>
           <li>Join Campaign</li>
+          <li>Create Campaign</li>
         </ul>
       </div>
 
@@ -47,7 +48,7 @@
         <p class="uppercase text-zinc-400 mb-2">Tools</p>
         <ul class="space-y-1">
           <li>Dice Roller</li>
-          <li>Fear / Hope</li>
+          <li>Trackers</li>
         </ul>
       </div>
     </nav>
@@ -68,8 +69,8 @@
         class="w-full p-2 rounded bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 mb-4">
 
       <div class="flex gap-2 mb-6">
-        <button id="expandBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Expand All</button>
-        <button id="collapseBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Collapse All</button>
+        <button onclick="expandAll()" id="expandBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Expand All</button>
+        <button onclick="collapseAll()" id="collapseBtn" class="px-3 py-1 bg-zinc-200 dark:bg-zinc-700 rounded">Collapse All</button>
       </div>
 
       <div id="cards" class="grid md:grid-cols-2 gap-4"></div>
@@ -79,8 +80,6 @@
   </main>
 
 </div>
-
-<script src="app.js"></script>
 
 </body>
 </html>
