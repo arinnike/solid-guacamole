@@ -61,7 +61,7 @@ Players can spend Hope to:
 • Certain spells and abilities may also require spending Hope to activate
 
 
-<b>FEAR
+<b>FEAR</b>
 Spent by GMs on moves or features:
 
 • Gained when a player rolls with Fear
