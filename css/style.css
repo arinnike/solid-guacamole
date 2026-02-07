@@ -1,8 +1,8 @@
-footer img {
-  /**max-width: 140px;**/
+/**footer img {
+  max-width: 140px;
   height: 82px;
-  width: 72px
-}
+  width: 72px;
+}**/
 
 .card {
   transition: all 0.2s ease;
