@@ -39,6 +39,18 @@ body: `
 `
 },
 {
+title: "Traits",
+summary: "Character attributes",
+body: `
+• <b>Agility</b>: Sprint, Leap, Manuever
+• <b>Strength</b>: Lift, Smash, Grapple
+• <b>Finesse</b>: Control, Hide, Tinker
+• <b>Instinct</b>: Perceive, Sense, Navigate
+• <b>Presence</b>: Charm, Perform, Deceive
+• <b>Knowledge</b>: Recall, Analyze, Comprehend
+`
+},
+{
 title: "Fear & Hope",
 summary: "Core resource mechanics",
 body: `
@@ -87,6 +99,48 @@ body: `
 `
 },
 {
+  title: "Resistance, Immunity, & Damage",
+  summary: "Modifying damage",
+  body: `
+  <b>DAMAGE TYPES</b>
+  • There are only two damage types: Physical and Magical
+  • Unless otherwise stated, all attacks deal one of these damage types
+  • Mundane and unarmed attacks deal Physical damage
+  • Spells deal Magical damage
+  
+  
+  <b>RESISTANCE</b>
+  • Reduce incoming damage of that type by half
+  • Apply resistance before any other modifiers (ex: armor)
+  • Effects of multiple resistances to same damage type do not stack
+  • Attacks dealing both physical and magical damage only benefit from resistance if they are resistant to both types
+
+
+  <b>IMMUNITY</b>
+  • Ignore incoming damage of that type
+  • Attacks dealing both physical and magical damage only benefit from immunity if they are immune to both types
+
+
+  <b>ARMOR</b>
+  • Players may reduce damage thresholds by spending an armor slot
+  • Direct damage cannot be reduced by armor slots
+
+  
+  <b>EVASION</b>
+  • Attack rolls that are greater than or equal to the targets Evasion they hit and deal damage
+
+
+  <b>MULTI-TARGET ATTACK ROLLS</b>
+  • Some abilities allow players to target multiple advesaries
+  • Make one attack roll and one damage roll, then apply results to each target individually
+
+
+  <b>MULTIPLE DAMAGE SOURCES</b>
+  • Damage dealt simultaneously from multiple sources
+  • Always total before comparing to target's damage thresholds
+  `
+},
+{
 title: "Range & Movement",
 summary: "Positioning and distance",
 body: `
@@ -98,25 +152,25 @@ body: `
 
 
 <b>DEFINED RANGE</b>
-Use the following if your table uses a 1-inch grid battlemap and prefers a more precise ruleset:
+Use these rules if your table uses a 1-inch grid battlemap and prefers a more precise ruleset:
 
-• Melee: 1 square
-• Very Close: 3 squares
-• Close: 6 squares
-• Far: 12 squares
-• Very Far: 13+ squares
-• Out of Range: Off the battlemap
+• <b>Melee</b>: 1 square
+• <b>Very Close</b>: 3 squares
+• <b>Close</b>: 6 squares
+• <b>Far</b>: 12 squares
+• <b>Very Far</b>: 13+ squares
+• <b>Out of Range</b>: Off the battlemap
 
 
 <b>ABSTRACT RANGE</b>
-Use these rules if you are using physical distances for theater of the mind/LARP sessions: :
+Use these rules if your table uses physical distances for theater of the mind/LARP sessions: :
 
-• Melee: Close enough to touch, up to a few feet away
-• Very Close: Close enough to see details, up to about 5-10 feet away
-• Close: Close enough to see prominent details, about 10-30 feet away
-• Far: Close enough to see very little detail, about 30-100 feet away
-• Very Far: Too far to make out details, about 100-300 feet away
-• Out of Range: Anythinbg outside of Very Far range usually can't be targeted
+• <b>Melee</b>: Close enough to touch, up to a few feet away
+• <b>Very Close</b>: Close enough to see details, up to about 5-10 feet away
+• <b>Close</b>: Close enough to see prominent details, about 10-30 feet away
+• <b>Far</b>: Close enough to see very little detail, about 30-100 feet away
+• <b>Very Far</b>: Too far to make out details, about 100-300 feet away
+• <b>Out of Range</b>: Anythinbg outside of Very Far range usually can't be targeted
 
 
 <b>LINE OF SIGHT & COVER </b>
