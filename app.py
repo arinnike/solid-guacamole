@@ -1,10 +1,12 @@
-from flask import Flask
+from flask import Flask, jsonify, render_template, request
 from dotenv import load_dotenv
 import os
 import mysql.connector
 
 #Load .env ONCE, explicitly
 load_dotenv(os.path.expanduser("~/.env"))
+
+app = Flask(__name__)
 
 def get_db():
     return mysql.connector.connect(
@@ -16,4 +18,38 @@ def get_db():
 
 @app.route("/")
 def home():
-    return os.getenv("Placeholder", "Env not loaded")
+    return render_template("weapons.html")
+
+# Supabase test route to verify env loading
+@app.route("/supabase-test")
+def supabase_test():
+    return os.getenv("SUPABASE_URL", "Env not loaded")
+
+# Check flask sanity
+@app.route("/health")
+def health():
+    return "OK"
+
+# Weapons table search
+@app.route("/api/weapons")
+def weapons_api():
+    search = request.args.get("q", "")
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    if search:
+        cursor.execute("""
+            SELECT *
+            FROM weapons
+            WHERE name LIKE %s
+        """, (f"%{search}%",))
+    else:
+        cursor.execute("SELECT * FROM weapons")
+
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
