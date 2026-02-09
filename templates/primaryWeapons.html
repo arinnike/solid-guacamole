@@ -14,14 +14,14 @@
 
 <input id="search" placeholder="Search weapons..." />
 
-<table id="weaponsTable">
+<table id="primaryWeaponsTable">
     <thead></thead>
     <tbody></tbody>
 </table>
 
 <script>
 async function loadWeapons(query="") {
-    const res = await fetch(`/api/weapons?q=${query}`);
+    const res = await fetch(`/api/primaryWeapons?q=${query}`);
     const data = await res.json();
 
     const thead = document.querySelector("thead");
