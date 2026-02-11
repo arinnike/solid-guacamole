@@ -11,6 +11,12 @@
       darkMode: 'class'
     }
   </script>
+  <script>
+    window.SUPABASE_URL = "{{ SUPABASE_URL }}";
+    window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
+  </script>
+  <script src="js/login.js"></script>
+
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 
@@ -48,6 +54,10 @@
           <li>Dice Roller</li>
           <li>Trackers</li>
         </ul>
+      </div>
+      
+      <div>
+        <button id="discordLogin">Login with Discord</button>
       </div>
     </nav>
   </aside>
