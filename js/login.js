@@ -8,3 +8,5 @@ document.getElementById("discordLogin").addEventListener("click", async () => {
     provider: "discord",
   });
 });
+
+console.log("login.js loaded");
