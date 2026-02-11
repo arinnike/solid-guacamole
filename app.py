@@ -6,7 +6,7 @@ import mysql.connector
 #Load .env ONCE, explicitly
 load_dotenv(os.path.expanduser("~/.env"))
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 def get_db():
     return mysql.connector.connect(
@@ -16,23 +16,30 @@ def get_db():
         database=os.getenv("DB_NAME")
     )
 
-@app.route("/")
+@application.route("/")
 def home():
-    return render_template("weapons.html")
+    return render_template("index.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_SERVICE_KEY"),
+    )
+    
+@application.route("/primary_weapons")
+def weapons_page():
+    return render_template("primary_weapons.html")
 
 # Supabase test route to verify env loading
-@app.route("/supabase-test")
+@application.route("/supabase-test")
 def supabase_test():
     return os.getenv("SUPABASE_URL", "Env not loaded")
 
 # Check flask sanity
-@app.route("/health")
+@application.route("/health")
 def health():
     return "OK"
 
-# Weapons table search
-@app.route("/api/weapons")
-def weapons_api():
+# Primary weapons table search
+@application.route("/api/primary_weapons")
+def primaryWeapons_api():
     search = request.args.get("q", "")
 
     conn = get_db()
@@ -41,11 +48,11 @@ def weapons_api():
     if search:
         cursor.execute("""
             SELECT *
-            FROM weapons
+            FROM primary_weapons
             WHERE name LIKE %s
         """, (f"%{search}%",))
     else:
-        cursor.execute("SELECT * FROM weapons")
+        cursor.execute("SELECT * FROM primary_weapons")
 
     rows = cursor.fetchall()
 
