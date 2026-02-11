@@ -1,10 +1,10 @@
-const supabase = window.supabase.createClient(
+const supabaseClient = window.supabase.createClient(
   window.SUPABASE_URL,
   window.SUPABASE_KEY
 );
 
 document.getElementById("discordLogin").addEventListener("click", async () => {
-  await supabase.auth.signInWithOAuth({
+  await supabaseClient.auth.signInWithOAuth({
     provider: "discord",
   });
 });
