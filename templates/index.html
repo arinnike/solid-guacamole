@@ -57,8 +57,42 @@
         </ul>
       </div>
       
-      <div>
-        <button id="discordLogin">Login with Discord</button>
+      <div id="auth-area" class="relative flex gap-3 items-center">
+
+        <!-- Logged out -->
+        <div id="logged-out" class="flex gap-2 hidden">
+
+          <button id="signin-toggle" class="px-3 py-1 bg-indigo-600 text-white rounded">
+            Sign In
+          </button>
+
+          <a href="/signup.html" class="px-3 py-1 border rounded">
+            Sign Up
+          </a>
+
+          <!-- Sign-in dropdown -->
+          <div id="signin-menu" class="hidden absolute right-0 top-10 bg-white border rounded p-4 w-64 shadow">
+
+            <input id="email" class="border w-full mb-2 p-1" placeholder="Email">
+            <input id="password" type="password" class="border w-full mb-2 p-1" placeholder="Password">
+
+            <button id="email-login" class="w-full bg-indigo-600 text-white rounded py-1 mb-2">
+              Sign In
+            </button>
+
+            <button id="discord-login" class="w-full border rounded py-1">
+              Sign in with Discord
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Logged in -->
+        <div id="logged-in" class="hidden flex gap-2">
+          <a href="/settings.html" class="px-3 py-1 border rounded">Settings</a>
+          <button id="logout" class="px-3 py-1 bg-red-600 text-white rounded">Logout</button>
+        </div>
+
       </div>
     </nav>
   </aside>
