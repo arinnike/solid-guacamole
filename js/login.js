@@ -56,4 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     loggedOut.classList.remove("hidden");
   }
 
+//Debugging
+console.log("login.js loaded");
+
 });
