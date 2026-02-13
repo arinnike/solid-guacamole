@@ -1,6 +1,39 @@
-.env
-venv/
+# =====================
+# Python / Flask
+# =====================
 __pycache__/
-*.pyc
+*.py[cod]
+.env
+.env.*
+venv/
+instance/
+*.sqlite3
+
+# =====================
+# Frontend / Node
+# =====================
 node_modules/
-app.py
+npm-debug.log*
+
+# =====================
+# Logs / temp
+# =====================
+*.log
+*.tmp
+*.swp
+FETCH_HEAD
+stderr.log
+
+# =====================
+# Editor / OS
+# =====================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =====================
+# Build artifacts
+# =====================
+dist/
+build/
