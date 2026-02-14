@@ -1,3 +1,5 @@
+console.log("SETTINGS.JS FILE EXECUTED");
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 window.supabase ??= createClient(
