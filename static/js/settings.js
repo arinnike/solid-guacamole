@@ -39,7 +39,7 @@ console.log("saveBtn:", saveBtn);
 
   // Save settings
   saveBtn.addEventListener("click", async () => {
-
+console.log("save clicked");
     status.textContent = "Saving…";
 
     const displayName = displayNameInput.value;
