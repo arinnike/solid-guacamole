@@ -53,24 +53,30 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // --------------------
-// Logout (DO NOT await signOut)
+// HARD LOGOUT
 // --------------------
 document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
-  console.log("logout clicked");
+  console.log("logout clicked — HARD RESET");
 
-  // Fire and forget
+  // Tell Supabase to sign out (fire and forget)
   sb.auth.signOut();
 
-  // Clear local app state
+  // Nuke Supabase tokens manually
+  Object.keys(localStorage)
+    .filter(k => k.includes("sb-"))
+    .forEach(k => localStorage.removeItem(k));
+
+  sessionStorage.clear();
+
   window.currentUserId = null;
 
   loggedIn?.classList.add("hidden");
   loggedOut?.classList.remove("hidden");
 
-  // Hard reload to reset everything
+  // Hard reload
   window.location.href = "/";
 });
 
@@ -99,7 +105,7 @@ document.addEventListener("click", async (e) => {
 });
 
 // --------------------
-// Auth watcher (single truth)
+// Auth watcher
 // --------------------
 sb.auth.onAuthStateChange(async (_event, session) => {
 
@@ -110,23 +116,6 @@ sb.auth.onAuthStateChange(async (_event, session) => {
 
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
-
-    const { data } = await sb
-      .from("user_settings")
-      .select("dark_mode")
-      .eq("user_id", window.currentUserId)
-      .single();
-
-    if (!data) {
-      await sb.from("user_settings").insert({
-        user_id: window.currentUserId,
-        dark_mode: false,
-      });
-    }
-
-    if (data?.dark_mode) {
-      document.documentElement.classList.add("dark");
-    }
 
   } else {
     console.log("AUTH STATE: logged out");
