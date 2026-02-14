@@ -8,7 +8,7 @@ const loggedIn = document.getElementById("logged-in");
 const signinToggle = document.getElementById("signin-toggle");
 const signinMenu = document.getElementById("signin-menu");
 
-// Global user cache (used by settings.js)
+// Global user cache
 window.currentUserId = null;
 
 // --------------------
@@ -53,22 +53,25 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // --------------------
-// Logout
+// Logout (DO NOT await signOut)
 // --------------------
-document.addEventListener("click", async (e) => {
+document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
   console.log("logout clicked");
 
-  await sb.auth.signOut();
+  // Fire and forget
+  sb.auth.signOut();
 
+  // Clear local app state
   window.currentUserId = null;
 
   loggedIn?.classList.add("hidden");
   loggedOut?.classList.remove("hidden");
 
-  window.location.reload();
+  // Hard reload to reset everything
+  window.location.href = "/";
 });
 
 // --------------------
@@ -96,7 +99,7 @@ document.addEventListener("click", async (e) => {
 });
 
 // --------------------
-// Auth watcher (single source of truth)
+// Auth watcher (single truth)
 // --------------------
 sb.auth.onAuthStateChange(async (_event, session) => {
 
