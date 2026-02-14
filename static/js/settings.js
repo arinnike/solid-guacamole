@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
+    console.log("SAVE BUTTON PRESSED");
+    
     if (!currentUserId) {
       status.textContent = "Not logged in.";
       return;
