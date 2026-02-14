@@ -19,13 +19,72 @@ document.addEventListener("DOMContentLoaded", async () => {
   const status = document.getElementById("status");
 
   console.log("saveBtn:", saveBtn);
-  saveBtn.style.outline = "3px solid red";
 
-    saveBtn.addEventListener("mousedown", () => {
-    console.log("MOUSEDOWN detected");
+  if (!saveBtn) {
+    console.error("Save button not found");
+    return;
+  }
+
+  // ==========================
+  // SAVE HANDLER (attach FIRST)
+  // ==========================
+  saveBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    console.log("save clicked");
+
+    status.textContent = "Saving…";
+
+    const displayName = displayNameInput.value;
+    const darkMode = darkModeCheckbox.checked;
+
+    const { data: sessionData } = await supabase.auth.getSession();
+
+    if (!sessionData.session) {
+      status.textContent = "Not logged in.";
+      return;
+    }
+
+    const userId = sessionData.session.user.id;
+
+    console.log("payload:", {
+      user_id: userId,
+      display_name: displayName,
+      dark_mode: darkMode,
     });
 
-  // ---------- AUTH + LOAD ----------
+    const result = await supabase
+      .from("user_settings")
+      .upsert(
+        {
+          user_id: userId,
+          display_name: displayName,
+          dark_mode: darkMode,
+        },
+        { onConflict: "user_id" }
+      )
+      .select()
+      .single();
+
+    console.log("UPSERT RESULT:", result);
+
+    if (result.error) {
+      status.textContent = result.error.message;
+      console.error(result.error);
+      return;
+    }
+
+    status.textContent = "Saved!";
+
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  });
+
+  // ==========================
+  // AUTH + LOAD SETTINGS
+  // ==========================
   const { data } = await supabase.auth.getSession();
 
   if (!data.session) {
@@ -45,47 +104,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayNameInput.value = settings.display_name || "";
     darkModeCheckbox.checked = !!settings.dark_mode;
   }
-
-  // ---------- SAVE ----------
-  saveBtn.addEventListener("click", async () => {
-    e.preventDefault();
-    console.log("save clicked");
-
-    status.textContent = "Saving…";
-
-    const displayName = displayNameInput.value;
-    const darkMode = darkModeCheckbox.checked;
-
-    console.log("payload:", {
-      user_id: userId,
-      display_name: displayName,
-      dark_mode: darkMode,
-    });
-
-    const result = await supabase
-      .from("user_settings")
-      .upsert({
-        user_id: userId,
-        display_name: displayName,
-        dark_mode: darkMode,
-      })
-      .select();
-
-    console.log("UPSERT RESULT:", result);
-
-    if (result.error) {
-      status.textContent = result.error.message;
-      console.error(result.error);
-      return;
-    }
-
-    status.textContent = "Saved!";
-
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  });
 
 });
