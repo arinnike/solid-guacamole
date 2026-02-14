@@ -1,3 +1,7 @@
+console.log("settings.js loaded");
+
+console.log("saveBtn:", document.getElementById("save-settings"));
+
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 window.supabase ??= createClient(
