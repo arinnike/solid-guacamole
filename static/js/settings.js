@@ -1,13 +1,13 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
+window.supabase ??= createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_KEY
+);
+
+const supabase = window.supabase;
+
 document.addEventListener("DOMContentLoaded", async () => {
-
-  window.supabase ??= createClient(
-    window.SUPABASE_URL,
-    window.SUPABASE_KEY
-  );
-
-  const supabase = window.supabase;
 
   console.log("settings.js loaded");
 
@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   console.log("saveBtn:", saveBtn);
 
-  // Ensure logged in + load settings
+  // Auth check
   const { data } = await supabase.auth.getSession();
 
   if (!data.session) {
@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const userId = data.session.user.id;
 
+  // Load existing settings
   const { data: settings } = await supabase
     .from("user_settings")
     .select("display_name, dark_mode")
@@ -39,9 +40,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     darkModeCheckbox.checked = !!settings.dark_mode;
   }
 
-  // Save settings
+  // SAVE
   saveBtn.addEventListener("click", async () => {
-
     console.log("save clicked");
 
     status.textContent = "Saving…";
@@ -58,13 +58,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
 
     if (error) {
-      console.error(error);
       status.textContent = error.message;
       return;
     }
 
-    if (darkMode) document.documentElement.classList.add("dark");
-    else document.documentElement.classList.remove("dark");
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
 
     status.textContent = "Saved!";
   });
