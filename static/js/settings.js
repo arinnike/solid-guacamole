@@ -19,7 +19,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ==========================
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
+    
     console.log("save clicked");
+    console.log("sb exists:", !!sb);
+    console.log("sb.auth exists:", !!sb?.auth);
+    console.log("ABOUT TO CALL getUser");
+
+    const userResult = await sb.auth.getUser();
+
+    console.log("GET USER RESULT:", userResult);
+
+    const userData = userResult.data;
+    const userError = userResult.error;
 
     status.textContent = "Saving…";
 
