@@ -1,10 +1,3 @@
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-window.supabase ??= createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_KEY
-);
-
 const supabase = window.supabase;
 
 console.log("login.js loaded");

@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const darkMode = darkModeCheckbox.checked;
 
     const { data: sessionData, error: sessionError } =
-      await supabase.auth.getSession();
+      await supabase.auth.getUser();
       console.log("SESSION RESULT:", sessionData, sessionError);
 
     if (sessionError || !sessionData.session) {
