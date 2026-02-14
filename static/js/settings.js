@@ -39,31 +39,53 @@ const status = document.getElementById("status");
 saveBtn.addEventListener("click", async () => {
   status.textContent = "Saving…";
 
-  const { data } = await supabase.auth.getSession();
-  const userId = data.session.user.id;
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
 
-  const displayName = displayNameInput.value;
-  const darkMode = darkModeCheckbox.checked;
+    console.log("SESSION:", sessionData, sessionError);
 
-  const { error } = await supabase
-    .from("user_settings")
-    .upsert({
+    if (!sessionData?.session) {
+      status.textContent = "No session";
+      return;
+    }
+
+    const userId = sessionData.session.user.id;
+    const displayName = displayNameInput.value;
+    const darkMode = darkModeCheckbox.checked;
+
+    console.log("UPSERT PAYLOAD:", {
+      user_id: userId,
+      display_name: displayName,
+      dark_mode: darkMode,
+    });
+
+    const result = await supabase
+      .from("user_settings")
+      .upsert({
         user_id: userId,
         display_name: displayName,
         dark_mode: darkMode,
-    });
+      })
+      .select();
 
-  if (error) {
-    status.textContent = error.message;
-    return;
+    console.log("UPSERT RESULT:", result);
+
+    if (result.error) {
+      status.textContent = result.error.message;
+      console.error(result.error);
+      return;
+    }
+
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
+    status.textContent = "Saved!";
+  } catch (err) {
+    console.error("SETTINGS SAVE CRASH:", err);
+    status.textContent = "Crash — see console";
   }
-
-  // Apply dark mode immediately
-  if (darkMode) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
-
-  status.textContent = "Saved!";
 });
