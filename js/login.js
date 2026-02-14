@@ -105,3 +105,7 @@ document.addEventListener("click", async (e) => {
 });
 
 console.log("login.js loaded");
+
+document.addEventListener("click", () => {
+  console.log("GLOBAL CLICK DETECTED");
+});
