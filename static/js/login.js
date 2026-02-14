@@ -2,66 +2,81 @@ const supabase = window.supabase;
 
 console.log("login.js loaded");
 
+// Elements
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
 const signinToggle = document.getElementById("signin-toggle");
 const signinMenu = document.getElementById("signin-menu");
 
-// Toggle dropdown
+// --------------------
+// Dropdown toggle
+// --------------------
 signinToggle?.addEventListener("click", () => {
-  signinMenu.classList.toggle("hidden");
+  signinMenu?.classList.toggle("hidden");
 });
 
+// --------------------
 // Email login
+// --------------------
 document.getElementById("email-login")?.addEventListener("click", async () => {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  const email = document.getElementById("email")?.value;
+  const password = document.getElementById("password")?.value;
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) alert(error.message);
+  if (!email || !password) {
+    alert("Please enter email and password.");
+    return;
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  signinMenu?.classList.add("hidden");
 });
 
+// --------------------
 // Discord login
+// --------------------
 document.getElementById("discord-login")?.addEventListener("click", async () => {
   await supabase.auth.signInWithOAuth({
     provider: "discord",
     options: {
-      redirectTo: "https://dhgmtools.com"
-    }
+      redirectTo: "https://dhgmtools.com",
+    },
   });
 });
 
-// Logout
-document.addEventListener("click", (e) => {
+// --------------------
+// Logout (proper Supabase logout)
+// --------------------
+document.addEventListener("click", async (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
-  console.log("logout clicked — forcing client logout");
+  console.log("logout clicked");
 
-  // Kill Supabase tokens manually
-  Object.keys(localStorage)
-    .filter(k => k.includes("sb-"))
-    .forEach(k => localStorage.removeItem(k));
+  await supabase.auth.signOut();
 
-  sessionStorage.clear();
-
-  // Force UI
-  loggedIn.classList.add("hidden");
-  loggedOut.classList.remove("hidden");
-
-  // Hard reload to stop rehydration
   window.location.replace("/");
 });
 
-// Forgot password (delegated)
+// --------------------
+// Forgot password
+// --------------------
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#forgot-password");
   if (!btn) return;
 
   e.preventDefault();
-  console.log("forgot password clicked");
 
   const email = document.getElementById("email")?.value;
+
   if (!email) {
     alert("Please enter your email first.");
     return;
@@ -72,14 +87,16 @@ document.addEventListener("click", async (e) => {
   });
 
   if (error) alert(error.message);
-  else alert("Password reset email sent! Check your inbox.");
+  else alert("Password reset email sent!");
 });
 
+// --------------------
 // Auth watcher
+// --------------------
 supabase.auth.onAuthStateChange(async (_event, session) => {
   if (session) {
-    loggedOut.classList.add("hidden");
-    loggedIn.classList.remove("hidden");
+    loggedOut?.classList.add("hidden");
+    loggedIn?.classList.remove("hidden");
 
     const userId = session.user.id;
 
@@ -92,7 +109,7 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
     if (!data) {
       await supabase.from("user_settings").insert({
         user_id: userId,
-        dark_mode: false
+        dark_mode: false,
       });
     }
 
@@ -101,20 +118,22 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
     }
 
   } else {
-    loggedIn.classList.add("hidden");
-    loggedOut.classList.remove("hidden");
+    loggedIn?.classList.add("hidden");
+    loggedOut?.classList.remove("hidden");
   }
 });
 
-// Run session check WITHOUT blocking module
+// --------------------
+// Initial session check
+// --------------------
 (async () => {
   const { data } = await supabase.auth.getSession();
 
   if (data.session) {
-    loggedOut.classList.add("hidden");
-    loggedIn.classList.remove("hidden");
+    loggedOut?.classList.add("hidden");
+    loggedIn?.classList.remove("hidden");
   } else {
-    loggedIn.classList.add("hidden");
-    loggedOut.classList.remove("hidden");
+    loggedIn?.classList.add("hidden");
+    loggedOut?.classList.remove("hidden");
   }
 })();
