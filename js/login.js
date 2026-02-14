@@ -38,16 +38,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     await supabase.auth.signOut();
   });
 
-  supabase.auth.onAuthStateChange((_event, session) => {
+  // Auth state watcher
+  supabase.auth.onAuthStateChange(async (_event, session) => {
     if (session) {
       loggedOut.classList.add("hidden");
       loggedIn.classList.remove("hidden");
+
+      const userId = session.user.id;
+
+      // Ensure user_settings exists
+      const { data } = await supabase
+        .from("user_settings")
+        .select("dark_mode")
+        .eq("user_id", userId)
+        .single();
+
+      if (!data) {
+        await supabase.from("user_settings").insert({
+          user_id: userId,
+          dark_mode: false
+        });
+      }
+
+      if (data?.dark_mode) {
+        document.documentElement.classList.add("dark");
+      }
+
     } else {
       loggedIn.classList.add("hidden");
       loggedOut.classList.remove("hidden");
     }
   });
 
+  // Initial session check
   const { data: { session } } = await supabase.auth.getSession();
 
   if (session) {
@@ -56,12 +79,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     loggedOut.classList.remove("hidden");
   }
 
-//Debugging
-console.log("login.js loaded");
+  // Forgot password (delegated)
+  document.addEventListener("click", async (e) => {
+    if (e.target.id !== "forgot-password") return;
 
-//document.getElementById("forgot-password")?.addEventListener("click", (e) => {
-  //e.preventDefault();
-  //console.log("forgot password clicked");
-//});
+    e.preventDefault();
+
+    signinMenu?.classList.add("hidden");
+
+    const email = document.getElementById("email")?.value;
+
+    if (!email) {
+      alert("Please enter your email first.");
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://dhgmtools.com/reset-password",
+    });
+
+    if (error) {
+      alert(error.message);
+    } else {
+      alert("Password reset email sent! Check your inbox.");
+    }
+  });
+
+  console.log("login.js loaded");
 
 });
