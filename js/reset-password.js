@@ -27,3 +27,5 @@ document.getElementById("reset-btn")?.addEventListener("click", async () => {
     }, 1500);
   }
 });
+
+console.log("reset-password.js loaded");
