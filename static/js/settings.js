@@ -39,53 +39,31 @@ const status = document.getElementById("status");
 saveBtn.addEventListener("click", async () => {
   status.textContent = "Saving…";
 
-  try {
-    const { data: sessionData, error: sessionError } =
-      await supabase.auth.getSession();
+  const { data: sessionData } = await supabase.auth.getSession();
 
-    console.log("SESSION:", sessionData, sessionError);
+  console.log("session:", sessionData);
 
-    if (!sessionData?.session) {
-      status.textContent = "No session";
-      return;
-    }
+  const userId = sessionData.session.user.id;
 
-    const userId = sessionData.session.user.id;
-    const displayName = displayNameInput.value;
-    const darkMode = darkModeCheckbox.checked;
+  const displayName = displayNameInput.value;
+  const darkMode = darkModeCheckbox.checked;
 
-    console.log("UPSERT PAYLOAD:", {
+  const { data, error } = await supabase
+    .from("user_settings")
+    .upsert({
       user_id: userId,
       display_name: displayName,
       dark_mode: darkMode,
-    });
+    })
+    .select();
 
-    const result = await supabase
-      .from("user_settings")
-      .upsert({
-        user_id: userId,
-        display_name: displayName,
-        dark_mode: darkMode,
-      })
-      .select();
+  console.log("upsert result:", data);
+  console.log("upsert error:", error);
 
-    console.log("UPSERT RESULT:", result);
-
-    if (result.error) {
-      status.textContent = result.error.message;
-      console.error(result.error);
-      return;
-    }
-
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-
-    status.textContent = "Saved!";
-  } catch (err) {
-    console.error("SETTINGS SAVE CRASH:", err);
-    status.textContent = "Crash — see console";
+  if (error) {
+    status.textContent = error.message;
+    return;
   }
+
+  status.textContent = "Saved!";
 });
