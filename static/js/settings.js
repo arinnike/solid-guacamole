@@ -1,7 +1,3 @@
-console.log("settings.js loaded");
-
-console.log("saveBtn:", document.getElementById("save-settings"));
-
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 window.supabase ??= createClient(
@@ -11,17 +7,14 @@ window.supabase ??= createClient(
 
 const supabase = window.supabase;
 
-const displayNameInput = document.getElementById("display-name");
-const darkModeCheckbox = document.getElementById("dark-mode");
-const saveBtn = document.getElementById("save-settings");
-const status = document.getElementById("status");
+document.addEventListener("DOMContentLoaded", async () => {
 
-// Ensure logged in + load settings
-(async () => {
-    console.log("before getSession");
+  const displayNameInput = document.getElementById("display-name");
+  const darkModeCheckbox = document.getElementById("dark-mode");
+  const saveBtn = document.getElementById("save-settings");
+  const status = document.getElementById("status");
 
   const { data } = await supabase.auth.getSession();
-    console.log("after getSession", sessionResponse);
 
   if (!data.session) {
     window.location.href = "/";
@@ -30,6 +23,7 @@ const status = document.getElementById("status");
 
   const userId = data.session.user.id;
 
+  // Load settings
   const { data: settings } = await supabase
     .from("user_settings")
     .select("display_name, dark_mode")
@@ -40,37 +34,35 @@ const status = document.getElementById("status");
     displayNameInput.value = settings.display_name || "";
     darkModeCheckbox.checked = !!settings.dark_mode;
   }
-})();
 
-// Save settings
-saveBtn.addEventListener("click", async () => {
-  status.textContent = "Saving…";
+  // Save settings
+  saveBtn.addEventListener("click", async () => {
 
-  const { data: sessionData } = await supabase.auth.getSession();
+    status.textContent = "Saving…";
 
-  console.log("session:", sessionData);
+    const displayName = displayNameInput.value;
+    const darkMode = darkModeCheckbox.checked;
 
-  const userId = sessionData.session.user.id;
+    const { error } = await supabase
+      .from("user_settings")
+      .upsert({
+        user_id: userId,
+        display_name: displayName,
+        dark_mode: darkMode,
+      });
 
-  const displayName = displayNameInput.value;
-  const darkMode = darkModeCheckbox.checked;
+    if (error) {
+      status.textContent = error.message;
+      return;
+    }
 
-  const { data, error } = await supabase
-    .from("user_settings")
-    .upsert({
-      user_id: userId,
-      display_name: displayName,
-      dark_mode: darkMode,
-    })
-    .select();
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
 
-  console.log("upsert result:", data);
-  console.log("upsert error:", error);
+    status.textContent = "Saved!";
+  });
 
-  if (error) {
-    status.textContent = error.message;
-    return;
-  }
-
-  status.textContent = "Saved!";
 });
