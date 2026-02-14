@@ -4,58 +4,34 @@
 
 {% block content %}
 
-<h2 class="text-2xl font-bold mb-4">Weapons</h2>
+<div class="space-y-6">
 
-<!-- Local styles (temporary – can move to styles.css later) -->
-<style>
-  table { border-collapse: collapse; width: 100%; }
-  th, td { border: 1px solid #ccc; padding: 6px; }
-  th { background: #eee; }
-</style>
+  <div>
+    <h2 class="text-2xl font-bold">Primary Weapons</h2>
+    <p class="text-sm text-zinc-600 dark:text-zinc-400">
+      Browse and search all primary weapons.
+    </p>
+  </div>
 
-<input
-  id="search"
-  placeholder="Search weapons..."
-  class="border p-2 mb-4 w-full rounded dark:bg-zinc-700"
-/>
+  <input
+    id="search"
+    placeholder="Search weapons..."
+    class="border p-2 w-full rounded dark:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+  />
 
-<table id="primaryWeaponsTable">
-  <thead></thead>
-  <tbody></tbody>
-</table>
+  <div class="overflow-x-auto bg-white dark:bg-zinc-800 rounded-lg shadow">
+    <table id="primaryWeaponsTable" class="min-w-full text-sm">
+      <thead class="bg-zinc-100 dark:bg-zinc-700"></thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
-<script>
-async function loadWeapons(query="") {
-  const res = await fetch(`/api/primary_weapons?q=${query}`);
-  const data = await res.json();
+  <p id="table-status" class="text-sm text-center text-zinc-500"></p>
 
-  const thead = document.querySelector("#primaryWeaponsTable thead");
-  const tbody = document.querySelector("#primaryWeaponsTable tbody");
+</div>
 
-  tbody.innerHTML = "";
-  thead.innerHTML = "";
+{% endblock %}
 
-  if (data.length === 0) return;
-
-  const headers = Object.keys(data[0]);
-
-  thead.innerHTML =
-    "<tr>" + headers.map(h => `<th>${h}</th>`).join("") + "</tr>";
-
-  data.forEach(row => {
-    const tr = document.createElement("tr");
-    headers.forEach(h => {
-      tr.innerHTML += `<td>${row[h]}</td>`;
-    });
-    tbody.appendChild(tr);
-  });
-}
-
-document.getElementById("search").addEventListener("input", e => {
-  loadWeapons(e.target.value);
-});
-
-loadWeapons();
-</script>
-
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/primaryWeapons.js') }}"></script>
 {% endblock %}

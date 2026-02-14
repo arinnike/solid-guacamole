@@ -1,46 +1,41 @@
-console.log("SETTINGS.JS FILE EXECUTED");
+console.log("settings.js loaded");
 
-const supabase = window.supabase;
+const sb = window.supabase;
 
 document.addEventListener("DOMContentLoaded", async () => {
-
-  console.log("settings.js loaded");
 
   const displayNameInput = document.getElementById("display-name");
   const darkModeCheckbox = document.getElementById("dark-mode");
   const saveBtn = document.getElementById("save-settings");
   const status = document.getElementById("status");
 
-  console.log("saveBtn:", saveBtn);
+  if (!saveBtn) {
+    console.error("Save button not found");
+    return;
+  }
 
-  if (!saveBtn) return;
-
-  // ==================
-  // SAVE HANDLER FIRST
-  // ==================
+  // ==========================
+  // SAVE HANDLER (attach FIRST)
+  // ==========================
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("save clicked");
-    console.log("window.supabase:", window.supabase);
-    console.log("supabase.auth:", supabase.auth);
-    console.log("ABOUT TO CALL getSession");
 
     status.textContent = "Saving…";
 
     const displayName = displayNameInput.value;
     const darkMode = darkModeCheckbox.checked;
 
-    const { data: sessionData, error: sessionError } =
-      await supabase.auth.getUser();
-      console.log("SESSION RESULT:", sessionData, sessionError);
+    // Get current user
+    const { data: userData, error: userError } = await sb.auth.getUser();
 
-    if (sessionError || !sessionData.session) {
+    if (userError || !userData.user) {
       status.textContent = "Not logged in.";
-      console.error(sessionError);
+      console.error(userError);
       return;
     }
 
-    const userId = sessionData.session.user.id;
+    const userId = userData.user.id;
 
     console.log("payload:", {
       user_id: userId,
@@ -48,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       dark_mode: darkMode,
     });
 
-    const result = await supabase
+    const result = await sb
       .from("user_settings")
       .upsert(
         {
@@ -71,22 +66,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     status.textContent = "Saved!";
 
+    // Apply dark mode immediately
     document.documentElement.classList.toggle("dark", darkMode);
   });
 
-  // ============
+  // ==========================
   // LOAD SETTINGS
-  // ============
-  const { data } = await supabase.auth.getSession();
+  // ==========================
+  const { data: userData } = await sb.auth.getUser();
 
-  if (!data.session) {
+  if (!userData.user) {
     window.location.href = "/";
     return;
   }
 
-  const userId = data.session.user.id;
+  const userId = userData.user.id;
 
-  const { data: settings } = await supabase
+  const { data: settings } = await sb
     .from("user_settings")
     .select("display_name, dark_mode")
     .eq("user_id", userId)

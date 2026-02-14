@@ -1,4 +1,4 @@
-const supabase = window.supabase;
+const sb = window.supabase;
 
 console.log("login.js loaded");
 
@@ -27,7 +27,7 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
     return;
   }
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error } = await sb.auth.signInWithPassword({
     email,
     password,
   });
@@ -44,7 +44,7 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
 // Discord login
 // --------------------
 document.getElementById("discord-login")?.addEventListener("click", async () => {
-  await supabase.auth.signInWithOAuth({
+  await sb.auth.signInWithOAuth({
     provider: "discord",
     options: {
       redirectTo: "https://dhgmtools.com",
@@ -53,7 +53,7 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // --------------------
-// Logout (proper Supabase logout)
+// Logout
 // --------------------
 document.addEventListener("click", async (e) => {
   const logoutBtn = e.target.closest("#logout");
@@ -61,8 +61,7 @@ document.addEventListener("click", async (e) => {
 
   console.log("logout clicked");
 
-  await supabase.auth.signOut();
-
+  await sb.auth.signOut();
   window.location.replace("/");
 });
 
@@ -82,7 +81,7 @@ document.addEventListener("click", async (e) => {
     return;
   }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
     redirectTo: "https://dhgmtools.com/reset-password",
   });
 
@@ -93,21 +92,21 @@ document.addEventListener("click", async (e) => {
 // --------------------
 // Auth watcher
 // --------------------
-supabase.auth.onAuthStateChange(async (_event, session) => {
+sb.auth.onAuthStateChange(async (_event, session) => {
   if (session) {
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
 
     const userId = session.user.id;
 
-    const { data } = await supabase
+    const { data } = await sb
       .from("user_settings")
       .select("dark_mode")
       .eq("user_id", userId)
       .single();
 
     if (!data) {
-      await supabase.from("user_settings").insert({
+      await sb.from("user_settings").insert({
         user_id: userId,
         dark_mode: false,
       });
@@ -127,7 +126,7 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
 // Initial session check
 // --------------------
 (async () => {
-  const { data } = await supabase.auth.getSession();
+  const { data } = await sb.auth.getSession();
 
   if (data.session) {
     loggedOut?.classList.add("hidden");
