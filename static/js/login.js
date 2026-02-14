@@ -8,6 +8,9 @@ const loggedIn = document.getElementById("logged-in");
 const signinToggle = document.getElementById("signin-toggle");
 const signinMenu = document.getElementById("signin-menu");
 
+// Global user cache (used by settings.js)
+window.currentUserId = null;
+
 // --------------------
 // Dropdown toggle
 // --------------------
@@ -27,10 +30,7 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
     return;
   }
 
-  const { error } = await sb.auth.signInWithPassword({
-    email,
-    password,
-  });
+  const { error } = await sb.auth.signInWithPassword({ email, password });
 
   if (error) {
     alert(error.message);
@@ -62,7 +62,13 @@ document.addEventListener("click", async (e) => {
   console.log("logout clicked");
 
   await sb.auth.signOut();
-  window.location.replace("/");
+
+  window.currentUserId = null;
+
+  loggedIn?.classList.add("hidden");
+  loggedOut?.classList.remove("hidden");
+
+  window.location.reload();
 });
 
 // --------------------
@@ -90,24 +96,27 @@ document.addEventListener("click", async (e) => {
 });
 
 // --------------------
-// Auth watcher
+// Auth watcher (single source of truth)
 // --------------------
 sb.auth.onAuthStateChange(async (_event, session) => {
+
   if (session) {
+    console.log("AUTH STATE: logged in");
+
+    window.currentUserId = session.user.id;
+
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
-
-    const userId = session.user.id;
 
     const { data } = await sb
       .from("user_settings")
       .select("dark_mode")
-      .eq("user_id", userId)
+      .eq("user_id", window.currentUserId)
       .single();
 
     if (!data) {
       await sb.from("user_settings").insert({
-        user_id: userId,
+        user_id: window.currentUserId,
         dark_mode: false,
       });
     }
@@ -117,18 +126,23 @@ sb.auth.onAuthStateChange(async (_event, session) => {
     }
 
   } else {
+    console.log("AUTH STATE: logged out");
+
+    window.currentUserId = null;
+
     loggedIn?.classList.add("hidden");
     loggedOut?.classList.remove("hidden");
   }
 });
 
 // --------------------
-// Initial session check
+// Initial hydration
 // --------------------
 (async () => {
-  const { data } = await sb.auth.getSession();
+  const { data } = await sb.auth.getUser();
 
-  if (data.session) {
+  if (data.user) {
+    window.currentUserId = data.user.id;
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
   } else {
