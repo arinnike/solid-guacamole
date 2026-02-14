@@ -10,21 +10,23 @@
     tailwind.config = { darkMode: 'class' }
   </script>
 
+  <!-- Supabase env -->
   <script>
     window.SUPABASE_URL = "{{ SUPABASE_URL }}";
     window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
   </script>
 
-  <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+  <!-- Supabase UMD (synchronous, global) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  window.supabase = createClient(
-    window.SUPABASE_URL,
-    window.SUPABASE_KEY
-  );
+  <script>
+    window.supabase = supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_KEY
+    );
 
-  console.log("GLOBAL SUPABASE INITIALIZED");
-</script>
+    console.log("GLOBAL SUPABASE INITIALIZED");
+  </script>
 
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
@@ -37,8 +39,8 @@
 
   <main class="flex-1 p-6 overflow-y-auto flex flex-col">
     <div class="max-w-5xl mx-auto w-full">
-        {% block content %}
-        {% endblock %}
+      {% block content %}
+      {% endblock %}
     </div>
 
     {% include "footer.html" %}
@@ -47,7 +49,7 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-<script type="module" src="{{ url_for('static', filename='js/login.js') }}"></script>
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
 
 {% block scripts %}{% endblock %}
 
