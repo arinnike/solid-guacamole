@@ -79,11 +79,12 @@ if (session) {
 
 // Forgot password
 document.addEventListener("click", async (e) => {
-  if (e.target.id !== "forgot-password") return;
+  const btn = e.target.closest("#forgot-password");
+  if (!btn) return;
 
   e.preventDefault();
 
-  signinMenu?.classList.add("hidden");
+  console.log("forgot password clicked");
 
   const email = document.getElementById("email")?.value;
 
