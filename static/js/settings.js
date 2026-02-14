@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("save clicked");
+    console.log("window.supabase:", window.supabase);
+    console.log("supabase.auth:", supabase.auth);
+    console.log("ABOUT TO CALL getSession");
 
     status.textContent = "Saving…";
 
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const { data: sessionData, error: sessionError } =
       await supabase.auth.getSession();
+      console.log("SESSION RESULT:", sessionData, sessionError);
 
     if (sessionError || !sessionData.session) {
       status.textContent = "Not logged in.";
