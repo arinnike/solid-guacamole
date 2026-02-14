@@ -1,5 +1,3 @@
-console.count("SETTINGS MODULE LOAD");
-
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
 window.supabase ??= createClient(
