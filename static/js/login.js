@@ -47,6 +47,10 @@ document.addEventListener("click", async (e) => {
 
   await supabase.auth.signOut();
   alert("Logged out");
+
+  // force UI immediately
+  loggedIn.classList.add("hidden");
+  loggedOut.classList.remove("hidden");
 });
 
 // Forgot password (delegated)
@@ -106,6 +110,11 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
 (async () => {
   const { data } = await supabase.auth.getSession();
 
-  if (data.session) loggedIn.classList.remove("hidden");
-  else loggedOut.classList.remove("hidden");
+  if (data.session) {
+    loggedOut.classList.add("hidden");
+    loggedIn.classList.remove("hidden");
+  } else {
+    loggedIn.classList.add("hidden");
+    loggedOut.classList.remove("hidden");
+  }
 })();
