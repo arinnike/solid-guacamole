@@ -59,9 +59,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 //Debugging
 console.log("login.js loaded");
 
-document.getElementById("forgot-password")?.addEventListener("click", (e) => {
-  e.preventDefault();
-  console.log("forgot password clicked");
-});
+//document.getElementById("forgot-password")?.addEventListener("click", (e) => {
+  //e.preventDefault();
+  //console.log("forgot password clicked");
+//});
 
 });

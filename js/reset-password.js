@@ -5,26 +5,28 @@ const supabase = createClient(
   window.SUPABASE_KEY
 );
 
-document.getElementById("reset-btn")?.addEventListener("click", async () => {
-  const password = document.getElementById("new-password").value;
-  const status = document.getElementById("status");
+document.addEventListener("click", async (e) => {
+  if (e.target.id !== "forgot-password") return;
 
-  if (!password || password.length < 6) {
-    status.textContent = "Password must be at least 6 characters.";
+  e.preventDefault();
+
+  console.log("forgot password clicked");
+
+  const email = document.getElementById("email")?.value;
+
+  if (!email) {
+    alert("Please enter your email first.");
     return;
   }
 
-  const { error } = await supabase.auth.updateUser({
-    password: password,
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://dhgmtools.com/reset-password",
   });
 
   if (error) {
-    status.textContent = error.message;
+    alert(error.message);
   } else {
-    status.textContent = "Password updated! Redirecting...";
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1500);
+    alert("Password reset email sent! Check your inbox.");
   }
 });
 
