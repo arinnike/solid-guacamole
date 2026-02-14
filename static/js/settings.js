@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- SAVE ----------
   saveBtn.addEventListener("click", async () => {
-    else.preventDefault();
+    e.preventDefault();
     console.log("save clicked");
 
     status.textContent = "Saving…";
