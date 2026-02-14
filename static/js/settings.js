@@ -7,17 +7,18 @@ window.supabase ??= createClient(
 
 const supabase = window.supabase;
 
-console.log("settings.js loaded");
+document.addEventListener("DOMContentLoaded", async () => {
 
-const displayNameInput = document.getElementById("display-name");
-const darkModeCheckbox = document.getElementById("dark-mode");
-const saveBtn = document.getElementById("save-settings");
-const status = document.getElementById("status");
+  console.log("settings.js loaded");
 
-console.log("saveBtn:", saveBtn);
+  const displayNameInput = document.getElementById("display-name");
+  const darkModeCheckbox = document.getElementById("dark-mode");
+  const saveBtn = document.getElementById("save-settings");
+  const status = document.getElementById("status");
 
-// ---------- AUTH + LOAD SETTINGS ----------
-(async () => {
+  console.log("saveBtn:", saveBtn);
+
+  // ---------- AUTH + LOAD ----------
   const { data } = await supabase.auth.getSession();
 
   if (!data.session) {
@@ -37,49 +38,46 @@ console.log("saveBtn:", saveBtn);
     displayNameInput.value = settings.display_name || "";
     darkModeCheckbox.checked = !!settings.dark_mode;
   }
-})();
 
-// ---------- SAVE ----------
-saveBtn.addEventListener("click", async () => {
-  console.log("save clicked");
+  // ---------- SAVE ----------
+  saveBtn.addEventListener("click", async () => {
+    console.log("save clicked");
 
-  status.textContent = "Saving…";
+    status.textContent = "Saving…";
 
-  const { data: sessionData } = await supabase.auth.getSession();
-  const userId = sessionData.session.user.id;
+    const displayName = displayNameInput.value;
+    const darkMode = darkModeCheckbox.checked;
 
-    console.log("userId:", userId);
-
-  const displayName = displayNameInput.value;
-  const darkMode = darkModeCheckbox.checked;
-
-  console.log("payload:", {
-    user_id: userId,
-    display_name: displayName,
-    dark_mode: darkMode,
-  });
-
-  const result = await supabase
-    .from("user_settings")
-    .upsert({
+    console.log("payload:", {
       user_id: userId,
       display_name: displayName,
       dark_mode: darkMode,
-    })
-    .select();
+    });
+
+    const result = await supabase
+      .from("user_settings")
+      .upsert({
+        user_id: userId,
+        display_name: displayName,
+        dark_mode: darkMode,
+      })
+      .select();
 
     console.log("UPSERT RESULT:", result);
 
-  if (result.error) {
-    console.error(result.error);
-    status.textContent = result.error.message;
-    return;
-  }
-   status.textContent = "Saved!";
+    if (result.error) {
+      status.textContent = result.error.message;
+      console.error(result.error);
+      return;
+    }
 
-  if (darkMode) {
-    document.documentElement.classList.add("dark");
-  } else {
-    document.documentElement.classList.remove("dark");
-  }
+    status.textContent = "Saved!";
+
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  });
+
 });
