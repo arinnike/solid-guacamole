@@ -45,30 +45,41 @@ saveBtn.addEventListener("click", async () => {
 
   status.textContent = "Saving…";
 
-  const { data } = await supabase.auth.getSession();
-  const userId = data.session.user.id;
+  const { data: sessionData } = await supabase.auth.getSession();
+  const userId = sessionData.session.user.id;
+
+    console.log("userId:", userId);
 
   const displayName = displayNameInput.value;
   const darkMode = darkModeCheckbox.checked;
 
-  const { error } = await supabase
+  console.log("payload:", {
+    user_id: userId,
+    display_name: displayName,
+    dark_mode: darkMode,
+  });
+
+  const result = await supabase
     .from("user_settings")
     .upsert({
       user_id: userId,
       display_name: displayName,
       dark_mode: darkMode,
-    });
+    })
+    .select();
 
-  if (error) {
-    status.textContent = error.message;
+    console.log("UPSERT RESULT:", result);
+
+  if (result.error) {
+    console.error(result.error);
+    status.textContent = result.error.message;
     return;
   }
+   status.textContent = "Saved!";
 
   if (darkMode) {
     document.documentElement.classList.add("dark");
   } else {
     document.documentElement.classList.remove("dark");
   }
-
-  status.textContent = "Saved!";
 });
