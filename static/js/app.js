@@ -309,7 +309,7 @@ document.documentElement.classList.toggle("dark")
 localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light"
 }
 
-search.addEventListener("input", filterCards)
+search?.addEventListener("input", filterCards)
 
 
 // Load theme
