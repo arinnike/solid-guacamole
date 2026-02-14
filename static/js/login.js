@@ -45,12 +45,25 @@ document.addEventListener("click", async (e) => {
 
   console.log("logout clicked");
 
-  await supabase.auth.signOut();
-  alert("Logged out");
+  try {
+    await supabase.auth.signOut();
+  } catch (e) {
+    console.warn("Supabase signOut failed (Firefox IndexedDB)", e);
+  }
 
-  // force UI immediately
+  // Force clear browser auth state
+  Object.keys(localStorage)
+    .filter(k => k.includes("sb-"))
+    .forEach(k => localStorage.removeItem(k));
+
+  sessionStorage.clear();
+
+  // Force UI
   loggedIn.classList.add("hidden");
   loggedOut.classList.remove("hidden");
+
+  // Hard reload to prevent rehydration
+  window.location.href = "/";
 });
 
 // Forgot password (delegated)
