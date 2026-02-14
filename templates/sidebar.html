@@ -1,4 +1,6 @@
-<aside class="w-64 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block">
+<aside
+  class="w-64 shrink-0 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block z-20"
+>
 
   <h1 class="text-xl font-bold mb-6">Daggerheart GM Tools</h1>
 
@@ -12,12 +14,12 @@
         <li>
           <a
             href="/"
-            class="block px-2 py-1 rounded
-              {% if request.path == '/' %}
-                bg-indigo-100 dark:bg-indigo-900 font-semibold
-              {% else %}
-                hover:bg-zinc-100 dark:hover:bg-zinc-700
-              {% endif %}"
+            class="block px-2 py-1 rounded transition
+            {% if request.path == '/' %}
+              bg-indigo-100 dark:bg-indigo-900 font-semibold
+            {% else %}
+              hover:bg-zinc-100 dark:hover:bg-zinc-700
+            {% endif %}"
           >
             Cheat Sheet
           </a>
@@ -49,23 +51,9 @@
       <p class="uppercase text-zinc-400 mb-2">Campaign</p>
       <ul class="space-y-1">
 
-        <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-            My Campaigns
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-            Join Campaign
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-            Create Campaign
-          </a>
-        </li>
+        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">My Campaigns</a></li>
+        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Join Campaign</a></li>
+        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Create Campaign</a></li>
 
       </ul>
     </div>
@@ -75,17 +63,8 @@
       <p class="uppercase text-zinc-400 mb-2">Tools</p>
       <ul class="space-y-1">
 
-        <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-            Dice Roller
-          </a>
-        </li>
-
-        <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-            Trackers
-          </a>
-        </li>
+        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Dice Roller</a></li>
+        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Trackers</a></li>
 
       </ul>
     </div>
@@ -126,9 +105,7 @@
 
         </div>
 
-        <a href="/signup.html" class="px-3 py-1 border rounded">
-          Sign Up
-        </a>
+        <a href="/signup.html" class="px-3 py-1 border rounded">Sign Up</a>
 
       </div>
 
