@@ -2,42 +2,44 @@ console.log("settings.js loaded");
 
 const sb = window.supabase;
 
-document.addEventListener("DOMContentLoaded", async () => {
+const displayNameInput = document.getElementById("display-name");
+const darkModeCheckbox = document.getElementById("dark-mode");
+const saveBtn = document.getElementById("save-settings");
+const status = document.getElementById("status");
 
-  const displayNameInput = document.getElementById("display-name");
-  const darkModeCheckbox = document.getElementById("dark-mode");
-  const saveBtn = document.getElementById("save-settings");
-  const status = document.getElementById("status");
-
-  if (!saveBtn) {
-    console.error("Save button not found");
-    return;
-  }
+if (!saveBtn) {
+  console.error("Save button not found");
+} else {
 
   let currentUserId = null;
 
   // ==========================
-  // LOAD USER + SETTINGS FIRST
+  // LOAD USER + SETTINGS
   // ==========================
-  const { data: userResult, error: userError } = await sb.auth.getUser();
+  (async () => {
 
-  if (userError || !userResult.user) {
-    window.location.href = "/";
-    return;
-  }
+    const { data: userResult, error: userError } = await sb.auth.getUser();
 
-  currentUserId = userResult.user.id;
+    if (userError || !userResult.user) {
+      window.location.href = "/";
+      return;
+    }
 
-  const { data: settings } = await sb
-    .from("user_settings")
-    .select("display_name, dark_mode")
-    .eq("user_id", currentUserId)
-    .single();
+    currentUserId = userResult.user.id;
+    console.log("CURRENT USER ID:", currentUserId);
 
-  if (settings) {
-    displayNameInput.value = settings.display_name || "";
-    darkModeCheckbox.checked = !!settings.dark_mode;
-  }
+    const { data: settings } = await sb
+      .from("user_settings")
+      .select("display_name, dark_mode")
+      .eq("user_id", currentUserId)
+      .single();
+
+    if (settings) {
+      displayNameInput.value = settings.display_name || "";
+      darkModeCheckbox.checked = !!settings.dark_mode;
+    }
+
+  })();
 
   // ==========================
   // SAVE HANDLER
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
 
     console.log("SAVE BUTTON PRESSED");
-    
+
     if (!currentUserId) {
       status.textContent = "Not logged in.";
       return;
@@ -56,6 +58,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const displayName = displayNameInput.value;
     const darkMode = darkModeCheckbox.checked;
+
+    console.log("ABOUT TO UPSERT", {
+      user_id: currentUserId,
+      display_name: displayName,
+      dark_mode: darkMode
+    });
 
     const result = await sb
       .from("user_settings")
@@ -79,9 +87,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     status.textContent = "Saved!";
-
-    // Apply dark mode immediately
     document.documentElement.classList.toggle("dark", darkMode);
   });
-
-});
+}
