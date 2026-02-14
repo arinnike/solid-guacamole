@@ -47,11 +47,11 @@ saveBtn.addEventListener("click", async () => {
 
   const { error } = await supabase
     .from("user_settings")
-    .update({
-      display_name: displayName,
-      dark_mode: darkMode,
-    })
-    .eq("user_id", userId);
+    .upsert({
+        user_id: userId,
+        display_name: displayName,
+        dark_mode: darkMode,
+    });
 
   if (error) {
     status.textContent = error.message;
