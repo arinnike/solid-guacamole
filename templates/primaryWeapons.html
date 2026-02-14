@@ -1,56 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Weapons</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 6px; }
-        th { background: #eee; }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h2>Weapons</h2>
+{% block title %}Primary Weapons{% endblock %}
 
-<input id="search" placeholder="Search weapons..." />
+{% block content %}
+
+<h2 class="text-2xl font-bold mb-4">Weapons</h2>
+
+<!-- Local styles (temporary – can move to styles.css later) -->
+<style>
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 6px; }
+  th { background: #eee; }
+</style>
+
+<input
+  id="search"
+  placeholder="Search weapons..."
+  class="border p-2 mb-4 w-full rounded dark:bg-zinc-700"
+/>
 
 <table id="primaryWeaponsTable">
-    <thead></thead>
-    <tbody></tbody>
+  <thead></thead>
+  <tbody></tbody>
 </table>
 
 <script>
 async function loadWeapons(query="") {
-    const res = await fetch(`/api/primaryWeapons?q=${query}`);
-    const data = await res.json();
+  const res = await fetch(`/api/primary_weapons?q=${query}`);
+  const data = await res.json();
 
-    const thead = document.querySelector("thead");
-    const tbody = document.querySelector("tbody");
+  const thead = document.querySelector("#primaryWeaponsTable thead");
+  const tbody = document.querySelector("#primaryWeaponsTable tbody");
 
-    tbody.innerHTML = "";
-    thead.innerHTML = "";
+  tbody.innerHTML = "";
+  thead.innerHTML = "";
 
-    if (data.length === 0) return;
+  if (data.length === 0) return;
 
-    // Build header dynamically from DB columns
-    const headers = Object.keys(data[0]);
-    thead.innerHTML = "<tr>" + headers.map(h => `<th>${h}</th>`).join("") + "</tr>";
+  const headers = Object.keys(data[0]);
 
-    data.forEach(row => {
-        const tr = document.createElement("tr");
-        headers.forEach(h => {
-            tr.innerHTML += `<td>${row[h]}</td>`;
-        });
-        tbody.appendChild(tr);
+  thead.innerHTML =
+    "<tr>" + headers.map(h => `<th>${h}</th>`).join("") + "</tr>";
+
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+    headers.forEach(h => {
+      tr.innerHTML += `<td>${row[h]}</td>`;
     });
+    tbody.appendChild(tr);
+  });
 }
 
 document.getElementById("search").addEventListener("input", e => {
-    loadWeapons(e.target.value);
+  loadWeapons(e.target.value);
 });
 
 loadWeapons();
 </script>
 
-</body>
-</html>
+{% endblock %}
