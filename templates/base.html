@@ -25,11 +25,9 @@
   {% include "sidebar.html" %}
 
   <main class="flex-1 p-6 overflow-y-auto flex flex-col">
-    <div class="flex-1">
-        <div class="max-w-5xl mx-auto">
-            {% block content %}
-            {% endblock %}
-        </div>
+    <div class="max-w-5xl mx-auto w-full">
+        {% block content %}
+        {% endblock %}
     </div>
 
     {% include "footer.html" %}
