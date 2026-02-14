@@ -1,9 +1,11 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
-const supabase = createClient(
+window.supabase ??= createClient(
   window.SUPABASE_URL,
   window.SUPABASE_KEY
 );
+
+const supabase = window.supabase;
 
 document.addEventListener("click", async (e) => {
   if (e.target.id !== "forgot-password") return;
