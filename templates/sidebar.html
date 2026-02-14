@@ -1,44 +1,46 @@
-<nav class="space-y-4 text-sm">
-      <div>
-        <p class="uppercase text-zinc-400 mb-2">Reference</p>
-        <ul class="space-y-1">
-          <li class="font-semibold">Cheat Sheet</li>
-          <li>Characters</li>
-          <li>Equipment</li>
-          <li>Library</li>
-        </ul>
-      </div>
+<aside class="w-64 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block">
 
-      <div>
-        <p class="uppercase text-zinc-400 mb-2">Campaign</p>
-        <ul class="space-y-1">
-          <li>My Campaigns</li>
-          <li>Join Campaign</li>
-          <li>Create Campaign</li>
-        </ul>
-      </div>
+  <h1 class="text-xl font-bold mb-6">Daggerheart GM Tools</h1>
 
-      <div>
-        <p class="uppercase text-zinc-400 mb-2">Tools</p>
-        <ul class="space-y-1">
-          <li>Dice Roller</li>
-          <li>Trackers</li>
-        </ul>
-      </div>
-      
-      <div id="auth-area" class="flex gap-3 items-center">
+  <nav class="space-y-4 text-sm">
 
-      <!-- Logged out -->
+    <div>
+      <p class="uppercase text-zinc-400 mb-2">Reference</p>
+      <ul class="space-y-1">
+        <li class="font-semibold">Cheat Sheet</li>
+        <li>Characters</li>
+        <li>Equipment</li>
+        <li>Library</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="uppercase text-zinc-400 mb-2">Campaign</p>
+      <ul class="space-y-1">
+        <li>My Campaigns</li>
+        <li>Join Campaign</li>
+        <li>Create Campaign</li>
+      </ul>
+    </div>
+
+    <div>
+      <p class="uppercase text-zinc-400 mb-2">Tools</p>
+      <ul class="space-y-1">
+        <li>Dice Roller</li>
+        <li>Trackers</li>
+      </ul>
+    </div>
+
+    <div id="auth-area" class="flex gap-3 items-center">
+
       <div id="logged-out" class="flex gap-2">
 
-        <!-- Relative wrapper for Sign In + dropdown -->
         <div class="relative">
 
           <button id="signin-toggle" class="px-3 py-1 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Sign In
           </button>
 
-          <!-- Sign-in dropdown -->
           <div id="signin-menu" class="hidden absolute left-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded p-4 w-64 shadow z-50">
 
             <input id="email" class="border w-full mb-2 p-1 dark:bg-zinc-700" placeholder="Email">
@@ -70,11 +72,13 @@
 
       </div>
 
-      <!-- Logged in -->
       <div id="logged-in" class="hidden flex gap-2">
         <a href="/settings.html" class="px-3 py-1 border rounded">Settings</a>
         <button id="logout" class="px-3 py-1 bg-red-600 text-white rounded">Logout</button>
       </div>
 
     </div>
-    </nav>
+
+  </nav>
+
+</aside>
