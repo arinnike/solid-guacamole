@@ -39,19 +39,13 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // Logout
-document.addEventListener("click", async (e) => {
+document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
-  console.log("logout clicked");
+  console.log("logout clicked — forcing client logout");
 
-  try {
-    await supabase.auth.signOut();
-  } catch (e) {
-    console.warn("Supabase signOut failed (Firefox IndexedDB)", e);
-  }
-
-  // Force clear browser auth state
+  // Kill Supabase tokens manually
   Object.keys(localStorage)
     .filter(k => k.includes("sb-"))
     .forEach(k => localStorage.removeItem(k));
@@ -62,8 +56,8 @@ document.addEventListener("click", async (e) => {
   loggedIn.classList.add("hidden");
   loggedOut.classList.remove("hidden");
 
-  // Hard reload to prevent rehydration
-  window.location.href = "/";
+  // Hard reload to stop rehydration
+  window.location.replace("/");
 });
 
 // Forgot password (delegated)
