@@ -19,6 +19,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const status = document.getElementById("status");
 
   console.log("saveBtn:", saveBtn);
+  saveBtn.style.outline = "3px solid red";
+
+    saveBtn.addEventListener("mousedown", () => {
+    console.log("MOUSEDOWN detected");
+    });
 
   // ---------- AUTH + LOAD ----------
   const { data } = await supabase.auth.getSession();
