@@ -10,7 +10,8 @@ window.supabase ??= createClient(
 const supabase = window.supabase;
 
 document.addEventListener("DOMContentLoaded", async () => {
-
+    console.log("DOM ready");
+    
   const displayNameInput = document.getElementById("display-name");
   const darkModeCheckbox = document.getElementById("dark-mode");
   const saveBtn = document.getElementById("save-settings");
