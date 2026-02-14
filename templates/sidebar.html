@@ -2,43 +2,96 @@
 
   <h1 class="text-xl font-bold mb-6">Daggerheart GM Tools</h1>
 
-  <nav class="space-y-4 text-sm">
+  <nav class="space-y-6 text-sm">
 
+    <!-- Reference -->
     <div>
       <p class="uppercase text-zinc-400 mb-2">Reference</p>
       <ul class="space-y-1">
+
         <li>
-            <a
-                href="/"
-                class="font-semibold block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700"
-            >
-                Cheat Sheet
-            </a>
-            </li>
-        <li>Characters</li>
-        <li>Equipment</li>
-        <li>Library</li>
+          <a
+            href="/"
+            class="block px-2 py-1 rounded
+              {% if request.path == '/' %}
+                bg-indigo-100 dark:bg-indigo-900 font-semibold
+              {% else %}
+                hover:bg-zinc-100 dark:hover:bg-zinc-700
+              {% endif %}"
+          >
+            Cheat Sheet
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Characters
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Equipment
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Library
+          </a>
+        </li>
+
       </ul>
     </div>
 
+    <!-- Campaign -->
     <div>
       <p class="uppercase text-zinc-400 mb-2">Campaign</p>
       <ul class="space-y-1">
-        <li>My Campaigns</li>
-        <li>Join Campaign</li>
-        <li>Create Campaign</li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            My Campaigns
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Join Campaign
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Create Campaign
+          </a>
+        </li>
+
       </ul>
     </div>
 
+    <!-- Tools -->
     <div>
       <p class="uppercase text-zinc-400 mb-2">Tools</p>
       <ul class="space-y-1">
-        <li>Dice Roller</li>
-        <li>Trackers</li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Dice Roller
+          </a>
+        </li>
+
+        <li>
+          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Trackers
+          </a>
+        </li>
+
       </ul>
     </div>
 
-    <div id="auth-area" class="flex gap-3 items-center">
+    <!-- Auth -->
+    <div id="auth-area" class="flex gap-3 items-center pt-4 border-t border-zinc-200 dark:border-zinc-700">
 
       <div id="logged-out" class="flex gap-2">
 
