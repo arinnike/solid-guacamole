@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // Forgot password (delegated)
-  document.addEventListener("click", async (e) => {
+  /*document.addEventListener("click", async (e) => {
     if (e.target.id !== "forgot-password") return;
 
     e.preventDefault();
@@ -103,6 +103,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       alert("Password reset email sent! Check your inbox.");
     }
+  });*/
+
+  const forgotBtn = document.getElementById("forgot-password");
+
+  console.log("forgotBtn =", forgotBtn);
+
+  forgotBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("FORGOT BUTTON DIRECT CLICK WORKED");
   });
 
   console.log("login.js loaded");
