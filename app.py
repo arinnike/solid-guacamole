@@ -16,13 +16,20 @@ def get_db():
         database=os.getenv("DB_NAME")
     )
 
+# Index page
 @application.route("/")
 def home():
     return render_template("index.html",
         SUPABASE_URL=os.getenv("SUPABASE_URL"),
         SUPABASE_KEY=os.getenv("SUPABASE_SERVICE_KEY"),
     )
-    
+
+# Reset password
+@application.route("/reset-password")
+def reset_password():
+    return render_template("reset-password.html")
+
+# Primary weapons page    
 @application.route("/primary_weapons")
 def weapons_page():
     return render_template("primary_weapons.html")
