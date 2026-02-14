@@ -21,7 +21,7 @@ def get_db():
 def home():
     return render_template("index.html",
         SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_SERVICE_KEY"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
 # Reset password
