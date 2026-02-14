@@ -1,7 +1,5 @@
 const sb = window.supabase;
 
-console.log("login.js loaded");
-
 // Elements
 const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
@@ -11,16 +9,12 @@ const signinMenu = document.getElementById("signin-menu");
 // Global user cache
 window.currentUserId = null;
 
-// --------------------
 // Dropdown toggle
-// --------------------
 signinToggle?.addEventListener("click", () => {
   signinMenu?.classList.toggle("hidden");
 });
 
-// --------------------
 // Email login
-// --------------------
 document.getElementById("email-login")?.addEventListener("click", async () => {
   const email = document.getElementById("email")?.value;
   const password = document.getElementById("password")?.value;
@@ -32,39 +26,26 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
 
   const { error } = await sb.auth.signInWithPassword({ email, password });
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+  if (error) alert(error.message);
 
   signinMenu?.classList.add("hidden");
 });
 
-// --------------------
 // Discord login
-// --------------------
 document.getElementById("discord-login")?.addEventListener("click", async () => {
   await sb.auth.signInWithOAuth({
     provider: "discord",
-    options: {
-      redirectTo: "https://dhgmtools.com",
-    },
+    options: { redirectTo: "https://dhgmtools.com" },
   });
 });
 
-// --------------------
-// HARD LOGOUT
-// --------------------
+// HARD logout
 document.addEventListener("click", (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
-  console.log("logout clicked — HARD RESET");
-
-  // Tell Supabase to sign out (fire and forget)
   sb.auth.signOut();
 
-  // Nuke Supabase tokens manually
   Object.keys(localStorage)
     .filter(k => k.includes("sb-"))
     .forEach(k => localStorage.removeItem(k));
@@ -76,13 +57,10 @@ document.addEventListener("click", (e) => {
   loggedIn?.classList.add("hidden");
   loggedOut?.classList.remove("hidden");
 
-  // Hard reload
   window.location.href = "/";
 });
 
-// --------------------
 // Forgot password
-// --------------------
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#forgot-password");
   if (!btn) return;
@@ -104,32 +82,20 @@ document.addEventListener("click", async (e) => {
   else alert("Password reset email sent!");
 });
 
-// --------------------
 // Auth watcher
-// --------------------
-sb.auth.onAuthStateChange(async (_event, session) => {
-
+sb.auth.onAuthStateChange((_event, session) => {
   if (session) {
-    console.log("AUTH STATE: logged in");
-
     window.currentUserId = session.user.id;
-
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
-
   } else {
-    console.log("AUTH STATE: logged out");
-
     window.currentUserId = null;
-
     loggedIn?.classList.add("hidden");
     loggedOut?.classList.remove("hidden");
   }
 });
 
-// --------------------
 // Initial hydration
-// --------------------
 (async () => {
   const { data } = await sb.auth.getUser();
 

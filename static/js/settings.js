@@ -1,5 +1,3 @@
-console.log("settings.js loaded");
-
 const sb = window.supabase;
 
 const displayNameInput = document.getElementById("display-name");
@@ -7,26 +5,21 @@ const darkModeCheckbox = document.getElementById("dark-mode");
 const saveBtn = document.getElementById("save-settings");
 const status = document.getElementById("status");
 
-if (!saveBtn) {
-  console.error("Save button not found");
-} else {
+if (saveBtn) {
 
   let currentUserId = null;
 
-  // ==========================
-  // LOAD USER + SETTINGS
-  // ==========================
+  // Load user + settings
   (async () => {
 
-    const { data: userResult, error: userError } = await sb.auth.getUser();
+    const { data: userResult } = await sb.auth.getUser();
 
-    if (userError || !userResult.user) {
+    if (!userResult.user) {
       window.location.href = "/";
       return;
     }
 
     currentUserId = userResult.user.id;
-    console.log("CURRENT USER ID:", currentUserId);
 
     const { data: settings } = await sb
       .from("user_settings")
@@ -41,13 +34,9 @@ if (!saveBtn) {
 
   })();
 
-  // ==========================
-  // SAVE HANDLER
-  // ==========================
+  // Save handler
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-
-    console.log("SAVE BUTTON PRESSED");
 
     if (!currentUserId) {
       status.textContent = "Not logged in.";
@@ -58,12 +47,6 @@ if (!saveBtn) {
 
     const displayName = displayNameInput.value;
     const darkMode = darkModeCheckbox.checked;
-
-    console.log("ABOUT TO UPSERT", {
-      user_id: currentUserId,
-      display_name: displayName,
-      dark_mode: darkMode
-    });
 
     const result = await sb
       .from("user_settings")
@@ -78,11 +61,8 @@ if (!saveBtn) {
       .select()
       .single();
 
-    console.log("UPSERT RESULT:", result);
-
     if (result.error) {
       status.textContent = result.error.message;
-      console.error(result.error);
       return;
     }
 
