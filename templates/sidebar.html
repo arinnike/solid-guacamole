@@ -1,0 +1,80 @@
+<nav class="space-y-4 text-sm">
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Reference</p>
+        <ul class="space-y-1">
+          <li class="font-semibold">Cheat Sheet</li>
+          <li>Characters</li>
+          <li>Equipment</li>
+          <li>Library</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Campaign</p>
+        <ul class="space-y-1">
+          <li>My Campaigns</li>
+          <li>Join Campaign</li>
+          <li>Create Campaign</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="uppercase text-zinc-400 mb-2">Tools</p>
+        <ul class="space-y-1">
+          <li>Dice Roller</li>
+          <li>Trackers</li>
+        </ul>
+      </div>
+      
+      <div id="auth-area" class="flex gap-3 items-center">
+
+      <!-- Logged out -->
+      <div id="logged-out" class="flex gap-2">
+
+        <!-- Relative wrapper for Sign In + dropdown -->
+        <div class="relative">
+
+          <button id="signin-toggle" class="px-3 py-1 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Sign In
+          </button>
+
+          <!-- Sign-in dropdown -->
+          <div id="signin-menu" class="hidden absolute left-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded p-4 w-64 shadow z-50">
+
+            <input id="email" class="border w-full mb-2 p-1 dark:bg-zinc-700" placeholder="Email">
+            <input id="password" type="password" class="border w-full mb-2 p-1 dark:bg-zinc-700" placeholder="Password">
+
+            <button id="email-login" class="w-full border rounded py-1 mb-2 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+              Sign In
+            </button>
+
+            <button id="discord-login" class="w-full bg-indigo-600 text-white rounded py-1 hover:bg-indigo-700">
+              Sign in with Discord
+            </button>
+
+            <button
+              type="button"
+              id="forgot-password"
+              class="block w-full text-center text-sm text-indigo-500 hover:underline mt-2"
+            >
+              Forgot password?
+            </button>
+
+          </div>
+
+        </div>
+
+        <a href="/signup.html" class="px-3 py-1 border rounded">
+          Sign Up
+        </a>
+
+      </div>
+
+      <!-- Logged in -->
+      <div id="logged-in" class="hidden flex gap-2">
+        <a href="/settings.html" class="px-3 py-1 border rounded">Settings</a>
+        <button id="logout" class="px-3 py-1 bg-red-600 text-white rounded">Logout</button>
+      </div>
+
+    </div>
+    </nav>

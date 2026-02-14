@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Daggerheart GM Tools{% endblock %}</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+
+  <script>
+    window.SUPABASE_URL = "{{ SUPABASE_URL }}";
+    window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
+  </script>
+
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+
+<body class="h-full bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200">
+
+<div class="flex h-screen">
+
+  {% include "sidebar.html" %}
+
+  <main class="flex-1 p-6 overflow-y-auto flex flex-col">
+    <div class="flex-1 max-w-5xl mx-auto">
+
+      {% block content %}
+      {% endblock %}
+
+    </div>
+
+    {% include "footer.html" %}
+  </main>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+</body>
+</html>
