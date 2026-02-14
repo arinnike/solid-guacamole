@@ -14,51 +14,52 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  let currentUserId = null;
+
   // ==========================
-  // SAVE HANDLER (attach FIRST)
+  // LOAD USER + SETTINGS FIRST
+  // ==========================
+  const { data: userResult, error: userError } = await sb.auth.getUser();
+
+  if (userError || !userResult.user) {
+    window.location.href = "/";
+    return;
+  }
+
+  currentUserId = userResult.user.id;
+
+  const { data: settings } = await sb
+    .from("user_settings")
+    .select("display_name, dark_mode")
+    .eq("user_id", currentUserId)
+    .single();
+
+  if (settings) {
+    displayNameInput.value = settings.display_name || "";
+    darkModeCheckbox.checked = !!settings.dark_mode;
+  }
+
+  // ==========================
+  // SAVE HANDLER
   // ==========================
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
-    
-    console.log("save clicked");
-    console.log("sb exists:", !!sb);
-    console.log("sb.auth exists:", !!sb?.auth);
-    console.log("ABOUT TO CALL getUser");
 
-    const userResult = await sb.auth.getUser();
-
-    console.log("GET USER RESULT:", userResult);
-
-    const userData = userResult.data;
-    const userError = userResult.error;
+    if (!currentUserId) {
+      status.textContent = "Not logged in.";
+      return;
+    }
 
     status.textContent = "Saving…";
 
     const displayName = displayNameInput.value;
     const darkMode = darkModeCheckbox.checked;
 
-    // Get current user
-    const { data: userData, error: userError } = await sb.auth.getUser();
-
-    if (userError || !userData.user) {
-      status.textContent = "Not logged in.";
-      console.error(userError);
-      return;
-    }
-
-    const userId = userData.user.id;
-
-    console.log("payload:", {
-      user_id: userId,
-      display_name: displayName,
-      dark_mode: darkMode,
-    });
-
     const result = await sb
       .from("user_settings")
       .upsert(
         {
-          user_id: userId,
+          user_id: currentUserId,
           display_name: displayName,
           dark_mode: darkMode,
         },
@@ -80,28 +81,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Apply dark mode immediately
     document.documentElement.classList.toggle("dark", darkMode);
   });
-
-  // ==========================
-  // LOAD SETTINGS
-  // ==========================
-  const { data: userData } = await sb.auth.getUser();
-
-  if (!userData.user) {
-    window.location.href = "/";
-    return;
-  }
-
-  const userId = userData.user.id;
-
-  const { data: settings } = await sb
-    .from("user_settings")
-    .select("display_name, dark_mode")
-    .eq("user_id", userId)
-    .single();
-
-  if (settings) {
-    displayNameInput.value = settings.display_name || "";
-    darkModeCheckbox.checked = !!settings.dark_mode;
-  }
 
 });
