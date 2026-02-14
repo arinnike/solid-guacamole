@@ -37,8 +37,14 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // Logout
-document.getElementById("logout")?.addEventListener("click", async () => {
+document.addEventListener("click", async (e) => {
+  const logoutBtn = e.target.closest("#logout");
+  if (!logoutBtn) return;
+
+  console.log("logout clicked");
+
   await supabase.auth.signOut();
+  alert("Logged out");
 });
 
 // Forgot password (delegated)
