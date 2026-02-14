@@ -5,29 +5,20 @@ const supabase = createClient(
   window.SUPABASE_KEY
 );
 
-document.addEventListener("click", async (e) => {
-  if (e.target.id !== "forgot-password") return;
+document.getElementById("reset-btn")?.addEventListener("click", async () => {
+  const password = document.getElementById("new-password").value;
+  const status = document.getElementById("status");
 
-  e.preventDefault();
-
-  console.log("forgot password clicked");
-
-  const email = document.getElementById("email")?.value;
-
-  if (!email) {
-    alert("Please enter your email first.");
-    return;
-  }
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "https://dhgmtools.com/reset-password",
+  const { error } = await supabase.auth.updateUser({
+    password: password,
   });
 
   if (error) {
-    alert(error.message);
+    status.textContent = error.message;
   } else {
-    alert("Password reset email sent! Check your inbox.");
+    status.textContent = "Password updated! Redirecting...";
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 1500);
   }
 });
-
-console.log("reset-password.js loaded");

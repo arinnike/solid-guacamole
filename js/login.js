@@ -38,6 +38,7 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 
 // Logout
 document.getElementById("logout")?.addEventListener("click", async () => {
+  console.log("logout clicked");
   await supabase.auth.signOut();
 });
 
@@ -101,3 +102,4 @@ supabase.auth.onAuthStateChange(async (_event, session) => {
   if (data.session) loggedIn.classList.remove("hidden");
   else loggedOut.classList.remove("hidden");
 })();
+
