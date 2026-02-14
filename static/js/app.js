@@ -1,13 +1,19 @@
+// ============================
+// RULES DATA (unchanged)
+// ============================
 const rules = [
-  // (rules array unchanged — keep exactly as you have it)
+  // KEEP YOUR FULL RULES ARRAY EXACTLY AS YOU HAVE IT
 ];
 
+// ============================
+// Globals
+// ============================
 const container = document.getElementById("cards");
 const search = document.getElementById("search");
 
-// --------------------
+// ============================
 // Sidebar active link
-// --------------------
+// ============================
 document.addEventListener("DOMContentLoaded", () => {
   const currentPath = window.location.pathname;
 
@@ -18,64 +24,73 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// --------------------
+// ============================
 // Dark mode
-// --------------------
+// ============================
 if (localStorage.theme === "dark") {
   document.documentElement.classList.add("dark");
 }
 
 function toggleDark() {
   document.documentElement.classList.toggle("dark");
-  localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+  localStorage.theme = document.documentElement.classList.contains("dark")
+    ? "dark"
+    : "light";
 }
 
-// --------------------
-// Cheat Sheet Logic (ONLY if on that page)
-// --------------------
-if (container) {
+// ============================
+// Cheat Sheet Functions (GLOBAL)
+// ============================
+function toggle(i) {
+  document.getElementById("body" + i)?.classList.toggle("hidden");
+}
 
-  function render() {
-    container.innerHTML = "";
+function expandAll() {
+  rules.forEach((_, i) =>
+    document.getElementById("body" + i)?.classList.remove("hidden")
+  );
+}
 
-    rules.forEach((r, i) => {
-      container.innerHTML += `
+function collapseAll() {
+  rules.forEach((_, i) =>
+    document.getElementById("body" + i)?.classList.add("hidden")
+  );
+}
+
+function filterCards() {
+  const q = search.value.toLowerCase();
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(q)
+      ? "block"
+      : "none";
+  });
+}
+
+// ============================
+// Cheat Sheet Render
+// ============================
+function renderCards() {
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  rules.forEach((r, i) => {
+    container.innerHTML += `
       <div class="card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded p-4">
         <div class="cursor-pointer font-semibold" onclick="toggle(${i})">
           ${r.title}
           <p class="text-sm text-zinc-400">${r.summary}</p>
         </div>
         <div id="body${i}" class="hidden mt-3 whitespace-pre-line text-sm">${r.body}</div>
-      </div>`;
-    });
-  }
+      </div>
+    `;
+  });
+}
 
-  function toggle(i) {
-    document.getElementById("body" + i)?.classList.toggle("hidden");
-  }
-
-  function expandAll() {
-    rules.forEach((_, i) =>
-      document.getElementById("body" + i)?.classList.remove("hidden")
-    );
-  }
-
-  function collapseAll() {
-    rules.forEach((_, i) =>
-      document.getElementById("body" + i)?.classList.add("hidden")
-    );
-  }
-
-  function filterCards() {
-    const q = search.value.toLowerCase();
-    document.querySelectorAll(".card").forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(q)
-        ? "block"
-        : "none";
-    });
-  }
-
+// ============================
+// Init cheat sheet ONLY if present
+// ============================
+if (container) {
   search?.addEventListener("input", filterCards);
-
-  render();
+  renderCards();
 }
