@@ -8,6 +8,9 @@ load_dotenv(os.path.expanduser("~/.env"))
 
 application = Flask(__name__)
 
+application.config["TEMPLATES_AUTO_RELOAD"] = True
+application.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
 def get_db():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),

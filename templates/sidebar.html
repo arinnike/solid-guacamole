@@ -1,5 +1,5 @@
 <aside
-  class="w-64 shrink-0 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block z-20"
+  class="w-64 shrink-0 bg-white dark:bg-zinc-800 border-r border-zinc-200 dark:border-zinc-700 p-4 hidden md:block"
 >
 
   <h1 class="text-xl font-bold mb-6">Daggerheart GM Tools</h1>
@@ -12,33 +12,25 @@
       <ul class="space-y-1">
 
         <li>
-          <a
-            href="/"
-            class="block px-2 py-1 rounded transition
-            {% if request.path == '/' %}
-              bg-indigo-100 dark:bg-indigo-900 font-semibold
-            {% else %}
-              hover:bg-zinc-100 dark:hover:bg-zinc-700
-            {% endif %}"
-          >
+          <a href="/" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Cheat Sheet
           </a>
         </li>
 
         <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+          <a href="/characters" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Characters
           </a>
         </li>
 
         <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+          <a href="/equipment" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Equipment
           </a>
         </li>
 
         <li>
-          <a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+          <a href="/library" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Library
           </a>
         </li>
@@ -51,9 +43,9 @@
       <p class="uppercase text-zinc-400 mb-2">Campaign</p>
       <ul class="space-y-1">
 
-        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">My Campaigns</a></li>
-        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Join Campaign</a></li>
-        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Create Campaign</a></li>
+        <li><a href="/campaigns" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">My Campaigns</a></li>
+        <li><a href="/join" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Join Campaign</a></li>
+        <li><a href="/create" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Create Campaign</a></li>
 
       </ul>
     </div>
@@ -63,8 +55,8 @@
       <p class="uppercase text-zinc-400 mb-2">Tools</p>
       <ul class="space-y-1">
 
-        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Dice Roller</a></li>
-        <li><a href="#" class="block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Trackers</a></li>
+        <li><a href="/dice" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Dice Roller</a></li>
+        <li><a href="/trackers" class="nav-link block px-2 py-1 rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">Trackers</a></li>
 
       </ul>
     </div>
@@ -75,13 +67,11 @@
       <div id="logged-out" class="flex gap-2">
 
         <div class="relative">
-
           <button id="signin-toggle" class="px-3 py-1 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
             Sign In
           </button>
 
           <div id="signin-menu" class="hidden absolute left-0 top-full mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded p-4 w-64 shadow z-50">
-
             <input id="email" class="border w-full mb-2 p-1 dark:bg-zinc-700" placeholder="Email">
             <input id="password" type="password" class="border w-full mb-2 p-1 dark:bg-zinc-700" placeholder="Password">
 
@@ -93,20 +83,13 @@
               Sign in with Discord
             </button>
 
-            <button
-              type="button"
-              id="forgot-password"
-              class="block w-full text-center text-sm text-indigo-500 hover:underline mt-2"
-            >
+            <button type="button" id="forgot-password" class="block w-full text-center text-sm text-indigo-500 hover:underline mt-2">
               Forgot password?
             </button>
-
           </div>
-
         </div>
 
         <a href="/signup.html" class="px-3 py-1 border rounded">Sign Up</a>
-
       </div>
 
       <div id="logged-in" class="hidden flex gap-2">
