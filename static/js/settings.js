@@ -41,34 +41,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // SAVE
-  saveBtn.addEventListener("click", async () => {
-    console.log("save clicked");
+  document.addEventListener("click", async (e) => {
+  const btn = e.target.closest("#save-settings");
+  if (!btn) return;
 
-    status.textContent = "Saving…";
+  console.log("save clicked");
 
-    const displayName = displayNameInput.value;
-    const darkMode = darkModeCheckbox.checked;
+  status.textContent = "Saving…";
 
-    const { error } = await supabase
-      .from("user_settings")
-      .upsert({
-        user_id: userId,
-        display_name: displayName,
-        dark_mode: darkMode,
-      });
+  const displayName = displayNameInput.value;
+  const darkMode = darkModeCheckbox.checked;
 
-    if (error) {
-      status.textContent = error.message;
-      return;
-    }
+  const { error } = await supabase
+    .from("user_settings")
+    .upsert({
+      user_id: userId,
+      display_name: displayName,
+      dark_mode: darkMode,
+    });
 
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+  if (error) {
+    status.textContent = error.message;
+    return;
+  }
 
-    status.textContent = "Saved!";
-  });
+  if (darkMode) document.documentElement.classList.add("dark");
+  else document.documentElement.classList.remove("dark");
+
+  status.textContent = "Saved!";
+});
 
 });
