@@ -317,4 +317,24 @@ if(localStorage.theme==="dark"){
 document.documentElement.classList.add("dark")
 }
 
-render()
+// Only run cheat sheet logic if we're on that page
+if (container) {
+
+  function render() {
+    container.innerHTML = ""
+    rules.forEach((r,i)=>{
+      container.innerHTML += `
+      <div class="card bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded p-4">
+        <div class="cursor-pointer font-semibold" onclick="toggle(${i})">
+          ${r.title}
+          <p class="text-sm text-zinc-400">${r.summary}</p>
+        </div>
+        <div id="body${i}" class="hidden mt-3 whitespace-pre-line text-sm">${r.body}</div>
+      </div>`
+    })
+  }
+
+  search?.addEventListener("input", filterCards)
+
+  render()
+}
