@@ -7,18 +7,17 @@ window.supabase ??= createClient(
 
 const supabase = window.supabase;
 
-document.addEventListener("DOMContentLoaded", async () => {
+console.log("settings.js loaded");
 
-  console.log("settings.js loaded");
+const displayNameInput = document.getElementById("display-name");
+const darkModeCheckbox = document.getElementById("dark-mode");
+const saveBtn = document.getElementById("save-settings");
+const status = document.getElementById("status");
 
-  const displayNameInput = document.getElementById("display-name");
-  const darkModeCheckbox = document.getElementById("dark-mode");
-  const saveBtn = document.getElementById("save-settings");
-  const status = document.getElementById("status");
+console.log("saveBtn:", saveBtn);
 
-  console.log("saveBtn:", saveBtn);
-
-  // Auth check
+// ---------- AUTH + LOAD SETTINGS ----------
+(async () => {
   const { data } = await supabase.auth.getSession();
 
   if (!data.session) {
@@ -28,7 +27,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const userId = data.session.user.id;
 
-  // Load existing settings
   const { data: settings } = await supabase
     .from("user_settings")
     .select("display_name, dark_mode")
@@ -39,15 +37,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayNameInput.value = settings.display_name || "";
     darkModeCheckbox.checked = !!settings.dark_mode;
   }
+})();
 
-  // SAVE
-  document.addEventListener("click", async (e) => {
-  const btn = e.target.closest("#save-settings");
-  if (!btn) return;
-
+// ---------- SAVE ----------
+saveBtn.addEventListener("click", async () => {
   console.log("save clicked");
 
   status.textContent = "Saving…";
+
+  const { data } = await supabase.auth.getSession();
+  const userId = data.session.user.id;
 
   const displayName = displayNameInput.value;
   const darkMode = darkModeCheckbox.checked;
@@ -65,10 +64,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  if (darkMode) document.documentElement.classList.add("dark");
-  else document.documentElement.classList.remove("dark");
+  if (darkMode) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
 
   status.textContent = "Saved!";
-});
-
 });
