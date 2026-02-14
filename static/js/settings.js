@@ -1,12 +1,5 @@
 console.log("SETTINGS.JS FILE EXECUTED");
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-window.supabase ??= createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_KEY
-);
-
 const supabase = window.supabase;
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -20,14 +13,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   console.log("saveBtn:", saveBtn);
 
-  if (!saveBtn) {
-    console.error("Save button not found");
-    return;
-  }
+  if (!saveBtn) return;
 
-  // ==========================
-  // SAVE HANDLER (attach FIRST)
-  // ==========================
+  // ==================
+  // SAVE HANDLER FIRST
+  // ==================
   saveBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     console.log("save clicked");
@@ -37,10 +27,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const displayName = displayNameInput.value;
     const darkMode = darkModeCheckbox.checked;
 
-    const { data: sessionData } = await supabase.auth.getSession();
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
 
-    if (!sessionData.session) {
+    if (sessionError || !sessionData.session) {
       status.textContent = "Not logged in.";
+      console.error(sessionError);
       return;
     }
 
@@ -75,16 +67,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     status.textContent = "Saved!";
 
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", darkMode);
   });
 
-  // ==========================
-  // AUTH + LOAD SETTINGS
-  // ==========================
+  // ============
+  // LOAD SETTINGS
+  // ============
   const { data } = await supabase.auth.getSession();
 
   if (!data.session) {
