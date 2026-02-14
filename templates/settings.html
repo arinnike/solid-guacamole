@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <title>User Settings</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    window.SUPABASE_URL = "{{ SUPABASE_URL }}";
+    window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
+  </script>
+
+  <script type="module" src="{{ url_for('static', filename='js/settings.js') }}"></script>
+</head>
+
+<body class="min-h-screen bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 flex items-center justify-center">
+
+  <div class="bg-white dark:bg-zinc-800 p-8 rounded shadow w-full max-w-md space-y-6">
+
+    <h1 class="text-xl font-bold">User Settings</h1>
+
+    <!-- Display name -->
+    <div>
+      <label class="block text-sm mb-1">Display Name</label>
+      <input
+        id="display-name"
+        class="border w-full p-2 rounded dark:bg-zinc-700"
+        placeholder="Your name"
+      />
+    </div>
+
+    <!-- Dark mode -->
+    <div class="flex items-center gap-2">
+      <input id="dark-mode" type="checkbox">
+      <label for="dark-mode">Enable dark mode</label>
+    </div>
+
+    <button
+      id="save-settings"
+      class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700"
+    >
+      Save Settings
+    </button>
+
+    <p id="status" class="text-sm"></p>
+
+  </div>
+
+</body>
+</html>

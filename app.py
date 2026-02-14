@@ -33,6 +33,15 @@ def reset_password():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
+# Settings page
+@application.route("/settings.html")
+def settings():
+    return render_template(
+        "settings.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
+    )
+
 # Primary weapons page    
 @application.route("/primary_weapons")
 def weapons_page():
