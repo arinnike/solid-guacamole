@@ -18,7 +18,10 @@ const status = document.getElementById("status");
 
 // Ensure logged in + load settings
 (async () => {
+    console.log("before getSession");
+
   const { data } = await supabase.auth.getSession();
+    console.log("after getSession", sessionResponse);
 
   if (!data.session) {
     window.location.href = "/";
