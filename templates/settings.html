@@ -19,12 +19,14 @@
   </div>
 
   <!-- Dark mode -->
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-3">
     <label class="switch">
-        <input type="checkbox" id="darkToggle">
-        <span class="slider"></span>
+      <input type="checkbox" id="dark-mode">
+      <span class="slider"></span>
     </label>
-    <label for="dark-mode">Enable dark mode</label>
+    <label for="dark-mode" class="text-sm cursor-pointer">
+      Enable dark mode
+    </label>
   </div>
 
   <button
@@ -38,7 +40,8 @@
   <p id="status" class="text-sm"></p>
 
 </div>
-{% endblock %} 
+
+{% endblock %}
 
 {% block scripts %}
 <script src="/js/theme.js"></script>
