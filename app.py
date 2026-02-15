@@ -175,6 +175,20 @@ def secondaryWeapons_api():
 
     return jsonify(rows)
 
+@application.route("/api/armor")
+@login_required
+def armor_api():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM armor")
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
+
 # ------------------------
 # Health
 # ------------------------
