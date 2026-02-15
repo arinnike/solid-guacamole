@@ -1,6 +1,4 @@
 console.log("APP.JS LOADED");
-console.log("Rules exists:", typeof rules);
-console.log("Rules length:", rules?.length);
 
 // ============================
 // RULES DATA (unchanged)
@@ -371,5 +369,3 @@ if (container) {
   search?.addEventListener("input", filterCards);
   renderCards();
 }
-
-renderCards();
