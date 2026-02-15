@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Daggerheart GM Tools{% endblock %}</title>
 
+  <!-- Prevent flash before theme loads -->
+  <style>
+    html {
+      visibility: hidden;
+    }
+  </style>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = { darkMode: 'class' }
@@ -16,7 +23,7 @@
     window.SUPABASE_KEY = "{{ SUPABASE_KEY }}";
   </script>
 
-  <!-- Supabase UMD (synchronous, global) -->
+  <!-- Supabase UMD -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
@@ -24,8 +31,6 @@
       window.SUPABASE_URL,
       window.SUPABASE_KEY
     );
-
-    console.log("GLOBAL SUPABASE INITIALIZED");
   </script>
 
   <link rel="stylesheet" href="/css/styles.css" />
@@ -39,8 +44,7 @@
 
   <main class="flex-1 p-6 overflow-y-auto flex flex-col">
     <div class="max-w-5xl mx-auto w-full">
-      {% block content %}
-      {% endblock %}
+      {% block content %}{% endblock %}
     </div>
 
     {% include "footer.html" %}
@@ -48,9 +52,8 @@
 
 </div>
 
-<script src="{{ url_for('static', filename='js/app.js') }}?v=999"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
 <script src="{{ url_for('static', filename='js/login.js') }}"></script>
-
 <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 
 {% block scripts %}{% endblock %}

@@ -52,11 +52,6 @@ body.dark .slider {
   background-color: #555;
 }
 
-body.dark {
-  background-color: #121212;
-  color: #e5e5e5;
-}
-
 body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }

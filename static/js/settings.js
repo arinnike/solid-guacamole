@@ -31,7 +31,7 @@ if (saveBtn) {
   displayNameInput.value = settings.display_name || "";
   darkModeCheckbox.checked = !!settings.dark_mode;
 
-  document.body.classList.toggle("dark", settings.dark_mode);
+  document.documentElement.classList.toggle("dark", settings.dark_mode);
 }
 
   })();
