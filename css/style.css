@@ -14,9 +14,8 @@
 }
 
 .switch input {
-  position: absolute;
-  opacity: 0;
-  pointer-events: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .slider {
