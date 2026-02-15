@@ -88,12 +88,20 @@ def settings():
 @application.route("/primary_weapons")
 @login_required
 def weapons_page():
-    return render_template("primary_weapons.html")
+    return render_template(
+        "primary_weapons.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
+        )
 
 @application.route("/equipment")
 @login_required
 def equipment_page():
-    return render_template("equipment.html")
+    return render_template(
+        "equipment.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
+        )
 
 # ------------------------
 # Supabase → Flask Session
