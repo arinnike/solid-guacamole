@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request, session, redirect
+from flask import Flask, jsonify, render_template, request, session, redirect, abort
 from dotenv import load_dotenv
 import os
 import mysql.connector
@@ -35,7 +35,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user" not in session:
-            return redirect("/login")
+            return abort(401)   # or redirect("/")
         return f(*args, **kwargs)
     return decorated
 
