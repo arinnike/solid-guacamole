@@ -113,25 +113,31 @@ html {
   margin: auto;
 }
 
-.dice-btn {
-  background: #1c1c25;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 12px;
+.dice-icon {
   cursor: pointer;
-  color: #eee;
-  font-size: 1rem;
-  transition: 0.15s;
+  width: 64px;
+  height: 64px;
+  margin: auto;
+  transition: transform .15s, fill .15s;
 }
 
-.dice-btn:hover {
-  background: #2a2a36;
-  transform: translateY(-2px);
+.dice-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: #444;
+  stroke: #eee;
+  stroke-width: 2;
 }
 
-.duality {
-  grid-column: span 2;
-  background: linear-gradient(135deg, #4fa3ff, #b84fff);
+.dice-icon:hover svg {
+  fill: #2a2a36;
+  transform: scale(1.1);
+  stroke: #fff;
+}
+
+.duality svg {
+  fill: #3a3a52;
+  stroke: #8faaff;
 }
 
 #result {
