@@ -103,6 +103,15 @@ def equipment_page():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
         )
 
+@application.route("/dice")
+@login_required
+def dice_page():
+    return render_template(
+        "dice.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
+        )
+
 # ------------------------
 # Supabase → Flask Session
 # ------------------------

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="dice-container">
+
+  <h1>🎲 Dice</h1>
+
+  <div id="dice-grid">
+
+    <button class="dice-btn duality" onclick="rollDuality()">Duality</button>
+
+    <button class="dice-btn" onclick="roll(20)">d20</button>
+    <button class="dice-btn" onclick="roll(100)">d100</button>
+    <button class="dice-btn" onclick="roll(12)">d12</button>
+    <button class="dice-btn" onclick="roll(8)">d8</button>
+    <button class="dice-btn" onclick="roll(6)">d6</button>
+    <button class="dice-btn" onclick="roll(4)">d4</button>
+
+  </div>
+
+  <div id="result">—</div>
+  <div id="details"></div>
+
+  <div id="history"></div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/dice.js') }}"></script>
+
+{% endblock %}

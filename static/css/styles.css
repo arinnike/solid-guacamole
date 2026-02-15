@@ -99,3 +99,57 @@ html {
   text-decoration: none;
   border-radius: 6px;
 }
+
+.dice-container {
+  text-align: center;
+  padding: 40px;
+}
+
+#dice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 16px;
+  max-width: 500px;
+  margin: auto;
+}
+
+.dice-btn {
+  background: #1c1c25;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  color: #eee;
+  font-size: 1rem;
+  transition: 0.15s;
+}
+
+.dice-btn:hover {
+  background: #2a2a36;
+  transform: translateY(-2px);
+}
+
+.duality {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #4fa3ff, #b84fff);
+}
+
+#result {
+  margin-top: 30px;
+  font-size: 2.2rem;
+}
+
+#details {
+  opacity: .8;
+  margin-top: 6px;
+}
+
+#history {
+  margin-top: 25px;
+  font-size: .9rem;
+  opacity: .7;
+}
+
+.history-item {
+  margin: 3px 0;
+}
