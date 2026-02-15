@@ -103,3 +103,5 @@ if (container) {
   search?.addEventListener("input", filterCards);
   renderCards();
 }
+
+renderCards();
