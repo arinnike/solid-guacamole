@@ -41,6 +41,21 @@
 
   </div>
 
+  <!-- Item Sub Tabs -->
+    <div id="item-tabs" class="flex gap-4 hidden">
+
+    <button class="item-tab font-semibold"
+            data-type="consumables">
+        Consumables
+    </button>
+
+    <button class="item-tab opacity-60"
+            data-type="loot">
+        Loot
+    </button>
+
+    </div>
+
   <!-- Filters -->
   <div class="flex flex-wrap gap-6">
 
@@ -85,6 +100,15 @@
               class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
         <option value="">All</option>
       </select>
+    </div>
+
+    <!-- Rarity -->
+    <div class="flex flex-col">
+    <label class="text-sm mb-1 opacity-70">Rarity</label>
+    <select id="rarity-filter"
+            class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
+        <option value="">All</option>
+    </select>
     </div>
 
   </div>

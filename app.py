@@ -189,6 +189,35 @@ def armor_api():
 
     return jsonify(rows)
 
+@application.route("/api/consumables")
+@login_required
+def consumables_api():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM consumables")
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
+
+
+@application.route("/api/loot")
+@login_required
+def loot_api():
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM loot")
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
+
 # ------------------------
 # Health
 # ------------------------
