@@ -6,9 +6,9 @@ async function applyDarkMode() {
   if (!user) return;
 
   const { data, error } = await sb
-    .from("profiles")
+    .from("user_settings")
     .select("dark_mode")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (error) {
