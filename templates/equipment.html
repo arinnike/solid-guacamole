@@ -1,16 +1,39 @@
 {% extends "base.html" %}
-
 {% block title %}Equipment{% endblock %}
 
 {% block content %}
 
-Equipment page coming soon!
+<div class="space-y-6">
 
+  <h1 class="text-3xl font-bold">Equipment</h1>
 
+  <!-- Main Tabs -->
+  <div class="flex gap-4 border-b border-zinc-300 dark:border-zinc-700">
+    <button class="main-tab font-semibold border-b-2 border-zinc-900 dark:border-zinc-200" data-tab="weapons">Weapons</button>
+    <button class="main-tab opacity-60" data-tab="armor">Armor</button>
+    <button class="main-tab opacity-60" data-tab="items">Items</button>
+  </div>
+
+  <!-- Weapon Sub Tabs -->
+  <div id="weapon-tabs" class="flex gap-4">
+    <button class="weapon-tab font-semibold" data-type="primary">Primary</button>
+    <button class="weapon-tab opacity-60" data-type="secondary">Secondary</button>
+  </div>
+
+  <!-- Search -->
+  <input
+    id="equipment-search"
+    placeholder="Search weapons..."
+    class="w-full md:w-96 px-4 py-2 rounded-lg border dark:border-zinc-700 bg-white dark:bg-zinc-800"
+  />
+
+  <!-- Grid -->
+  <div id="equipment-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+</div>
 
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-<script type="module" src="{{ url_for('static', filename='js/settings.js') }}"></script>
+<script src="{{ url_for('static', filename='js/equipment.js') }}"></script>
 {% endblock %}

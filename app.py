@@ -151,6 +151,30 @@ def primaryWeapons_api():
 
     return jsonify(rows)
 
+@application.route("/api/secondary_weapons")
+@login_required
+def secondaryWeapons_api():
+    search = request.args.get("q", "")
+
+    conn = get_db()
+    cursor = conn.cursor(dictionary=True)
+
+    if search:
+        cursor.execute("""
+            SELECT *
+            FROM secondary_weapons
+            WHERE name LIKE %s
+        """, (f"%{search}%",))
+    else:
+        cursor.execute("SELECT * FROM secondary_weapons")
+
+    rows = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(rows)
+
 # ------------------------
 # Health
 # ------------------------
