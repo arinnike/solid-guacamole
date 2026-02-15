@@ -1,3 +1,4 @@
+let currentMain = "weapons";
 let currentType = "primary";
 let allWeapons = [];
 
@@ -6,6 +7,7 @@ const tierFilter = document.getElementById("tier-filter");
 const traitFilter = document.getElementById("trait-filter");
 const burdenFilter = document.getElementById("burden-filter");
 const searchInput = document.getElementById("search-input");
+const weaponTabs = document.getElementById("weapon-tabs");
 
 /* Load weapons */
 
@@ -30,13 +32,13 @@ function populateFilters() {
     if (w.burden) burdens.add(w.burden);
   });
 
-  fillSelect(tierFilter, tiers);
-  fillSelect(traitFilter, traits);
-  fillSelect(burdenFilter, burdens);
+  fillSelect(tierFilter, tiers, "Tier");
+  fillSelect(traitFilter, traits, "Trait");
+  fillSelect(burdenFilter, burdens, "Burden");
 }
 
-function fillSelect(select, values) {
-  select.innerHTML = `<option value="">All</option>`;
+function fillSelect(select, values, label) {
+  select.innerHTML = `<option value="">${label}</option>`;
   [...values].sort().forEach(v => {
     select.innerHTML += `<option value="${v}">${v}</option>`;
   });
@@ -59,10 +61,12 @@ function renderTable() {
       (!burden || w.burden == burden) &&
       JSON.stringify(w).toLowerCase().includes(search)
     )
-    .forEach(w => {
+    .forEach((w, i) => {
+
+      const stripe = i % 2 === 0 ? "bg-zinc-50 dark:bg-zinc-900" : "bg-zinc-100 dark:bg-zinc-800";
 
       body.innerHTML += `
-        <tr class="border-t dark:border-zinc-700">
+        <tr class="${stripe} hover:bg-zinc-200 dark:hover:bg-zinc-700 transition border-t dark:border-zinc-700">
           <td class="p-2 font-semibold">${w.name}</td>
           <td class="p-2 text-center">${w.tier || ""}</td>
           <td class="p-2 text-center">${w.trait || ""}</td>
@@ -80,7 +84,7 @@ function renderTable() {
 [tierFilter, traitFilter, burdenFilter, searchInput]
   .forEach(el => el.addEventListener("input", renderTable));
 
-/* Tabs */
+/* Weapon tabs */
 
 document.querySelectorAll(".weapon-tab").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -89,6 +93,24 @@ document.querySelectorAll(".weapon-tab").forEach(btn => {
 
     currentType = btn.dataset.type;
     loadWeapons();
+  });
+});
+
+/* Main tabs */
+
+document.querySelectorAll(".main-tab").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".main-tab").forEach(b => {
+      b.classList.remove("border-b-2", "border-zinc-900", "dark:border-zinc-200");
+      b.classList.add("opacity-60");
+    });
+
+    btn.classList.remove("opacity-60");
+    btn.classList.add("border-b-2", "border-zinc-900", "dark:border-zinc-200");
+
+    currentMain = btn.dataset.main;
+
+    weaponTabs.style.display = currentMain === "weapons" ? "flex" : "none";
   });
 });
 

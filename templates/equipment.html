@@ -7,8 +7,15 @@
 
 <h1 class="text-3xl font-bold">Equipment</h1>
 
-<!-- Weapon Type Tabs -->
-<div class="flex gap-4">
+<!-- Main Tabs -->
+<div class="flex gap-6 border-b border-zinc-300 dark:border-zinc-700">
+  <button class="main-tab font-semibold border-b-2 border-zinc-900 dark:border-zinc-200 pb-2" data-main="weapons">Weapons</button>
+  <button class="main-tab opacity-60 pb-2" data-main="armor">Armor</button>
+  <button class="main-tab opacity-60 pb-2" data-main="items">Items</button>
+</div>
+
+<!-- Weapon Sub Tabs -->
+<div id="weapon-tabs" class="flex gap-4">
   <button class="weapon-tab font-semibold" data-type="primary">Primary Weapons</button>
   <button class="weapon-tab opacity-60" data-type="secondary">Secondary Weapons</button>
 </div>
@@ -20,15 +27,15 @@
     class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700"/>
 
   <select id="tier-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
-    <option value="">All Tiers</option>
+    <option value="">Tier</option>
   </select>
 
   <select id="trait-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
-    <option value="">All Traits</option>
+    <option value="">Trait</option>
   </select>
 
   <select id="burden-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
-    <option value="">All Burdens</option>
+    <option value="">Burden</option>
   </select>
 
 </div>
