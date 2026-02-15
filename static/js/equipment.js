@@ -170,23 +170,48 @@ document.querySelectorAll(".main-tab").forEach(b => b.onclick = () => {
   weaponTabs.style.display = currentMain === "weapons" ? "flex" : "none";
   itemTabs.style.display = currentMain === "items" ? "flex" : "none";
 
-  // Reset visual states
+  // Reset all filter visibility
+  tierFilter.parentElement.style.display = "none";
+  traitFilter.parentElement.style.display = "none";
+  reachFilter.parentElement.style.display = "none";
+  burdenFilter.parentElement.style.display = "none";
+  rarityFilter.parentElement.style.display = "none";
+
+  // Clear filter values
+  tierFilter.value = "";
+  traitFilter.value = "";
+  reachFilter.value = "";
+  burdenFilter.value = "";
+  rarityFilter.value = "";
+  searchInput.value = "";
+
+  // Reset sub-tabs
   document.querySelectorAll(".weapon-tab").forEach(t => t.classList.add("opacity-60"));
   document.querySelectorAll(".item-tab").forEach(t => t.classList.add("opacity-60"));
 
   if (currentMain === "weapons") {
     currentType = "primary";
     document.querySelector(".weapon-tab[data-type='primary']").classList.remove("opacity-60");
+
+    tierFilter.parentElement.style.display = "flex";
+    traitFilter.parentElement.style.display = "flex";
+    reachFilter.parentElement.style.display = "flex";
+    burdenFilter.parentElement.style.display = "flex";
+
     loadWeapons();
   }
 
   if (currentMain === "armor") {
+    tierFilter.parentElement.style.display = "flex";
     loadArmor();
   }
 
   if (currentMain === "items") {
     currentType = "consumables";
     document.querySelector(".item-tab[data-type='consumables']").classList.remove("opacity-60");
+
+    rarityFilter.parentElement.style.display = "flex";
+
     loadItems();
   }
 
