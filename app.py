@@ -39,6 +39,10 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated
 
+@application.route("/debug-session")
+def debug():
+    return str(session)
+
 # ------------------------
 # Pages
 # ------------------------
