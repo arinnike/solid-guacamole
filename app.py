@@ -1,15 +1,23 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, render_template, request, session, redirect
 from dotenv import load_dotenv
 import os
 import mysql.connector
+from functools import wraps
 
-#Load .env ONCE, explicitly
+# Load .env ONCE
 load_dotenv(os.path.expanduser("~/.env"))
 
 application = Flask(__name__)
 
+# REQUIRED for sessions
+application.secret_key = os.getenv("FLASK_SECRET", "dev-secret-change-me")
+
 application.config["TEMPLATES_AUTO_RELOAD"] = True
 application.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
+# ------------------------
+# Database
+# ------------------------
 
 def get_db():
     return mysql.connector.connect(
@@ -19,15 +27,38 @@ def get_db():
         database=os.getenv("DB_NAME")
     )
 
-# Index page
+# ------------------------
+# Auth Decorator
+# ------------------------
+
+def login_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if "user" not in session:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated
+
+# ------------------------
+# Pages
+# ------------------------
+
 @application.route("/")
 def home():
-    return render_template("index.html",
+    return render_template(
+        "index.html",
         SUPABASE_URL=os.getenv("SUPABASE_URL"),
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
-# Reset password
+@application.route("/login")
+def login():
+    return render_template(
+        "login.html",
+        SUPABASE_URL=os.getenv("SUPABASE_URL"),
+        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
+    )
+
 @application.route("/reset-password")
 def reset_password():
     return render_template(
@@ -36,8 +67,12 @@ def reset_password():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
-# Settings page
-@application.route("/settings.html")
+# ------------------------
+# PROTECTED PAGES
+# ------------------------
+
+@application.route("/settings")
+@login_required
 def settings():
     return render_template(
         "settings.html",
@@ -45,23 +80,37 @@ def settings():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
-# Primary weapons page    
 @application.route("/primary_weapons")
+@login_required
 def weapons_page():
     return render_template("primary_weapons.html")
 
-# Supabase test route to verify env loading
-@application.route("/supabase-test")
-def supabase_test():
-    return os.getenv("SUPABASE_URL", "Env not loaded")
+# ------------------------
+# Supabase → Flask Session
+# ------------------------
 
-# Check flask sanity
-@application.route("/health")
-def health():
-    return "OK"
+@application.route("/set-session", methods=["POST"])
+def set_session():
+    data = request.json
 
-# Primary weapons table search
+    if not data or "user" not in data:
+        return "Unauthorized", 401
+
+    session["user"] = data["user"]["id"]
+
+    return "ok"
+
+@application.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
+# ------------------------
+# API (already protected via pages)
+# ------------------------
+
 @application.route("/api/primary_weapons")
+@login_required
 def primaryWeapons_api():
     search = request.args.get("q", "")
 
@@ -83,3 +132,11 @@ def primaryWeapons_api():
     conn.close()
 
     return jsonify(rows)
+
+# ------------------------
+# Health
+# ------------------------
+
+@application.route("/health")
+def health():
+    return "OK"
