@@ -163,18 +163,33 @@ document.querySelectorAll(".weapon-tab").forEach(b=>b.onclick=()=>{currentType=b
 
 document.querySelectorAll(".item-tab").forEach(b=>b.onclick=()=>{currentType=b.dataset.type;loadItems();});
 
-document.querySelectorAll(".main-tab").forEach(b=>b.onclick=()=>{
-currentMain=b.dataset.main;
+document.querySelectorAll(".main-tab").forEach(b => b.onclick = () => {
 
-weaponTabs.style.display=currentMain==="weapons"?"flex":"none";
-itemTabs.style.display=currentMain==="items"?"flex":"none";
+  currentMain = b.dataset.main;
 
-[tierFilter.parentElement,traitFilter.parentElement,reachFilter.parentElement,burdenFilter.parentElement]
-.forEach(el=>el.style.display=currentMain==="weapons"?"flex":"none");
+  weaponTabs.style.display = currentMain === "weapons" ? "flex" : "none";
+  itemTabs.style.display = currentMain === "items" ? "flex" : "none";
 
-rarityFilter.parentElement.style.display=currentMain==="items"?"flex":"none";
+  // Reset visual states
+  document.querySelectorAll(".weapon-tab").forEach(t => t.classList.add("opacity-60"));
+  document.querySelectorAll(".item-tab").forEach(t => t.classList.add("opacity-60"));
 
-currentMain==="weapons"?loadWeapons():currentMain==="armor"?loadArmor():loadItems();
+  if (currentMain === "weapons") {
+    currentType = "primary";
+    document.querySelector(".weapon-tab[data-type='primary']").classList.remove("opacity-60");
+    loadWeapons();
+  }
+
+  if (currentMain === "armor") {
+    loadArmor();
+  }
+
+  if (currentMain === "items") {
+    currentType = "consumables";
+    document.querySelector(".item-tab[data-type='consumables']").classList.remove("opacity-60");
+    loadItems();
+  }
+
 });
 
 /* ---------------- Init ---------------- */
