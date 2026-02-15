@@ -55,3 +55,7 @@ body.dark .slider {
 body {
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+
+html {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
