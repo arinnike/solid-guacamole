@@ -5,30 +5,55 @@
 
 <div class="space-y-6">
 
-  <h1 class="text-3xl font-bold">Equipment</h1>
+<h1 class="text-3xl font-bold">Equipment</h1>
 
-  <!-- Main Tabs -->
-  <div class="flex gap-4 border-b border-zinc-300 dark:border-zinc-700">
-    <button class="main-tab font-semibold border-b-2 border-zinc-900 dark:border-zinc-200" data-tab="weapons">Weapons</button>
-    <button class="main-tab opacity-60" data-tab="armor">Armor</button>
-    <button class="main-tab opacity-60" data-tab="items">Items</button>
-  </div>
+<!-- Weapon Type Tabs -->
+<div class="flex gap-4">
+  <button class="weapon-tab font-semibold" data-type="primary">Primary Weapons</button>
+  <button class="weapon-tab opacity-60" data-type="secondary">Secondary Weapons</button>
+</div>
 
-  <!-- Weapon Sub Tabs -->
-  <div id="weapon-tabs" class="flex gap-4">
-    <button class="weapon-tab font-semibold" data-type="primary">Primary</button>
-    <button class="weapon-tab opacity-60" data-type="secondary">Secondary</button>
-  </div>
+<!-- Filters -->
+<div class="flex flex-wrap gap-4">
 
-  <!-- Search -->
-  <input
-    id="equipment-search"
-    placeholder="Search weapons..."
-    class="w-full md:w-96 px-4 py-2 rounded-lg border dark:border-zinc-700 bg-white dark:bg-zinc-800"
-  />
+  <input id="search-input" placeholder="Search..."
+    class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700"/>
 
-  <!-- Grid -->
-  <div id="equipment-grid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+  <select id="tier-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
+    <option value="">All Tiers</option>
+  </select>
+
+  <select id="trait-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
+    <option value="">All Traits</option>
+  </select>
+
+  <select id="burden-filter" class="px-3 py-2 border rounded dark:bg-zinc-800 dark:border-zinc-700">
+    <option value="">All Burdens</option>
+  </select>
+
+</div>
+
+<!-- Table -->
+<div class="overflow-x-auto">
+
+<table class="min-w-full text-sm border dark:border-zinc-700">
+<thead class="bg-zinc-200 dark:bg-zinc-800">
+<tr>
+  <th class="p-2 text-left">Name</th>
+  <th class="p-2">Tier</th>
+  <th class="p-2">Trait</th>
+  <th class="p-2">Reach</th>
+  <th class="p-2">Damage</th>
+  <th class="p-2">Burden</th>
+  <th class="p-2 text-left">Feature</th>
+</tr>
+</thead>
+
+<tbody id="equipment-body"></tbody>
+
+</table>
+
+</div>
 
 </div>
 

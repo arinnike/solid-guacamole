@@ -1,28 +1,86 @@
 let currentType = "primary";
-let weaponSearch = "";
+let allWeapons = [];
+
+const body = document.getElementById("equipment-body");
+const tierFilter = document.getElementById("tier-filter");
+const traitFilter = document.getElementById("trait-filter");
+const burdenFilter = document.getElementById("burden-filter");
+const searchInput = document.getElementById("search-input");
+
+/* Load weapons */
 
 async function loadWeapons() {
-  const res = await fetch(`/api/${currentType}_weapons?q=${encodeURIComponent(weaponSearch)}`);
-  const data = await res.json();
+  const res = await fetch(`/api/${currentType}_weapons`);
+  allWeapons = await res.json();
 
-  const grid = document.getElementById("equipment-grid");
-  grid.innerHTML = "";
+  populateFilters();
+  renderTable();
+}
 
-  data.forEach(w => {
-    const card = document.createElement("div");
-    card.className = "p-4 rounded-xl bg-white dark:bg-zinc-800 shadow";
+/* Populate dropdowns */
 
-    card.innerHTML = `
-      <h3 class="text-lg font-bold mb-1">${w.name}</h3>
-      <p class="text-sm opacity-70 mb-2">Tier: ${w.tier || "-"}</p>
-      <p class="text-sm">${w.description || ""}</p>
-    `;
+function populateFilters() {
+  const tiers = new Set();
+  const traits = new Set();
+  const burdens = new Set();
 
-    grid.appendChild(card);
+  allWeapons.forEach(w => {
+    if (w.tier) tiers.add(w.tier);
+    if (w.trait) traits.add(w.trait);
+    if (w.burden) burdens.add(w.burden);
+  });
+
+  fillSelect(tierFilter, tiers);
+  fillSelect(traitFilter, traits);
+  fillSelect(burdenFilter, burdens);
+}
+
+function fillSelect(select, values) {
+  select.innerHTML = `<option value="">All</option>`;
+  [...values].sort().forEach(v => {
+    select.innerHTML += `<option value="${v}">${v}</option>`;
   });
 }
 
-/* Weapon tabs */
+/* Rendering */
+
+function renderTable() {
+  const tier = tierFilter.value;
+  const trait = traitFilter.value;
+  const burden = burdenFilter.value;
+  const search = searchInput.value.toLowerCase();
+
+  body.innerHTML = "";
+
+  allWeapons
+    .filter(w =>
+      (!tier || w.tier == tier) &&
+      (!trait || w.trait == trait) &&
+      (!burden || w.burden == burden) &&
+      JSON.stringify(w).toLowerCase().includes(search)
+    )
+    .forEach(w => {
+
+      body.innerHTML += `
+        <tr class="border-t dark:border-zinc-700">
+          <td class="p-2 font-semibold">${w.name}</td>
+          <td class="p-2 text-center">${w.tier || ""}</td>
+          <td class="p-2 text-center">${w.trait || ""}</td>
+          <td class="p-2 text-center">${w.reach || ""}</td>
+          <td class="p-2 text-center">${w.damage || ""}</td>
+          <td class="p-2 text-center">${w.burden || ""}</td>
+          <td class="p-2">${w.feature || ""}</td>
+        </tr>
+      `;
+    });
+}
+
+/* Filters */
+
+[tierFilter, traitFilter, burdenFilter, searchInput]
+  .forEach(el => el.addEventListener("input", renderTable));
+
+/* Tabs */
 
 document.querySelectorAll(".weapon-tab").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -34,13 +92,6 @@ document.querySelectorAll(".weapon-tab").forEach(btn => {
   });
 });
 
-/* Search */
-
-document.getElementById("equipment-search").addEventListener("input", e => {
-  weaponSearch = e.target.value;
-  loadWeapons();
-});
-
-/* Initial load */
+/* Initial */
 
 loadWeapons();
