@@ -56,7 +56,16 @@ function populateArmorFilters() {
 }
 
 function populateItemFilters() {
-  fillSelect(rarityFilter, unique("rarity", allItems));
+
+  const rarityOrder = ["Common", "Uncommon", "Rare", "Legendary"];
+
+  const raritiesInData = unique("rarity", allItems);
+
+  const sortedRarities = rarityOrder.filter(r =>
+    raritiesInData.includes(r)
+  );
+
+  fillSelect(rarityFilter, sortedRarities);
 }
 
 function unique(key, arr) {
