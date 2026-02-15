@@ -55,13 +55,6 @@ def home():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
-@application.route("/login")
-def login():
-    return render_template(
-        "login.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-    )
 
 @application.route("/reset-password")
 def reset_password():
@@ -88,6 +81,11 @@ def settings():
 @login_required
 def weapons_page():
     return render_template("primary_weapons.html")
+
+@application.route("/equipment")
+@login_required
+def equipment_page():
+    return render_template("equipment.html")
 
 # ------------------------
 # Supabase → Flask Session
