@@ -32,6 +32,7 @@ if (saveBtn) {
   darkModeCheckbox.checked = !!settings.dark_mode;
 
   document.documentElement.classList.toggle("dark", settings.dark_mode);
+  localStorage.setItem("dark_mode", darkMode ? "true" : "false");
 }
 
   })();

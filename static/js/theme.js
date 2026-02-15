@@ -1,10 +1,7 @@
 async function applyDarkMode() {
   const { data: { user } } = await window.supabase.auth.getUser();
 
-  if (!user) {
-    document.documentElement.style.visibility = "visible";
-    return;
-  }
+  if (!user) return;
 
   const { data, error } = await window.supabase
     .from("user_settings")
@@ -14,14 +11,11 @@ async function applyDarkMode() {
 
   if (error) {
     console.error("Dark mode fetch failed:", error);
-    document.documentElement.style.visibility = "visible";
     return;
   }
 
   document.documentElement.classList.toggle("dark", data.dark_mode);
-
-  // Reveal page AFTER theme applied
-  document.documentElement.style.visibility = "visible";
+  localStorage.setItem("dark_mode", data.dark_mode ? "true" : "false");
 }
 
 document.addEventListener("user-ready", applyDarkMode);
