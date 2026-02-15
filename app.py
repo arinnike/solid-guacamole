@@ -70,7 +70,7 @@ def unauthorized():
         "unauthorized.html",
         SUPABASE_URL=os.getenv("SUPABASE_URL"),
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-        ), 401
+    ), 401
 
 # ------------------------
 # PROTECTED PAGES

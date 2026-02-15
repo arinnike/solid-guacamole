@@ -1,1 +1,16 @@
-equipment here
+{% extends "base.html" %}
+
+{% block title %}Equipment{% endblock %}
+
+{% block content %}
+
+Equipment page coming soon!
+
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
