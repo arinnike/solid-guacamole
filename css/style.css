@@ -1,3 +1,25 @@
+/* Card hover */
+
+.card {
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+
+/* Smooth theme transition */
+
+html {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+
+/* =========================
+   Toggle Switch (Dark Mode)
+   ========================= */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -5,22 +27,30 @@
   height: 26px;
 }
 
+/* Hide native checkbox completely */
+
 .switch input {
   position: absolute;
   opacity: 0;
-  pointer-events: none;
+  width: 0;
+  height: 0;
   appearance: none;
   -webkit-appearance: none;
 }
 
+/* Slider background */
+
 .slider {
+  display: block;
   position: absolute;
-  cursor: pointer;
   inset: 0;
+  cursor: pointer;
   background-color: #ccc;
-  transition: .3s;
+  transition: 0.25s;
   border-radius: 26px;
 }
+
+/* Slider knob */
 
 .slider:before {
   position: absolute;
@@ -30,27 +60,16 @@
   left: 3px;
   bottom: 3px;
   background: white;
-  transition: .3s;
+  transition: 0.25s;
   border-radius: 50%;
 }
 
-input:checked + .slider {
+/* Checked state */
+
+.switch input:checked + .slider {
   background-color: #4caf50;
 }
 
-input:checked + .slider:before {
+.switch input:checked + .slider:before {
   transform: translateX(24px);
-}
-
-/* FORCE hide native checkbox for dark mode toggle */
-#dark-mode {
-  position: absolute !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-}
-
-.switch {
-  position: relative !important;
 }
