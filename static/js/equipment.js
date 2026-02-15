@@ -1,8 +1,8 @@
 let currentType = "primary";
-let search = "";
+let weaponSearch = "";
 
 async function loadWeapons() {
-  const res = await fetch(`/api/${currentType}_weapons?q=${encodeURIComponent(search)}`);
+  const res = await fetch(`/api/${currentType}_weapons?q=${encodeURIComponent(weaponSearch)}`);
   const data = await res.json();
 
   const grid = document.getElementById("equipment-grid");
@@ -37,7 +37,7 @@ document.querySelectorAll(".weapon-tab").forEach(btn => {
 /* Search */
 
 document.getElementById("equipment-search").addEventListener("input", e => {
-  search = e.target.value;
+  weaponSearch = e.target.value;
   loadWeapons();
 });
 
