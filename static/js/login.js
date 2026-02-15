@@ -32,7 +32,7 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
     signinMenu?.classList.add("hidden");
   }
 
-  signinMenu?.classList.add("hidden");
+  //signinMenu?.classList.add("hidden");
 });
 
 // Discord login
@@ -114,3 +114,25 @@ sb.auth.onAuthStateChange((_event, session) => {
     loggedOut?.classList.remove("hidden");
   }
 })();
+
+//User session
+sb.auth.onAuthStateChange(async (_event, session) => {
+  if (session) {
+    window.currentUserId = session.user.id;
+    loggedOut?.classList.add("hidden");
+    loggedIn?.classList.remove("hidden");
+
+    // Sync Supabase → Flask
+    await fetch("/set-session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(session)
+    });
+
+    document.dispatchEvent(new Event("user-ready"));
+  } else {
+    window.currentUserId = null;
+    loggedIn?.classList.add("hidden");
+    loggedOut?.classList.remove("hidden");
+  }
+});
