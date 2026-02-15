@@ -1,4 +1,4 @@
-const sb = window.supabase;
+var sb = window.supabase;
 
 // Elements
 const loggedOut = document.getElementById("logged-out");

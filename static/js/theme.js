@@ -1,11 +1,9 @@
-const sb = window.supabase;
-
 async function applyDarkMode() {
-  const { data: { user } } = await sb.auth.getUser();
+  const { data: { user } } = await window.supabase.auth.getUser();
 
   if (!user) return;
 
-  const { data, error } = await sb
+  const { data, error } = await window.supabase
     .from("user_settings")
     .select("dark_mode")
     .eq("user_id", user.id)
