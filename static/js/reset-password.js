@@ -27,3 +27,12 @@ document.getElementById("reset-btn")?.addEventListener("click", async () => {
     }, 1500);
   }
 });
+
+// Darkmode toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const darkMode = localStorage.getItem("darkMode");
+
+  if (darkMode === "true") {
+    document.body.classList.add("dark");
+  }
+});

@@ -74,3 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initial load
   loadWeapons();
 });
+
+// Darkmode toggle
+document.addEventListener("DOMContentLoaded", () => {
+  const darkMode = localStorage.getItem("darkMode");
+
+  if (darkMode === "true") {
+    document.body.classList.add("dark");
+  }
+});
