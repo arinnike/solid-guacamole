@@ -7,6 +7,7 @@ let allWeapons = [];
 const body = document.getElementById("equipment-body");
 const tierFilter = document.getElementById("tier-filter");
 const traitFilter = document.getElementById("trait-filter");
+const reachFilter = document.getElementById("reach-filter");
 const burdenFilter = document.getElementById("burden-filter");
 const searchInput = document.getElementById("search-input");
 const weaponTabs = document.getElementById("weapon-tabs");
@@ -30,16 +31,19 @@ async function loadWeapons() {
 function populateFilters() {
   const tiers = new Set();
   const traits = new Set();
+  const reaches = new Set();
   const burdens = new Set();
 
   allWeapons.forEach(w => {
     if (w.tier) tiers.add(w.tier);
     if (w.trait) traits.add(w.trait);
+    if (w.reach) reaches.add(w.reach);
     if (w.burden) burdens.add(w.burden);
   });
 
   fillSelect(tierFilter, tiers);
   fillSelect(traitFilter, traits);
+  fillSelect(reachFilter, reaches);
   fillSelect(burdenFilter, burdens);
 }
 
@@ -57,6 +61,7 @@ function fillSelect(select, values) {
 function renderTable() {
   const tier = tierFilter.value;
   const trait = traitFilter.value;
+  const reach = reachFilter.value;
   const burden = burdenFilter.value;
   const search = searchInput.value.toLowerCase();
 
@@ -66,6 +71,7 @@ function renderTable() {
     .filter(w =>
       (!tier || w.tier == tier) &&
       (!trait || w.trait == trait) &&
+      (!reach || w.reach == reach) &&
       (!burden || w.burden == burden) &&
       JSON.stringify(w).toLowerCase().includes(search)
     )
@@ -93,7 +99,7 @@ function renderTable() {
    Filters
 ----------------------------- */
 
-[tierFilter, traitFilter, burdenFilter, searchInput]
+[tierFilter, traitFilter, reachFilter, burdenFilter, searchInput]
   .forEach(el => el.addEventListener("input", renderTable));
 
 /* -----------------------------
