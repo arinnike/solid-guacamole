@@ -1,4 +1,5 @@
 console.log("APP.JS LOADED");
+console.log("cards container:", document.getElementById("cards"));
 
 // ============================
 // RULES DATA (unchanged)
