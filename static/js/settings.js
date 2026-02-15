@@ -28,9 +28,11 @@ if (saveBtn) {
       .single();
 
     if (settings) {
-      displayNameInput.value = settings.display_name || "";
-      darkModeCheckbox.checked = !!settings.dark_mode;
-    }
+  displayNameInput.value = settings.display_name || "";
+  darkModeCheckbox.checked = !!settings.dark_mode;
+
+  document.body.classList.toggle("dark", settings.dark_mode);
+}
 
   })();
 
@@ -67,6 +69,6 @@ if (saveBtn) {
     }
 
     status.textContent = "Saved!";
-    document.documentElement.classList.toggle("dark", darkMode);
+    document.body.classList.toggle("dark", darkMode);
   });
 }

@@ -20,7 +20,10 @@
 
   <!-- Dark mode -->
   <div class="flex items-center gap-2">
-    <input id="dark-mode" type="checkbox">
+    <label class="switch">
+        <input type="checkbox" id="darkToggle">
+        <span class="slider"></span>
+    </label>
     <label for="dark-mode">Enable dark mode</label>
   </div>
 
@@ -38,5 +41,6 @@
 {% endblock %} 
 
 {% block scripts %}
+<script src="/js/theme.js"></script>
 <script type="module" src="{{ url_for('static', filename='js/settings.js') }}"></script>
 {% endblock %}

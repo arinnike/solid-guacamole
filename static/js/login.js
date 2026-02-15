@@ -26,7 +26,11 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
 
   const { error } = await sb.auth.signInWithPassword({ email, password });
 
-  if (error) alert(error.message);
+  if (error) {
+    alert(error.message);
+  } else {
+    signinMenu?.classList.add("hidden");
+  }
 
   signinMenu?.classList.add("hidden");
 });
@@ -88,6 +92,8 @@ sb.auth.onAuthStateChange((_event, session) => {
     window.currentUserId = session.user.id;
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
+
+    document.dispatchEvent(new Event("user-ready"));
   } else {
     window.currentUserId = null;
     loggedIn?.classList.add("hidden");
@@ -108,12 +114,3 @@ sb.auth.onAuthStateChange((_event, session) => {
     loggedOut?.classList.remove("hidden");
   }
 })();
-
-// Darkmode toggle
-document.addEventListener("DOMContentLoaded", () => {
-  const darkMode = localStorage.getItem("darkMode");
-
-  if (darkMode === "true") {
-    document.body.classList.add("dark");
-  }
-});

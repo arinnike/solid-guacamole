@@ -1,5 +1,3 @@
-console.log("APP.JS LOADED");
-
 // ============================
 // RULES DATA (unchanged)
 // ============================
@@ -297,19 +295,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// ============================
-// Dark mode
-// ============================
-if (localStorage.theme === "dark") {
-  document.documentElement.classList.add("dark");
-}
-
-function toggleDark() {
-  document.documentElement.classList.toggle("dark");
-  localStorage.theme = document.documentElement.classList.contains("dark")
-    ? "dark"
-    : "light";
-}
 
 // ============================
 // Cheat Sheet Functions (GLOBAL)
@@ -369,14 +354,3 @@ if (container) {
   search?.addEventListener("input", filterCards);
   renderCards();
 }
-
-// ============================
-// Darkmode toggle
-// ============================
-document.addEventListener("DOMContentLoaded", () => {
-  const darkMode = localStorage.getItem("darkMode");
-
-  if (darkMode === "true") {
-    document.body.classList.add("dark");
-  }
-});
