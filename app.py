@@ -64,6 +64,10 @@ def reset_password():
         SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
     )
 
+@application.route("/unauthorized")
+def unauthorized():
+    return render_template("unauthorized.html"), 401
+
 # ------------------------
 # PROTECTED PAGES
 # ------------------------

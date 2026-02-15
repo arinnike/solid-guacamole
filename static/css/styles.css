@@ -76,3 +76,26 @@ html {
 #dark-mode:checked + .slider::before {
   transform: translateX(24px) !important;
 }
+
+/* Unauthorized page */
+.unauthorized-container {
+  max-width: 500px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.unauthorized-container h1 {
+  margin-bottom: 1rem;
+}
+
+.unauthorized-container p {
+  margin-bottom: 2rem;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  background: #444;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
