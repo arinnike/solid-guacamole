@@ -1,11 +1,10 @@
 console.log("APP.JS LOADED");
-console.log("cards container:", document.getElementById("cards"));
 
 // ============================
 // RULES DATA (unchanged)
 // ============================
 const rules = [
-  // KEEP YOUR FULL RULES ARRAY EXACTLY AS YOU HAVE IT
+  // KEEP YOUR FULL RULES ARRAY EXACTLY AS IS
 ];
 
 // ============================
@@ -15,16 +14,21 @@ const container = document.getElementById("cards");
 const search = document.getElementById("search");
 
 // ============================
-// Sidebar active link
+// Sidebar active link (SAFE)
 // ============================
 document.addEventListener("DOMContentLoaded", () => {
-  const currentPath = window.location.pathname;
+  try {
+    const currentPath = window.location.pathname;
 
-  document.querySelectorAll(".nav-link").forEach(link => {
-    if (link.getAttribute("href") === currentPath) {
-      link.classList.add("font-bold");
-    }
-  });
+    document.querySelectorAll(".nav-link").forEach(link => {
+      const href = link.getAttribute("href");
+      if (href && href === currentPath) {
+        link.classList.add("font-bold");
+      }
+    });
+  } catch (err) {
+    console.warn("Sidebar highlight skipped:", err);
+  }
 });
 
 // ============================
@@ -61,6 +65,8 @@ function collapseAll() {
 }
 
 function filterCards() {
+  if (!search) return;
+
   const q = search.value.toLowerCase();
   document.querySelectorAll(".card").forEach(card => {
     card.style.display = card.innerText.toLowerCase().includes(q)
@@ -70,7 +76,7 @@ function filterCards() {
 }
 
 // ============================
-// Cheat Sheet Render
+// Render Cards (isolated)
 // ============================
 function renderCards() {
   if (!container) return;
@@ -91,7 +97,7 @@ function renderCards() {
 }
 
 // ============================
-// Init cheat sheet ONLY if present
+// Init Cheat Sheet (guaranteed)
 // ============================
 if (container) {
   search?.addEventListener("input", filterCards);
