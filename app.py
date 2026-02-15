@@ -35,7 +35,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         if "user" not in session:
-            return abort(401)   # or redirect("/")
+            return redirect("/unauthorized")
         return f(*args, **kwargs)
     return decorated
 
