@@ -44,11 +44,13 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 // HARD logout
-document.addEventListener("click", (e) => {
+document.addEventListener("click", async (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
-  sb.auth.signOut();
+  await sb.auth.signOut();
+
+  await fetch("/logout");
 
   Object.keys(localStorage)
     .filter(k => k.includes("sb-"))
