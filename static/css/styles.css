@@ -167,17 +167,17 @@ html {
 }
 
 #history::before {
-  content: "Roll History";
+  content: "Roll History (last 5)";
   display: block;
   margin-bottom: 12px;
-  font-size: 14px;
-  letter-spacing: .1em;
-  opacity: 0.6;
+  font-size: 13px;
+  letter-spacing: .08em;
+  opacity: 0.5;
 }
 
 .history-item {
-  padding: 8px 0;
-  border-bottom: 1px solid #333;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   font-size: 14px;
 }
 
