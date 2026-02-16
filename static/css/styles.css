@@ -114,48 +114,36 @@ html {
 }
 
 .dice-icon {
+  width: 80px;
+  height: 80px;
   cursor: pointer;
-  width: 64px;
-  height: 64px;
-  margin: auto;
-  transition: transform .15s, fill .15s;
+  transition: transform .15s ease;
 }
 
 .dice-icon svg {
   width: 100%;
   height: 100%;
-  fill: #444;
-  stroke: #eee;
-  stroke-width: 2;
+  stroke: #888;
+  stroke-width: 3;
+  fill: none;
+}
+
+.dice-icon text {
+  fill: #aaa;
+  font-size: 22px;
+  text-anchor: middle;
+  font-family: "Segoe UI", sans-serif;
+  font-weight: 500;
+}
+
+.dice-icon:hover {
+  transform: scale(1.08);
 }
 
 .dice-icon:hover svg {
-  fill: #2a2a36;
-  transform: scale(1.1);
   stroke: #fff;
 }
 
-.duality svg {
-  fill: #3a3a52;
-  stroke: #8faaff;
-}
-
-#result {
-  margin-top: 30px;
-  font-size: 2.2rem;
-}
-
-#details {
-  opacity: .8;
-  margin-top: 6px;
-}
-
-#history {
-  margin-top: 25px;
-  font-size: .9rem;
-  opacity: .7;
-}
-
-.history-item {
-  margin: 3px 0;
+.dice-icon:hover text {
+  fill: #fff;
 }
