@@ -114,29 +114,34 @@ html {
 }
 
 .dice-btn {
-  background: transparent;
-  border: 2px solid #888;
-  color: #aaa;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  color: #eee;
   padding: 14px 0;
   font-size: 18px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: transform .15s ease, border-color .15s ease, color .15s ease;
+  box-shadow: 0 3px 0 #111;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    background 0.12s ease;
 }
 
 .dice-btn:hover {
-  transform: scale(1.08);
-  border-color: #fff;
-  color: #fff;
+  background: #333;
+  transform: translateY(-1px);
 }
+
+.dice-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #111;
+}
+
+/* Duality just bigger — not colored */
 
 .duality-btn {
   grid-column: span 2;
-  border-color: #6fa8ff;
-  color: #6fa8ff;
-}
-
-.duality-btn:hover {
-  border-color: #b26fff;
-  color: #b26fff;
+  font-weight: 600;
+  letter-spacing: .04em;
 }
