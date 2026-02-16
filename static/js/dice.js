@@ -41,5 +41,5 @@ function rollDuality() {
     document.getElementById("details").textContent =
     `Duality → Hope ${hope} • Fear ${fear}`;
 
-    pushHistory(`Duality → ${total} (H:${hope} F:${fear})`);
+    pushHistory(`Duality → ${total} ${outcome} (H:${hope} F:${fear})`);
 }
