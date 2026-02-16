@@ -179,28 +179,15 @@ html {
 }
 
 .history-item {
-  position: relative;
-  padding: 6px 0 10px;
+  padding: 10px 0;
   font-size: 14px;
   transition: opacity .2s ease;
 }
 
-/* Divider */
+/* Short centered divider */
 
-.history-item::before {
-  content: "";
-  display: block;
+.history-item:not(:first-child) {
+  border-top: 1px solid #3a3a3a;
+  margin: 0 auto;
   width: 60%;
-  height: 1px;
-  margin: 0 auto 12px auto;
-  background: linear-gradient(
-    to right,
-    transparent,
-    #444,
-    transparent
-  );
-}
-
-.history-item:first-child::before {
-  display: none;
 }
