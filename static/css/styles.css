@@ -185,16 +185,14 @@ html {
   transition: opacity .2s ease;
 }
 
-/* Gradient divider ABOVE each item except the first */
+/* Divider */
 
 .history-item::before {
   content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
   width: 60%;
   height: 1px;
+  margin: 0 auto 14px auto;
   background: linear-gradient(
     to right,
     transparent,
