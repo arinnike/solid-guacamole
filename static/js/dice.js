@@ -24,23 +24,19 @@ function rollDuality() {
   const fear = d(12);
   const total = hope + fear;
 
-  let outcome;
   let text;
 
   if (hope === fear) {
-    outcome = total * 2;
-    text = "CRITICAL SUCCESS";
+    text = "CRITICAL";
   } else if (hope > fear) {
-    outcome = total + hope;
     text = "Hope Dominates";
   } else {
-    outcome = total + fear;
     text = "Fear Dominates";
   }
 
-  document.getElementById("result").textContent = outcome;
+  document.getElementById("result").textContent = total;
   document.getElementById("details").textContent =
     `Hope ${hope} • Fear ${fear} — ${text}`;
 
-  pushHistory(`Duality → ${outcome} (H:${hope} F:${fear})`);
+  pushHistory(`Duality → ${total} (H:${hope} F:${fear})`);
 }
