@@ -5,17 +5,20 @@ function d(sides) {
 }
 
 function pushHistory(text) {
-  history.unshift(text);
-  if (history.length > 5) history.pop();
 
   document.getElementById("history").innerHTML =
     history.map(h => `<div class="history-item">${h}</div>`).join("");
+
+  history.unshift(text);
+
+  if (history.length > 5) history.pop();
 }
 
 function roll(sides) {
   const value = d(sides);
   document.getElementById("result").style.display = "block";
   document.getElementById("details").style.display = "block";
+  document.getElementById("history").style.display = "block";
   document.getElementById("result").textContent = value;
   document.getElementById("details").textContent = `Rolled d${sides}`;
   pushHistory(`d${sides}: ${value}`);
@@ -24,6 +27,7 @@ function roll(sides) {
 function rollDuality() {
     document.getElementById("result").style.display = "block";
     document.getElementById("details").style.display = "block";
+    document.getElementById("history").style.display = "block";
     const hope = d(12);
     const fear = d(12);
     const total = hope + fear;
