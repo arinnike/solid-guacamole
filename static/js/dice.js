@@ -9,7 +9,7 @@ function pushHistory(text) {
   if (history.length > 5) history.pop();
 
   document.getElementById("history").innerHTML =
-    history.map(h => `<div class="history-item">${h}</div>`).join("");
+    history.map(h => `<div class="history-item">${h}</div><br>`).join("");
 }
 
 function roll(sides) {
@@ -20,23 +20,26 @@ function roll(sides) {
 }
 
 function rollDuality() {
-  const hope = d(12);
-  const fear = d(12);
-  const total = hope + fear;
+    const hope = d(12);
+    const fear = d(12);
+    const total = hope + fear;
 
-  let text;
+    let outcome;
 
-  if (hope === fear) {
-    text = "CRITICAL";
-  } else if (hope > fear) {
-    text = "Hope Dominates";
-  } else {
-    text = "Fear Dominates";
-  }
+    if (hope === fear) {
+    outcome = "Critical";
+    } else if (hope > fear) {
+    outcome = "Hope";
+    } else {
+    outcome = "Fear";
+    }
 
-  document.getElementById("result").textContent = total;
-  document.getElementById("details").textContent =
-    `Hope ${hope} • Fear ${fear} — ${text}`;
+    // Top line becomes: "8 Fear" or "10 Hope"
+    document.getElementById("result").textContent = `${total} ${outcome}`;
 
-  pushHistory(`Duality → ${total} (H:${hope} F:${fear})`);
+    // Details line becomes: "Duality → Hope 2 • Fear 6"
+    document.getElementById("details").textContent =
+    `Duality → Hope ${hope} • Fear ${fear}`;
+
+    pushHistory(`Duality → ${total} (H:${hope} F:${fear})`);
 }
