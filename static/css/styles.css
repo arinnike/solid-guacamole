@@ -179,12 +179,29 @@ html {
 }
 
 .history-item {
-  padding: 12px 0;
-  border-bottom: 1px solid #2f2f2f;
+  position: relative;
+  padding: 14px 0;
   font-size: 14px;
   transition: opacity .2s ease;
 }
 
-.history-item:last-child {
-  border-bottom: none;
+/* Gradient divider */
+.history-item::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    #444,
+    transparent
+  );
+}
+
+.history-item:last-child::after {
+  display: none;
 }
