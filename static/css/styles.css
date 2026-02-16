@@ -147,3 +147,44 @@ html {
 .dice-icon:hover text {
   fill: #fff;
 }
+
+.duality svg {
+  overflow: visible;
+}
+
+.hope {
+  stroke: #6fa8ff;
+  stroke-width: 3;
+  fill: none;
+}
+
+.fear {
+  stroke: #b26fff;
+  stroke-width: 3;
+  fill: none;
+}
+
+.hope-text {
+  fill: #6fa8ff;
+  font-size: 18px;
+  text-anchor: middle;
+}
+
+.fear-text {
+  fill: #b26fff;
+  font-size: 18px;
+  text-anchor: middle;
+}
+
+.duality:hover .hope {
+  filter: drop-shadow(0 0 6px #6fa8ff);
+}
+
+.duality:hover .fear {
+  filter: drop-shadow(0 0 6px #b26fff);
+}
+
+.duality:hover .hope-text,
+.duality:hover .fear-text {
+  filter: drop-shadow(0 0 4px currentColor);
+}
