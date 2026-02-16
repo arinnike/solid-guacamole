@@ -14,12 +14,16 @@ function pushHistory(text) {
 
 function roll(sides) {
   const value = d(sides);
+  document.getElementById("result").style.display = "block";
+  document.getElementById("details").style.display = "block";
   document.getElementById("result").textContent = value;
   document.getElementById("details").textContent = `Rolled d${sides}`;
   pushHistory(`d${sides}: ${value}`);
 }
 
 function rollDuality() {
+    document.getElementById("result").style.display = "block";
+    document.getElementById("details").style.display = "block";
     const hope = d(12);
     const fear = d(12);
     const total = hope + fear;

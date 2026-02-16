@@ -156,6 +156,7 @@ html {
   margin-top: 10px;
   font-size: 18px;
   opacity: 0.8;
+  display: none;
 }
 
 #history {
