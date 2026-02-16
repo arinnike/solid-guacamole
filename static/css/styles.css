@@ -147,7 +147,7 @@ html {
 }
 
 #result {
-  font-size: 56px;
+  font-size: 44px;
   font-weight: 700;
   margin-top: 40px;
 }
@@ -156,4 +156,31 @@ html {
   margin-top: 10px;
   font-size: 18px;
   opacity: 0.8;
+}
+
+#history {
+  margin-top: 40px;
+  text-align: left;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#history::before {
+  content: "Roll History";
+  display: block;
+  margin-bottom: 12px;
+  font-size: 14px;
+  letter-spacing: .1em;
+  opacity: 0.6;
+}
+
+.history-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+.history-item:last-child {
+  border-bottom: none;
 }

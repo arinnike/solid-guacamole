@@ -9,7 +9,7 @@ function pushHistory(text) {
   if (history.length > 5) history.pop();
 
   document.getElementById("history").innerHTML =
-    history.map(h => `<div class="history-item">${h}</div><br>`).join("");
+    history.map(h => `<div class="history-item">${h}</div>`).join("");
 }
 
 function roll(sides) {
