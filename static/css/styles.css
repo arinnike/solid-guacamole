@@ -113,78 +113,30 @@ html {
   margin: auto;
 }
 
-.dice-icon {
-  width: 80px;
-  height: 80px;
+.dice-btn {
+  background: transparent;
+  border: 2px solid #888;
+  color: #aaa;
+  padding: 14px 0;
+  font-size: 18px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform .15s ease;
+  transition: transform .15s ease, border-color .15s ease, color .15s ease;
 }
 
-.dice-icon svg {
-  width: 100%;
-  height: 100%;
-  stroke: #888;
-  stroke-width: 3;
-  fill: none;
-}
-
-.dice-icon text {
-  fill: #aaa;
-  font-size: 22px;
-  text-anchor: middle;
-  font-family: "Segoe UI", sans-serif;
-  font-weight: 500;
-}
-
-.dice-icon:hover {
+.dice-btn:hover {
   transform: scale(1.08);
+  border-color: #fff;
+  color: #fff;
 }
 
-.dice-icon:hover svg {
-  stroke: #fff;
+.duality-btn {
+  grid-column: span 2;
+  border-color: #6fa8ff;
+  color: #6fa8ff;
 }
 
-.dice-icon:hover text {
-  fill: #fff;
-}
-
-.duality svg {
-  overflow: visible;
-}
-
-.hope {
-  stroke: #6fa8ff;
-  stroke-width: 3;
-  fill: none;
-}
-
-.fear {
-  stroke: #b26fff;
-  stroke-width: 3;
-  fill: none;
-}
-
-.hope-text {
-  fill: #6fa8ff;
-  font-size: 18px;
-  text-anchor: middle;
-}
-
-.fear-text {
-  fill: #b26fff;
-  font-size: 18px;
-  text-anchor: middle;
-}
-
-.duality:hover .hope {
-  filter: drop-shadow(0 0 6px #6fa8ff);
-}
-
-.duality:hover .fear {
-  filter: drop-shadow(0 0 6px #b26fff);
-}
-
-.duality:hover .hope-text,
-.duality:hover .fear-text {
-  filter: drop-shadow(0 0 4px currentColor);
+.duality-btn:hover {
+  border-color: #b26fff;
+  color: #b26fff;
 }

@@ -5,83 +5,20 @@
 <div class="dice-container">
 
   <div id="dice-grid">
-    <!-- ================= DUALITY ================= -->
 
-    <div class="dice-icon duality" onclick="rollDuality()" title="Duality Dice">
+    <!-- Duality -->
+    <button class="dice-btn duality-btn" onclick="rollDuality()">Duality</button>
 
-      <svg viewBox="0 0 120 80">
+    <!-- Standard Dice -->
+    <button class="dice-btn" onclick="roll(20)">d20</button>
+    <button class="dice-btn" onclick="roll(12)">d12</button>
+    <button class="dice-btn" onclick="roll(100)">d100</button>
+    <button class="dice-btn" onclick="roll(8)">d8</button>
+    <button class="dice-btn" onclick="roll(6)">d6</button>
+    <button class="dice-btn" onclick="roll(4)">d4</button>
 
-        <!-- Hope -->
-        <polygon class="hope"
-          points="40,5 60,15 65,40 60,65 40,75 20,65 15,40 20,15"/>
+  </div>
 
-        <!-- Fear -->
-        <polygon class="fear"
-          points="80,5 100,15 105,40 100,65 80,75 60,65 55,40 60,15"/>
-
-        <text x="40" y="48" class="hope-text">12</text>
-        <text x="80" y="48" class="fear-text">12</text>
-
-      </svg>
-
-    </div>
-
-   <!-- ================= STANDARD DICE ================= -->
-
-    <!-- d20 -->
-    <div class="dice-icon" onclick="roll(20)" title="d20">
-      <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,35 80,90 20,90 5,35"/>
-        <line x1="50" y1="5" x2="20" y2="90"/>
-        <line x1="50" y1="5" x2="80" y2="90"/>
-        <line x1="5" y1="35" x2="95" y2="35"/>
-        <text x="50" y="58">20</text>
-      </svg>
-    </div>
-
-    <!-- d12 -->
-    <div class="dice-icon" onclick="roll(12)" title="d12">
-        <svg viewBox="0 0 100 100">
-        <polygon points="50,5 85,20 95,50 85,80 50,95 15,80 5,50 15,20"/>
-        <text x="50" y="58">12</text>
-        </svg>
-    </div>
-
-    <!-- d10 -->
-    <div class="dice-icon" onclick="roll(100)" title="d100">
-        <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,50 50,95 5,50"/>
-        <line x1="50" y1="5" x2="50" y2="95"/>
-        <line x1="5" y1="50" x2="95" y2="50"/>
-        <text x="50" y="58">100</text>
-        </svg>
-    </div>
-
-    <!-- d8 -->
-    <div class="dice-icon" onclick="roll(8)" title="d8">
-        <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,50 50,95 5,50"/>
-        <text x="50" y="58">8</text>
-        </svg>
-    </div>
-
-    <!-- d6 -->
-    <div class="dice-icon" onclick="roll(6)" title="d6">
-        <svg viewBox="0 0 100 100">
-        <rect x="15" y="15" width="70" height="70"/>
-        <text x="50" y="58">6</text>
-        </svg>
-    </div>
-
-    <!-- d4 -->
-    <div class="dice-icon" onclick="roll(4)" title="d4">
-        <svg viewBox="0 0 100 100">
-        <polygon points="50,5 95,95 5,95"/>
-        <text x="50" y="70">4</text>
-        </svg>
-    </div>
-
-</div>
 
   <div id="result">—</div>
   <div id="details"></div>
