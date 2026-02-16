@@ -185,11 +185,12 @@ html {
   transition: opacity .2s ease;
 }
 
-/* Gradient divider */
-.history-item::after {
+/* Gradient divider ABOVE each item except the first */
+
+.history-item::before {
   content: "";
   position: absolute;
-  bottom: 0;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
   width: 60%;
@@ -202,6 +203,6 @@ html {
   );
 }
 
-.history-item:last-child::after {
+.history-item:first-child::before {
   display: none;
 }
