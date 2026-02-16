@@ -162,7 +162,7 @@ html {
 
 #history {
   margin-top: 40px;
-  text-align: left;
+  text-align: center;
   max-width: 320px;
   margin-left: auto;
   margin-right: auto;
@@ -178,7 +178,7 @@ html {
 }
 
 .history-item {
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #2f2f2f;
   font-size: 14px;
   transition: opacity .2s ease;
