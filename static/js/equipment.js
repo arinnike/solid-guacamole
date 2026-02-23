@@ -173,6 +173,15 @@ document.querySelectorAll(".weapon-tab").forEach(b=>b.onclick=()=>{currentType=b
 document.querySelectorAll(".item-tab").forEach(b=>b.onclick=()=>{currentType=b.dataset.type;loadItems();});
 
 document.querySelectorAll(".main-tab").forEach(b => b.onclick = () => {
+  // Reset ALL main tabs
+  document.querySelectorAll(".main-tab").forEach(t => {
+    t.classList.remove("font-semibold", "border-b-2", "border-zinc-900", "dark:border-zinc-200");
+    t.classList.add("opacity-60");
+  });
+
+  // Activate clicked tab
+  b.classList.add("font-semibold", "border-b-2", "border-zinc-900", "dark:border-zinc-200");
+  b.classList.remove("opacity-60");
 
   currentMain = b.dataset.main;
 
