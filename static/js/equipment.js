@@ -168,9 +168,39 @@ tableHead.innerHTML=`<th>Name</th><th>Rarity</th><th>Description</th>`;
 currentMain==="weapons"?renderWeapons():currentMain==="armor"?renderArmor():renderItems();
 }));
 
-document.querySelectorAll(".weapon-tab").forEach(b=>b.onclick=()=>{currentType=b.dataset.type;loadWeapons();});
+document.querySelectorAll(".weapon-tab")
+  .forEach(b => b.onclick = () => {
 
-document.querySelectorAll(".item-tab").forEach(b=>b.onclick=()=>{currentType=b.dataset.type;loadItems();});
+    // Reset all weapon tabs
+    document.querySelectorAll(".weapon-tab").forEach(t => {
+      t.classList.remove("font-semibold");
+      t.classList.add("opacity-60");
+    });
+
+    // Activate clicked tab
+    b.classList.add("font-semibold");
+    b.classList.remove("opacity-60");
+
+    currentType = b.dataset.type;
+    loadWeapons();
+  });
+
+document.querySelectorAll(".item-tab")
+  .forEach(b => b.onclick = () => {
+
+    // Reset all item tabs
+    document.querySelectorAll(".item-tab").forEach(t => {
+      t.classList.remove("font-semibold");
+      t.classList.add("opacity-60");
+    });
+
+    // Activate clicked tab
+    b.classList.add("font-semibold");
+    b.classList.remove("opacity-60");
+
+    currentType = b.dataset.type;
+    loadItems();
+  });
 
 document.querySelectorAll(".main-tab").forEach(b => b.onclick = () => {
   // Reset ALL main tabs
