@@ -5,43 +5,65 @@ const loggedOut = document.getElementById("logged-out");
 const loggedIn = document.getElementById("logged-in");
 const signinToggle = document.getElementById("signin-toggle");
 const signinMenu = document.getElementById("signin-menu");
+const navCharacters = document.getElementById("nav-characters");
 
 // Global user cache
 window.currentUserId = null;
 
 /*
-============================
-Utility: Update Role-Based Nav
-============================
+====================================
+Role Handling (with localStorage cache)
+====================================
 */
-async function updateNavForUser(userId) {
+
+async function fetchAndCacheUserRole(userId) {
   const { data, error } = await sb
     .from("user_settings")
     .select("role")
     .eq("user_id", userId)
     .maybeSingle();
 
-  if (error || !data) return;
+  if (error || !data) return null;
 
-  if (data.role >= 3) {
-    document.getElementById("nav-characters")
-      ?.classList.remove("hidden");
+  localStorage.setItem("user_role", data.role);
+  return data.role;
+}
+
+function applyRoleToNav(role) {
+  if (!navCharacters) return;
+
+  if (role >= 3) {
+    navCharacters.classList.remove("hidden");
+  } else {
+    navCharacters.classList.add("hidden");
+  }
+}
+
+async function updateNavForUser(userId) {
+  let role = localStorage.getItem("user_role");
+
+  if (role === null) {
+    role = await fetchAndCacheUserRole(userId);
+  }
+
+  if (role !== null) {
+    applyRoleToNav(parseInt(role));
   }
 }
 
 /*
-============================
+====================================
 Dropdown Toggle
-============================
+====================================
 */
 signinToggle?.addEventListener("click", () => {
   signinMenu?.classList.toggle("hidden");
 });
 
 /*
-============================
+====================================
 Email Login
-============================
+====================================
 */
 document.getElementById("email-login")?.addEventListener("click", async () => {
   const email = document.getElementById("email")?.value;
@@ -62,9 +84,9 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
 });
 
 /*
-============================
+====================================
 Discord Login
-============================
+====================================
 */
 document.getElementById("discord-login")?.addEventListener("click", async () => {
   await sb.auth.signInWithOAuth({
@@ -74,9 +96,9 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
 });
 
 /*
-============================
+====================================
 Logout
-============================
+====================================
 */
 document.addEventListener("click", async (e) => {
   const logoutBtn = e.target.closest("#logout");
@@ -85,10 +107,13 @@ document.addEventListener("click", async (e) => {
   await sb.auth.signOut();
   await fetch("/logout");
 
-  // Clear Supabase local storage
+  // Clear Supabase storage
   Object.keys(localStorage)
     .filter(k => k.includes("sb-"))
     .forEach(k => localStorage.removeItem(k));
+
+  // Clear role cache
+  localStorage.removeItem("user_role");
 
   sessionStorage.clear();
 
@@ -97,17 +122,15 @@ document.addEventListener("click", async (e) => {
   loggedIn?.classList.add("hidden");
   loggedOut?.classList.remove("hidden");
 
-  // Hide role-based nav
-  document.getElementById("nav-characters")
-    ?.classList.add("hidden");
+  navCharacters?.classList.add("hidden");
 
   window.location.href = "/";
 });
 
 /*
-============================
+====================================
 Forgot Password
-============================
+====================================
 */
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#forgot-password");
@@ -131,57 +154,42 @@ document.addEventListener("click", async (e) => {
 });
 
 /*
-============================
-Auth State Watcher (Single)
-============================
+====================================
+Auth State Watcher (Single Source of Truth)
+====================================
 */
-sb.auth.onAuthStateChange(async (_event, session) => {
-  if (session) {
+sb.auth.onAuthStateChange(async (event, session) => {
+
+  if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+
+    if (!session?.user) return;
+
     window.currentUserId = session.user.id;
 
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
 
-    // Sync Supabase → Flask
+    // Sync Supabase → Flask (only once per session)
     await fetch("/set-session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(session)
     });
 
-    // Role-based nav
+    // Apply role-based nav (cached)
     await updateNavForUser(session.user.id);
 
     document.dispatchEvent(new Event("user-ready"));
+  }
 
-  } else {
+  if (event === "SIGNED_OUT") {
     window.currentUserId = null;
 
     loggedIn?.classList.add("hidden");
     loggedOut?.classList.remove("hidden");
 
-    document.getElementById("nav-characters")
-      ?.classList.add("hidden");
+    navCharacters?.classList.add("hidden");
+
+    localStorage.removeItem("user_role");
   }
 });
-
-/*
-============================
-Initial Hydration
-============================
-*/
-(async () => {
-  const { data } = await sb.auth.getUser();
-
-  if (data.user) {
-    window.currentUserId = data.user.id;
-
-    loggedOut?.classList.add("hidden");
-    loggedIn?.classList.remove("hidden");
-
-    await updateNavForUser(data.user.id);
-  } else {
-    loggedIn?.classList.add("hidden");
-    loggedOut?.classList.remove("hidden");
-  }
-})();
