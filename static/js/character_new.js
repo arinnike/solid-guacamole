@@ -258,6 +258,10 @@ function selectCommunity(id) {
    STEP 4 – Traits
 ================================ */
 
+/* ===============================
+   STEP 4 – Traits (Pool Enforced)
+================================ */
+
 const TRAIT_VALUES = [-1,0,0,1,1,2];
 const TRAITS = ["agility","presence","knowledge","strength","finesse","instinct"];
 
@@ -268,19 +272,60 @@ function renderTraits() {
     <div class="border rounded p-3 bg-white dark:bg-zinc-800">
       <label class="block text-sm mb-1 capitalize">${trait}</label>
       <select class="w-full border p-1 rounded dark:bg-zinc-700"
-        onchange="setTrait('${trait}',this.value)">
-        <option value="">Select</option>
-        ${TRAIT_VALUES.map(v =>
-          `<option value="${v}">${v>=0?`+${v}`:v}</option>`
-        ).join("")}
+        data-trait="${trait}">
       </select>
     </div>
   `).join("");
+
+  updateTraitDropdowns();
 }
 
-function setTrait(trait,value){
-  wizardState.traits[trait] =
-    value === "" ? null : parseInt(value);
+function updateTraitDropdowns() {
+  const selects = document.querySelectorAll("#trait-grid select");
+
+  // Count selected values
+  const selectedValues = Object.values(wizardState.traits)
+    .filter(v => v !== null);
+
+  // Clone pool
+  const remainingPool = [...TRAIT_VALUES];
+
+  // Remove already-used values
+  selectedValues.forEach(val => {
+    const index = remainingPool.indexOf(val);
+    if (index !== -1) remainingPool.splice(index, 1);
+  });
+
+  selects.forEach(select => {
+    const trait = select.dataset.trait;
+    const currentValue = wizardState.traits[trait];
+
+    select.innerHTML = `<option value="">Select</option>`;
+
+    // If trait already has a value, allow it to remain selectable
+    const allowed = currentValue !== null
+      ? [...remainingPool, currentValue]
+      : [...remainingPool];
+
+    const uniqueSorted = [...new Set(allowed)].sort((a,b)=>a-b);
+
+    uniqueSorted.forEach(val => {
+      const option = document.createElement("option");
+      option.value = val;
+      option.textContent = val >= 0 ? `+${val}` : val;
+
+      if (val === currentValue) option.selected = true;
+
+      select.appendChild(option);
+    });
+
+    select.onchange = (e) => {
+      wizardState.traits[trait] =
+        e.target.value === "" ? null : parseInt(e.target.value);
+
+      updateTraitDropdowns();
+    };
+  });
 }
 
 document.getElementById("step4-complete")
