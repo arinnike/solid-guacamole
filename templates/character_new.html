@@ -40,23 +40,26 @@
 
       <div>
         <label class="block text-sm mb-1">Portrait (optional)</label>
+
         <input type="file"
-          id="char-portrait"
-          accept="image/jpeg,image/png,image/webp"
-          class="text-sm">
+            id="char-portrait"
+            accept="image/jpeg,image/png,image/webp"
+            class="text-sm">
 
-        <div id="portrait-preview" class="hidden mt-2">
-          <img class="w-24 h-24 rounded object-cover border">
+        <!-- Requirements -->
+        <p class="text-xs text-zinc-500 mt-1">
+            PNG, JPG, or WebP. Maximum size 2MB.
+        </p>
+
+        <!-- Inline Error -->
+        <div id="portrait-error"
+            class="hidden text-red-600 text-sm mt-1">
         </div>
-      </div>
 
-      <button type="button"
-        id="step1-complete"
-        class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-        Continue
-      </button>
-
-    </div>
+        <!-- Preview -->
+        <div id="portrait-preview" class="hidden mt-3">
+            <img class="w-24 h-24 rounded object-cover border">
+        </div>
   </div>
 
   <!-- ================= STEP 2 ================= -->

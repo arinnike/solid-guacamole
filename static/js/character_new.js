@@ -102,24 +102,37 @@ document.getElementById("char-portrait")
   ?.addEventListener("change", (e) => {
 
   const file = e.target.files[0];
+  const errorEl = document.getElementById("portrait-error");
+  const preview = document.getElementById("portrait-preview");
+
+  errorEl.classList.add("hidden");
+  errorEl.textContent = "";
+  preview.classList.add("hidden");
+
   if (!file) return;
 
   const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
   const maxSize = 2 * 1024 * 1024; // 2MB
+  
+  e.target.classList.remove("border-red-500");
 
   if (!allowedTypes.includes(file.type)) {
-    alert("Portrait must be JPG, PNG, or WebP.");
+    errorEl.textContent = "Portrait must be PNG, JPG, or WebP.";
+    errorEl.classList.remove("hidden");
     e.target.value = "";
+    e.target.classList.add("border-red-500");
     return;
   }
 
   if (file.size > maxSize) {
-    alert("Portrait must be under 2MB.");
+    errorEl.textContent = "Portrait must be under 2MB.";
+    errorEl.classList.remove("hidden");
     e.target.value = "";
+    e.target.classList.add("border-red-500");
     return;
   }
 
-  const preview = document.getElementById("portrait-preview");
+  // Preview
   const img = preview.querySelector("img");
 
   const objectUrl = URL.createObjectURL(file);
