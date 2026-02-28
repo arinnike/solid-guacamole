@@ -227,6 +227,11 @@ def loot_api():
 
     return jsonify(rows)
 
+@application.route("/characters")
+@login_required
+def characters():
+    return render_template("characters.html")
+
 # ------------------------
 # Health
 # ------------------------

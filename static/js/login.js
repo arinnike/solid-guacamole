@@ -9,12 +9,40 @@ const signinMenu = document.getElementById("signin-menu");
 // Global user cache
 window.currentUserId = null;
 
-// Dropdown toggle
+/*
+============================
+Utility: Update Role-Based Nav
+============================
+*/
+async function updateNavForUser(userId) {
+  const { data, error } = await sb
+    .from("user_settings")
+    .select("role")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (error || !data) return;
+
+  if (data.role >= 3) {
+    document.getElementById("nav-characters")
+      ?.classList.remove("hidden");
+  }
+}
+
+/*
+============================
+Dropdown Toggle
+============================
+*/
 signinToggle?.addEventListener("click", () => {
   signinMenu?.classList.toggle("hidden");
 });
 
-// Email login
+/*
+============================
+Email Login
+============================
+*/
 document.getElementById("email-login")?.addEventListener("click", async () => {
   const email = document.getElementById("email")?.value;
   const password = document.getElementById("password")?.value;
@@ -31,11 +59,13 @@ document.getElementById("email-login")?.addEventListener("click", async () => {
   } else {
     signinMenu?.classList.add("hidden");
   }
-
-  //signinMenu?.classList.add("hidden");
 });
 
-// Discord login
+/*
+============================
+Discord Login
+============================
+*/
 document.getElementById("discord-login")?.addEventListener("click", async () => {
   await sb.auth.signInWithOAuth({
     provider: "discord",
@@ -43,15 +73,19 @@ document.getElementById("discord-login")?.addEventListener("click", async () => 
   });
 });
 
-// HARD logout
+/*
+============================
+Logout
+============================
+*/
 document.addEventListener("click", async (e) => {
   const logoutBtn = e.target.closest("#logout");
   if (!logoutBtn) return;
 
   await sb.auth.signOut();
-
   await fetch("/logout");
 
+  // Clear Supabase local storage
   Object.keys(localStorage)
     .filter(k => k.includes("sb-"))
     .forEach(k => localStorage.removeItem(k));
@@ -63,10 +97,18 @@ document.addEventListener("click", async (e) => {
   loggedIn?.classList.add("hidden");
   loggedOut?.classList.remove("hidden");
 
+  // Hide role-based nav
+  document.getElementById("nav-characters")
+    ?.classList.add("hidden");
+
   window.location.href = "/";
 });
 
-// Forgot password
+/*
+============================
+Forgot Password
+============================
+*/
 document.addEventListener("click", async (e) => {
   const btn = e.target.closest("#forgot-password");
   if (!btn) return;
@@ -88,39 +130,15 @@ document.addEventListener("click", async (e) => {
   else alert("Password reset email sent!");
 });
 
-// Auth watcher
-sb.auth.onAuthStateChange((_event, session) => {
-  if (session) {
-    window.currentUserId = session.user.id;
-    loggedOut?.classList.add("hidden");
-    loggedIn?.classList.remove("hidden");
-
-    document.dispatchEvent(new Event("user-ready"));
-  } else {
-    window.currentUserId = null;
-    loggedIn?.classList.add("hidden");
-    loggedOut?.classList.remove("hidden");
-  }
-});
-
-// Initial hydration
-(async () => {
-  const { data } = await sb.auth.getUser();
-
-  if (data.user) {
-    window.currentUserId = data.user.id;
-    loggedOut?.classList.add("hidden");
-    loggedIn?.classList.remove("hidden");
-  } else {
-    loggedIn?.classList.add("hidden");
-    loggedOut?.classList.remove("hidden");
-  }
-})();
-
-//User session
+/*
+============================
+Auth State Watcher (Single)
+============================
+*/
 sb.auth.onAuthStateChange(async (_event, session) => {
   if (session) {
     window.currentUserId = session.user.id;
+
     loggedOut?.classList.add("hidden");
     loggedIn?.classList.remove("hidden");
 
@@ -131,10 +149,39 @@ sb.auth.onAuthStateChange(async (_event, session) => {
       body: JSON.stringify(session)
     });
 
+    // Role-based nav
+    await updateNavForUser(session.user.id);
+
     document.dispatchEvent(new Event("user-ready"));
+
   } else {
     window.currentUserId = null;
+
+    loggedIn?.classList.add("hidden");
+    loggedOut?.classList.remove("hidden");
+
+    document.getElementById("nav-characters")
+      ?.classList.add("hidden");
+  }
+});
+
+/*
+============================
+Initial Hydration
+============================
+*/
+(async () => {
+  const { data } = await sb.auth.getUser();
+
+  if (data.user) {
+    window.currentUserId = data.user.id;
+
+    loggedOut?.classList.add("hidden");
+    loggedIn?.classList.remove("hidden");
+
+    await updateNavForUser(data.user.id);
+  } else {
     loggedIn?.classList.add("hidden");
     loggedOut?.classList.remove("hidden");
   }
-});
+})();
