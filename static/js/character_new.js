@@ -25,10 +25,7 @@ const wizardState = {
     instinct: null
   },
   armor_id: null,
-  weapons: {
-    primary: null,
-    secondary: null
-  },
+  weapons: { primary: null, secondary: null },
   experiences: [],
   appearance: "",
   background: ""
@@ -38,7 +35,7 @@ const wizardState = {
    Session Init
 ================================ */
 
-async function initSession() {
+document.addEventListener("DOMContentLoaded", async () => {
   const { data } = await window.supabase.auth.getSession();
 
   if (!data?.session) {
@@ -47,163 +44,15 @@ async function initSession() {
   }
 
   cachedSession = data.session;
-}
+});
+
+/* ===============================
+   Helpers
+================================ */
 
 function getAccessToken() {
   return cachedSession?.access_token || null;
 }
-
-initSession();
-
-/* ===============================
-   Wizard Toggle
-================================ */
-
-document.querySelectorAll(".wizard-toggle").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const content = btn.nextElementSibling;
-    content.classList.toggle("hidden");
-
-    const step = btn.closest(".wizard-step");
-
-    if (step.dataset.step === "2" && !content.dataset.loaded) {
-      loadClasses();
-      content.dataset.loaded = "true";
-    }
-
-    if (step.dataset.step === "3" && !content.dataset.loaded) {
-      loadAncestries();
-      loadCommunities();
-      content.dataset.loaded = "true";
-    }
-
-    if (step.dataset.step === "4" && !content.dataset.loaded) {
-      renderTraits();
-      content.dataset.loaded = "true";
-    }
-
-    if (step.dataset.step === "5" && !content.dataset.loaded) {
-      loadArmor();
-      content.dataset.loaded = "true";
-    }
-
-    if (step.dataset.step === "6" && !content.dataset.loaded) {
-      loadWeapons();
-      content.dataset.loaded = "true";
-    }
-  });
-});
-
-/* ===============================
-   Portrait Validation + Preview
-================================ */
-
-document.getElementById("char-portrait")
-  ?.addEventListener("change", (e) => {
-
-  const file = e.target.files[0];
-  const errorEl = document.getElementById("portrait-error");
-  const preview = document.getElementById("portrait-preview");
-
-  errorEl.classList.add("hidden");
-  errorEl.textContent = "";
-  preview.classList.add("hidden");
-
-  if (!file) return;
-
-  const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-  const maxSize = 2 * 1024 * 1024; // 2MB
-  
-  e.target.classList.remove("border-red-500");
-
-  if (!allowedTypes.includes(file.type)) {
-    errorEl.textContent = "Portrait must be PNG, JPG, or WebP.";
-    errorEl.classList.remove("hidden");
-    e.target.value = "";
-    e.target.classList.add("border-red-500");
-    return;
-  }
-
-  if (file.size > maxSize) {
-    errorEl.textContent = "Portrait must be under 2MB.";
-    errorEl.classList.remove("hidden");
-    e.target.value = "";
-    e.target.classList.add("border-red-500");
-    return;
-  }
-
-  // Preview
-  const img = preview.querySelector("img");
-
-  const objectUrl = URL.createObjectURL(file);
-  img.src = objectUrl;
-
-  img.onload = () => {
-    URL.revokeObjectURL(objectUrl);
-  };
-
-  preview.classList.remove("hidden");
-});
-
-/* ===============================
-   STEP 1 – Basics
-================================ */
-
-document.getElementById("step1-complete")
-  ?.addEventListener("click", async () => {
-
-  const name = document.getElementById("char-name").value.trim();
-  const pronouns = document.getElementById("char-pronouns").value.trim();
-  const level = parseInt(document.getElementById("char-level").value);
-  const file = document.getElementById("char-portrait").files[0];
-
-  if (!name) {
-    alert("Character name is required.");
-    return;
-  }
-
-  wizardState.name = name;
-  wizardState.pronouns = pronouns || null;
-  wizardState.level = level;
-
-  if (file) {
-    try {
-      const userId = cachedSession.user.id;
-
-      const fileExt = file.name.split(".").pop().toLowerCase();
-      const filePath = `${userId}/${crypto.randomUUID()}.${fileExt}`;
-
-      const { error: uploadError } = await window.supabase
-        .storage
-        .from("portraits")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false
-        });
-
-      if (uploadError) throw uploadError;
-
-      const { data: publicUrlData } = window.supabase
-        .storage
-        .from("portraits")
-        .getPublicUrl(filePath);
-
-      wizardState.portrait_url = publicUrlData.publicUrl;
-
-    } catch (err) {
-      console.error("Portrait upload failed:", err);
-      alert("Portrait upload failed.");
-      return;
-    }
-  }
-
-  completeStep(1);
-  document.querySelector('[data-step="2"]').classList.remove("hidden");
-});
-
-/* ===============================
-   API Helpers
-================================ */
 
 async function apiFetch(endpoint) {
   const token = getAccessToken();
@@ -213,8 +62,58 @@ async function apiFetch(endpoint) {
     headers: { Authorization: `Bearer ${token}` }
   });
 
-  return response.json();
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("API error:", text);
+    throw new Error(`API failed: ${endpoint}`);
+  }
+
+  return await response.json();
 }
+
+function openStep(stepNumber, loaderFn) {
+  const step = document.querySelector(`[data-step="${stepNumber}"]`);
+  step.classList.remove("hidden");
+
+  const content = step.querySelector(".wizard-content");
+  content.classList.remove("hidden");
+
+  if (loaderFn && !content.dataset.loaded) {
+    loaderFn();
+    content.dataset.loaded = "true";
+  }
+}
+
+function completeStep(stepNumber) {
+  const step = document.querySelector(`[data-step="${stepNumber}"]`);
+  const content = step.querySelector(".wizard-content");
+  const status = step.querySelector(".wizard-status");
+
+  content.classList.add("hidden");
+  status.textContent = "Complete";
+  status.classList.remove("text-zinc-500");
+  status.classList.add("text-green-600");
+}
+
+/* ===============================
+   STEP 1
+================================ */
+
+document.getElementById("step1-complete")
+?.addEventListener("click", async () => {
+
+  const name = document.getElementById("char-name").value.trim();
+  if (!name) return alert("Character name is required.");
+
+  wizardState.name = name;
+  wizardState.pronouns =
+    document.getElementById("char-pronouns").value.trim() || null;
+  wizardState.level =
+    parseInt(document.getElementById("char-level").value);
+
+  completeStep(1);
+  openStep(2, loadClasses);
+});
 
 /* ===============================
    STEP 2 – Classes
@@ -248,8 +147,12 @@ function renderClasses(classes) {
 function selectSubclass(classId, subclassId) {
   wizardState.class_id = classId;
   wizardState.subclass_id = subclassId;
+
   completeStep(2);
-  document.querySelector('[data-step="3"]').classList.remove("hidden");
+  openStep(3, () => {
+    loadAncestries();
+    loadCommunities();
+  });
 }
 
 /* ===============================
@@ -301,13 +204,13 @@ function selectAncestry(id) {
 
 function selectCommunity(id) {
   wizardState.community_id = id;
+
   completeStep(3);
-  document.querySelector('[data-step="4"]').classList.remove("hidden");
+  openStep(4, renderTraits);
 }
 
 /* ===============================
-   Traits + Final Confirm
-   (unchanged logic)
+   STEP 4 – Traits
 ================================ */
 
 const TRAIT_VALUES = [-1, 0, 0, 1, 1, 2];
@@ -332,19 +235,12 @@ function renderTraits() {
 }
 
 function setTrait(trait, value) {
-  wizardState.traits[trait] = value === "" ? null : parseInt(value);
-}
-
-function validateTraits() {
-  const selected = Object.values(wizardState.traits);
-  if (selected.includes(null)) return false;
-
-  return JSON.stringify([...selected].sort((a,b)=>a-b))
-       === JSON.stringify([...TRAIT_VALUES].sort((a,b)=>a-b));
+  wizardState.traits[trait] =
+    value === "" ? null : parseInt(value);
 }
 
 document.getElementById("confirm-character")
-  ?.addEventListener("click", async () => {
+?.addEventListener("click", async () => {
 
   if (isSubmitting) return;
   isSubmitting = true;
@@ -380,18 +276,3 @@ document.getElementById("confirm-character")
     btn.textContent = "Create Character";
   }
 });
-
-/* ===============================
-   Utility
-================================ */
-
-function completeStep(stepNumber) {
-  const step = document.querySelector(`[data-step="${stepNumber}"]`);
-  const content = step.querySelector(".wizard-content");
-  const status = step.querySelector(".wizard-status");
-
-  content.classList.add("hidden");
-  status.textContent = "Complete";
-  status.classList.remove("text-zinc-500");
-  status.classList.add("text-green-600");
-}

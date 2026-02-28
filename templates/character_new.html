@@ -68,18 +68,50 @@
     </div>
   </div>
 
-  <!-- ================= STEP 2 ================= -->
-  <div class="wizard-step border rounded hidden" data-step="2">
-    <button type="button"
-      class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
-      <span class="font-semibold">Step 2: Class</span>
-      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
-    </button>
-    <div class="wizard-content p-4 space-y-4 hidden">
-      <div id="class-loading" class="text-zinc-500">Loading classes...</div>
-      <div id="class-grid" class="hidden grid gap-6 sm:grid-cols-2"></div>
+<!-- ================= STEP 2 ================= -->
+<div class="wizard-step border rounded hidden" data-step="2">
+
+  <button type="button"
+    class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+    <span class="font-semibold">Step 2: Class</span>
+    <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+  </button>
+
+  <div class="wizard-content p-4 space-y-6 hidden">
+
+    <!-- Loading -->
+    <div id="class-loading" class="text-zinc-500">
+      Loading classes...
     </div>
+
+    <!-- Class Grid -->
+    <div id="class-grid"
+      class="hidden grid gap-6 sm:grid-cols-2">
+    </div>
+
+    <!-- Selected Summary -->
+    <div id="class-selection-summary"
+      class="hidden p-3 border rounded bg-zinc-100 dark:bg-zinc-800 text-sm">
+      <strong>Selected:</strong>
+      <span id="selected-class-name"></span>
+      <span id="selected-subclass-name" class="text-zinc-500"></span>
+    </div>
+
+    <!-- Error -->
+    <div id="class-error"
+      class="hidden text-red-600 text-sm">
+      You must select a subclass.
+    </div>
+
+    <!-- Continue -->
+    <button type="button"
+      id="step2-complete"
+      class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+      Continue
+    </button>
+
   </div>
+</div>
 
   <!-- ================= STEP 3 ================= -->
   <div class="wizard-step border rounded hidden" data-step="3">
