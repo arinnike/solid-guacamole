@@ -104,6 +104,11 @@ def dice_page():
 def characters():
     return render_template("characters.html")
 
+@application.route("/characters/new")
+@login_required
+def new_character():
+    return render_template("character_new.html")
+
 # ------------------------
 # Supabase → Flask Session Sync
 # ------------------------

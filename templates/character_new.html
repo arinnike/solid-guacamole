@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto space-y-6">
+
+  <h1 class="text-2xl font-bold">Create Character</h1>
+
+  <!-- ================= STEP 1 ================= -->
+  <div class="wizard-step border rounded" data-step="1">
+
+    <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+      <span class="font-semibold">Step 1: Basics</span>
+      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+    </button>
+
+    <div class="wizard-content p-4 space-y-4">
+
+      <div>
+        <label class="block text-sm mb-1">Character Name</label>
+        <input id="char-name" class="w-full border p-2 rounded dark:bg-zinc-800">
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Pronouns</label>
+        <input id="char-pronouns" class="w-full border p-2 rounded dark:bg-zinc-800">
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Level</label>
+        <select id="char-level" class="w-full border p-2 rounded dark:bg-zinc-800">
+          {% for i in range(1,13) %}
+          <option value="{{ i }}">{{ i }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-sm mb-1">Portrait (optional)</label>
+        <input type="file" id="char-portrait">
+      </div>
+
+      <button id="step1-complete"
+        class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+        Continue
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ================= STEP 2 ================= -->
+  <div class="wizard-step border rounded hidden" data-step="2">
+
+    <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+      <span class="font-semibold">Step 2: Class</span>
+      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+    </button>
+
+    <div class="wizard-content p-4 space-y-4 hidden">
+
+      <div id="class-loading" class="text-zinc-500">
+        Loading classes...
+      </div>
+
+      <div id="class-grid" class="hidden grid gap-6 sm:grid-cols-2"></div>
+
+    </div>
+  </div>
+
+  <!-- ================= STEP 3 ================= -->
+  <div class="wizard-step border rounded hidden" data-step="3">
+
+    <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+      <span class="font-semibold">Step 3: Heritage</span>
+      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+    </button>
+
+    <div class="wizard-content p-4 space-y-6 hidden">
+
+      <div>
+        <h3 class="font-semibold mb-2">Choose Ancestry</h3>
+        <div id="ancestry-loading" class="text-zinc-500">
+          Loading ancestries...
+        </div>
+        <div id="ancestry-grid" class="hidden grid gap-6 sm:grid-cols-2"></div>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-2">Choose Community</h3>
+        <div id="community-grid" class="hidden grid gap-6 sm:grid-cols-2 opacity-50 pointer-events-none"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= STEP 4 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="4">
+
+        <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+            <span class="font-semibold">Step 4: Traits</span>
+            <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+        </button>
+
+        <div class="wizard-content p-4 space-y-6 hidden">
+
+            <p class="text-sm text-zinc-500">
+            Distribute the following values across your traits:
+            <strong>-1, 0, 0, +1, +1, +2</strong>
+            </p>
+
+            <div id="trait-grid" class="grid gap-4 sm:grid-cols-2"></div>
+
+            <div id="trait-error" class="text-red-600 text-sm hidden">
+            You must use each value exactly once.
+            </div>
+
+            <button id="step4-complete"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Continue
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ================= STEP 5 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="5">
+
+        <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+            <span class="font-semibold">Step 5: Armor (Optional)</span>
+            <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+        </button>
+
+        <div class="wizard-content p-4 space-y-6 hidden">
+
+            <div id="armor-loading" class="text-zinc-500">
+            Loading armor...
+            </div>
+
+            <div id="armor-table" class="hidden overflow-x-auto"></div>
+
+            <button id="step5-complete"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Continue
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ================= STEP 6 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="6">
+
+    <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+        <span class="font-semibold">Step 6: Weapons</span>
+        <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+    </button>
+
+        <div class="wizard-content p-4 space-y-6 hidden">
+
+            <div>
+            <h3 class="font-semibold mb-2">Primary Weapon</h3>
+            <div id="primary-weapon-table"></div>
+            </div>
+
+            <div>
+            <h3 class="font-semibold mb-2">Secondary Weapon</h3>
+            <div id="secondary-weapon-table"></div>
+            </div>
+
+            <div id="weapon-error" class="text-red-600 text-sm hidden">
+            Invalid weapon combination.
+            </div>
+
+            <button id="step6-complete"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Continue
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ================= STEP 7 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="7">
+
+        <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+            <span class="font-semibold">Step 7: Experiences</span>
+            <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+        </button>
+
+        <div class="wizard-content p-4 space-y-4 hidden">
+
+            <p class="text-sm text-zinc-500">
+            Add two defining experiences for your character.
+            </p>
+
+            <input id="exp-1"
+            class="w-full border p-2 rounded dark:bg-zinc-800"
+            placeholder="Experience 1">
+
+            <input id="exp-2"
+            class="w-full border p-2 rounded dark:bg-zinc-800"
+            placeholder="Experience 2">
+
+            <div id="exp-error" class="text-red-600 text-sm hidden">
+            Two experiences are required.
+            </div>
+
+            <button id="step7-complete"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- ================= STEP 8 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="8">
+
+        <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+            <span class="font-semibold">Step 8: Details</span>
+            <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+        </button>
+
+        <div class="wizard-content p-4 space-y-4 hidden">
+
+            <div>
+            <label class="block text-sm mb-1">Appearance</label>
+            <textarea id="char-appearance"
+                class="w-full border p-2 rounded dark:bg-zinc-800"
+                rows="3"></textarea>
+            </div>
+
+            <div>
+            <label class="block text-sm mb-1">Background</label>
+            <textarea id="char-background"
+                class="w-full border p-2 rounded dark:bg-zinc-800"
+                rows="4"></textarea>
+            </div>
+
+            <button id="step8-complete"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Finish Character
+            </button>
+
+        </div>
+    </div>
+
+    <!-- ================= STEP 9 ================= -->
+    <div class="wizard-step border rounded hidden" data-step="9">
+
+        <button class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+            <span class="font-semibold">Step 9: Review & Confirm</span>
+            <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+        </button>
+
+        <div class="wizard-content p-4 space-y-6 hidden">
+
+            <div id="review-container" class="space-y-4 text-sm"></div>
+
+            <div id="confirm-error" class="text-red-600 hidden"></div>
+
+            <button id="confirm-character"
+            class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+            Create Character
+            </button>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/character_new.js') }}"></script>
+{% endblock %}
