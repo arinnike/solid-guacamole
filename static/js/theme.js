@@ -7,10 +7,17 @@ async function applyDarkMode() {
     .from("user_settings")
     .select("dark_mode")
     .eq("user_id", user.id)
-    .single();
+    .maybeSingle();;
 
   if (error) {
     console.error("Dark mode fetch failed:", error);
+    return;
+  }
+
+  if (!data) {
+    // No settings yet — default to light
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("dark_mode", "false");
     return;
   }
 
