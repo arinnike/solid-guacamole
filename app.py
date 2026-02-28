@@ -1,19 +1,31 @@
-from flask import Flask, jsonify, render_template, request, session, redirect, abort
+from flask import Flask, jsonify, render_template, request, session, redirect
 from dotenv import load_dotenv
 import os
 import mysql.connector
 from functools import wraps
 
-# Load .env ONCE
+# ------------------------
+# Load Environment
+# ------------------------
+
 load_dotenv(os.path.expanduser("~/.env"))
 
 application = Flask(__name__)
-
-# REQUIRED for sessions
 application.secret_key = os.getenv("FLASK_SECRET", "dev-secret-change-me")
 
 application.config["TEMPLATES_AUTO_RELOAD"] = True
 application.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+
+# ------------------------
+# Global Template Context
+# ------------------------
+
+@application.context_processor
+def inject_supabase_config():
+    return {
+        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
+        "SUPABASE_KEY": os.getenv("SUPABASE_KEY"),
+    }
 
 # ------------------------
 # Database
@@ -44,76 +56,56 @@ def debug():
     return str(session)
 
 # ------------------------
-# Pages
+# Public Pages
 # ------------------------
 
 @application.route("/")
 def home():
-    return render_template(
-        "index.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-    )
-
+    return render_template("index.html")
 
 @application.route("/reset-password")
 def reset_password():
-    return render_template(
-        "reset-password.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-    )
+    return render_template("reset-password.html")
 
 @application.route("/unauthorized")
 def unauthorized():
-    return render_template(
-        "unauthorized.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-    ), 401
+    return render_template("unauthorized.html"), 401
+
+@application.route("/health")
+def health():
+    return "OK"
 
 # ------------------------
-# PROTECTED PAGES
+# Protected Pages
 # ------------------------
 
 @application.route("/settings")
 @login_required
 def settings():
-    return render_template(
-        "settings.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-    )
+    return render_template("settings.html")
 
 @application.route("/primary_weapons")
 @login_required
 def weapons_page():
-    return render_template(
-        "primary_weapons.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-        )
+    return render_template("primary_weapons.html")
 
 @application.route("/equipment")
 @login_required
 def equipment_page():
-    return render_template(
-        "equipment.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-        )
+    return render_template("equipment.html")
 
 @application.route("/dice")
 @login_required
 def dice_page():
-    return render_template(
-        "dice.html",
-        SUPABASE_URL=os.getenv("SUPABASE_URL"),
-        SUPABASE_KEY=os.getenv("SUPABASE_KEY"),
-        )
+    return render_template("dice.html")
+
+@application.route("/characters")
+@login_required
+def characters():
+    return render_template("characters.html")
 
 # ------------------------
-# Supabase → Flask Session
+# Supabase → Flask Session Sync
 # ------------------------
 
 @application.route("/set-session", methods=["POST"])
@@ -124,7 +116,6 @@ def set_session():
         return "Unauthorized", 401
 
     session["user"] = data["user"]["id"]
-
     return "ok"
 
 @application.route("/logout")
@@ -133,7 +124,7 @@ def logout():
     return redirect("/")
 
 # ------------------------
-# API (already protected via pages)
+# API Routes (MySQL)
 # ------------------------
 
 @application.route("/api/primary_weapons")
@@ -154,7 +145,6 @@ def primaryWeapons_api():
         cursor.execute("SELECT * FROM primary_weapons")
 
     rows = cursor.fetchall()
-
     cursor.close()
     conn.close()
 
@@ -178,7 +168,6 @@ def secondaryWeapons_api():
         cursor.execute("SELECT * FROM secondary_weapons")
 
     rows = cursor.fetchall()
-
     cursor.close()
     conn.close()
 
@@ -212,7 +201,6 @@ def consumables_api():
 
     return jsonify(rows)
 
-
 @application.route("/api/loot")
 @login_required
 def loot_api():
@@ -226,16 +214,3 @@ def loot_api():
     conn.close()
 
     return jsonify(rows)
-
-@application.route("/characters")
-@login_required
-def characters():
-    return render_template("characters.html")
-
-# ------------------------
-# Health
-# ------------------------
-
-@application.route("/health")
-def health():
-    return "OK"
