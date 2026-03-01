@@ -932,6 +932,8 @@ async function loadWeapons() {
 
   document.getElementById("secondary-accordion-toggle")
     .classList.add("opacity-50","pointer-events-none");
+
+  wireWeaponAccordions();
 }
 
 /* ---------- Accordion Controls ---------- */
@@ -946,6 +948,62 @@ function collapseAccordion(id) {
   const el = document.getElementById(id);
   el.classList.remove("max-h-[1000px]");
   el.classList.add("max-h-0");
+}
+
+function wireWeaponAccordions() {
+
+  const primaryToggle =
+    document.getElementById("primary-accordion-toggle");
+
+  const secondaryToggle =
+    document.getElementById("secondary-accordion-toggle");
+
+  // Remove old listeners by cloning (prevents duplicates)
+  const newPrimary = primaryToggle.cloneNode(true);
+  primaryToggle.parentNode.replaceChild(newPrimary, primaryToggle);
+
+  const newSecondary = secondaryToggle.cloneNode(true);
+  secondaryToggle.parentNode.replaceChild(newSecondary, secondaryToggle);
+
+  // PRIMARY TOGGLE
+  newPrimary.addEventListener("click", () => {
+
+    const content =
+      document.getElementById("primary-accordion-content");
+
+    const isExpanded =
+      content.classList.contains("max-h-[1000px]");
+
+    if (isExpanded) {
+      collapseAccordion("primary-accordion-content");
+    } else {
+      expandAccordion("primary-accordion-content");
+
+      // Visually collapse secondary only
+      collapseAccordion("secondary-accordion-content");
+    }
+  });
+
+  // SECONDARY TOGGLE
+  newSecondary.addEventListener("click", () => {
+
+    // If disabled, do nothing
+    if (newSecondary.classList.contains("pointer-events-none"))
+      return;
+
+    const content =
+      document.getElementById("secondary-accordion-content");
+
+    const isExpanded =
+      content.classList.contains("max-h-[1000px]");
+
+    if (isExpanded) {
+      collapseAccordion("secondary-accordion-content");
+    } else {
+      expandAccordion("secondary-accordion-content");
+      collapseAccordion("primary-accordion-content");
+    }
+  });
 }
 
 /* ---------- Table Rendering ---------- */
