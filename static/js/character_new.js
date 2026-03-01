@@ -963,23 +963,31 @@ function selectPrimaryWeapon(id) {
   const secondarySection =
     document.getElementById("secondary-section");
 
+  const secondaryList =
+    document.getElementById("secondary-weapon-list");
+
   const twoHandedMessage =
     document.getElementById("two-handed-message");
 
   if (selected.burden === "Two-handed") {
 
-  wizardState.weapons.secondary = null;
+    // 🔥 Clear secondary state
+    wizardState.weapons.secondary = null;
 
-  document.getElementById("secondary-weapon-list").innerHTML = "";
+    // 🔥 Remove secondary buttons completely
+    secondaryList.innerHTML = "";
 
-  secondarySection.classList.add("hidden");
+    // 🔥 Hide secondary section
+    secondarySection.classList.add("hidden");
 
-  twoHandedMessage.classList.remove("hidden");
-  twoHandedMessage.textContent =
-    "This weapon is two-handed. Secondary weapons cannot be equipped.";
+    // 🔥 Show message
+    twoHandedMessage.classList.remove("hidden");
+    twoHandedMessage.textContent =
+      "This weapon is two-handed. Secondary weapons cannot be equipped.";
 
   } else {
 
+    // 🔥 Allow secondary again
     twoHandedMessage.classList.add("hidden");
 
     secondarySection.classList.remove("hidden");
@@ -992,8 +1000,10 @@ function selectSecondaryWeapon(id) {
 
   const primary = wizardState.weapons.primary;
 
+  // Hard guard
   if (!primary || primary.burden === "Two-handed") {
-    return; // hard stop
+    console.log("Blocked secondary selection.");
+    return;
   }
 
   const selected =
