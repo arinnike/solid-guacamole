@@ -290,17 +290,51 @@ function renderClassDetail(c) {
       </div>
 
       <div>
-        <div class="font-semibold mb-2">Choose Subclass</div>
-        <div class="space-y-2">
-          ${c.subclasses.map(s => `
-            <button
-              class="w-full border rounded py-2 px-3 text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-              onclick="selectSubclass(${c.id}, ${s.id})">
-              ${s.subclass_name}
-            </button>
-          `).join("")}
+        <div class="font-semibold mb-3 text-lg">
+            Choose Your Subclass
         </div>
-      </div>
+
+        <div class="space-y-4">
+            ${(c.subclasses || []).map(s => `
+            <div class="border rounded p-4 bg-zinc-50/60 dark:bg-zinc-800 space-y-3">
+
+                <div>
+                <div class="font-semibold text-base">
+                    ${s.subclass_name}
+                </div>
+                <div class="text-sm text-zinc-500">
+                    ${s.subclass_description ?? ""}
+                </div>
+                </div>
+
+                <div class="text-sm space-y-2">
+
+                <div>
+                    <span class="font-semibold">Foundation Feature:</span>
+                    <div class="text-zinc-500">
+                    ${s.foundation_feature ?? "-"}
+                    </div>
+                </div>
+
+                <div>
+                    <span class="font-semibold">Mastery Feature:</span>
+                    <div class="text-zinc-500">
+                    ${s.mastery_feature ?? "-"}
+                    </div>
+                </div>
+
+                </div>
+
+                <button
+                class="mt-2 px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+                onclick="selectSubclass(${c.id}, ${s.id})">
+                Select ${s.subclass_name}
+                </button>
+
+            </div>
+            `).join("")}
+        </div>
+        </div>
 
     </div>
   `;
