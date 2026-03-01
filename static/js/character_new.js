@@ -78,8 +78,9 @@ async function apiFetch(endpoint) {
 function openStep(stepNumber, loaderFn) {
   const allSteps = document.querySelectorAll("[data-step]");
 
-  // Close all steps first
+  // Close all steps
   allSteps.forEach(step => {
+    step.classList.add("hidden");
     step.querySelector(".wizard-content")
       .classList.add("hidden");
   });
@@ -87,6 +88,8 @@ function openStep(stepNumber, loaderFn) {
   const step = document.querySelector(`[data-step="${stepNumber}"]`);
   const content = step.querySelector(".wizard-content");
 
+  // Show this step
+  step.classList.remove("hidden");
   content.classList.remove("hidden");
 
   if (loaderFn && !content.dataset.loaded) {
