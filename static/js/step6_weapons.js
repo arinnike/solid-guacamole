@@ -240,10 +240,16 @@ function applyBurdenRules(primaryWeapon) {
 
 document.addEventListener("click", (e) => {
 
-  if (e.target.id === "primary-toggle")
+  const primaryToggle =
+  e.target.closest("#primary-toggle");
+
+  const secondaryToggle =
+    e.target.closest("#secondary-toggle");
+
+  if (primaryToggle)
     expandPrimary();
 
-  if (e.target.id === "secondary-toggle")
+  if (secondaryToggle)
     expandSecondary();
 
   const primaryBtn =
