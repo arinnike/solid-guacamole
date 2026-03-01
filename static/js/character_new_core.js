@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   /* ---------- STEP TOGGLE (Editable Steps) ---------- */
 
-  document.querySelectorAll(".wizard-toggle")
+  /*document.querySelectorAll(".wizard-toggle")
     .forEach(toggle => {
 
       toggle.addEventListener("click", () => {
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         content.classList.toggle("hidden");
       });
 
-    });
+    });*/
 
 });
 
