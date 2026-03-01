@@ -225,7 +225,7 @@ function selectClass(classId) {
     });
 
   const selectedClass =
-    cachedClasses.find(c => c.id === classId);
+    cachedClasses.find(c => Number(c.id) === Number(classId));
 
   renderClassDetail(selectedClass);
 }
