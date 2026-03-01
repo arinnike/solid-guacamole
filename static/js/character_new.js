@@ -382,7 +382,18 @@ function selectSubclass(classId, subclassId) {
 ================================ */
 
 async function loadAncestries() {
-  renderAncestries(await apiFetch("/ancestries"));
+
+  //Show loading message
+  const loading =
+    document.getElementById("ancestry-loading");
+
+  if (loading) {
+    loading.classList.remove("hidden");
+  }
+
+  const data = await apiFetch("/ancestries");
+
+  renderAncestries(data);
 }
 
 async function loadCommunities() {
@@ -391,6 +402,14 @@ async function loadCommunities() {
 
 function renderAncestries(data) {
   cachedAncestries = data;
+
+  //Hide loading text once data is ready
+  const loading =
+    document.getElementById("ancestry-loading");
+
+  if (loading) {
+    loading.classList.add("hidden");
+  }
 
   const list = document.getElementById("ancestry-list");
 
