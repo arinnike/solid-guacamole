@@ -479,7 +479,6 @@ function renderCommunityEmptyState() {
 
 function selectAncestry(id) {
   selectedAncestryId = id;
-  wizardState.ancestry_id = id;
 
   document.querySelectorAll("#ancestry-list button")
     .forEach(btn => {
@@ -498,24 +497,22 @@ function selectAncestry(id) {
   const communitySection =
     document.getElementById("community-section");
 
-  communitySection.classList.remove("opacity-50","pointer-events-none");
-
-  // ADD SCROLL HERE
-  communitySection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
 }
 
 function renderAncestryDetail(a) {
-  const panel = document.getElementById("ancestry-detail-panel");
+
+  const panel =
+    document.getElementById("ancestry-detail-panel");
 
   panel.classList.remove("flex","items-center","justify-center","text-center");
 
   panel.innerHTML = `
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold">${a.name}</h2>
-      <p class="text-zinc-500">${a.description}</p>
+    <div class="space-y-6">
+
+      <div>
+        <h2 class="text-2xl font-bold">${a.name}</h2>
+        <p class="text-zinc-500">${a.description}</p>
+      </div>
 
       <div class="text-sm space-y-3">
         <div>
@@ -535,8 +532,30 @@ function renderAncestryDetail(a) {
           <div class="text-zinc-500">${a.lifespan}</div>
         </div>
       </div>
+
+      <button
+        class="mt-4 px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+        onclick="confirmAncestry(${a.id})">
+        Choose ${a.name}
+      </button>
+
     </div>
   `;
+}
+
+function confirmAncestry(id) {
+
+  wizardState.ancestry_id = id;
+
+  const communitySection =
+    document.getElementById("community-section");
+
+  communitySection.classList.remove("opacity-50","pointer-events-none");
+
+  communitySection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
 }
 
 function selectCommunity(id) {
