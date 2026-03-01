@@ -252,88 +252,65 @@
     <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
   </button>
 
-  <div class="wizard-content p-4 space-y-6 hidden">
+  <div class="wizard-content p-4 space-y-8 hidden">
 
-    <!-- Tier Message -->
+    <!-- Tier Info -->
     <div id="weapon-tier-info"
       class="text-sm text-zinc-500 hidden">
     </div>
 
-    <!-- PRIMARY ACCORDION -->
-    <div class="border rounded">
+    <!-- PRIMARY SECTION -->
+    <div>
+      <h3 class="text-lg font-semibold mb-3">
+        Select Primary Weapon
+      </h3>
 
-      <button type="button"
-        id="primary-accordion-toggle"
-        class="w-full text-left px-4 py-3 font-semibold bg-zinc-50 dark:bg-zinc-900">
-        Primary Weapons
-      </button>
-
-      <div id="primary-accordion-content"
-        class="transition-opacity duration-200 opacity-100">
-
-        <!-- Filters -->
-        <div class="p-4 space-y-3 border-b bg-white dark:bg-zinc-800">
-          <input type="text"
-            id="primary-filter-name"
-            placeholder="Filter by name"
-            class="w-full border rounded p-2 text-sm dark:bg-zinc-700">
-
-          <div class="grid grid-cols-3 gap-2">
-            <select id="primary-filter-trait" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
-            <select id="primary-filter-reach" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
-            <select id="primary-filter-burden" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
-          </div>
-        </div>
-
-        <!-- Table -->
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-zinc-100 dark:bg-zinc-800">
-              <tr>
-                <th class="p-2 text-left">Name</th>
-                <th class="p-2 text-left">Trait</th>
-                <th class="p-2 text-left">Reach</th>
-                <th class="p-2 text-left">Damage</th>
-                <th class="p-2 text-left">Burden</th>
-                <th class="p-2 text-left">Feature</th>
-              </tr>
-            </thead>
-            <tbody id="primary-weapon-table"></tbody>
-          </table>
-        </div>
-
+      <div class="overflow-x-auto border rounded">
+        <table class="w-full text-sm">
+          <thead class="bg-zinc-100 dark:bg-zinc-800">
+            <tr>
+              <th class="p-2 text-left">Name</th>
+              <th class="p-2 text-left">Trait</th>
+              <th class="p-2 text-left">Reach</th>
+              <th class="p-2 text-left">Damage</th>
+              <th class="p-2 text-left">Burden</th>
+              <th class="p-2 text-left">Feature</th>
+            </tr>
+          </thead>
+          <tbody id="primary-weapon-table"></tbody>
+        </table>
       </div>
     </div>
 
-    <!-- SECONDARY ACCORDION -->
-    <div class="border rounded">
+    <!-- SECONDARY SECTION -->
+    <div id="secondary-section" class="hidden space-y-4">
 
-      <button type="button"
-        id="secondary-accordion-toggle"
-        class="w-full text-left px-4 py-3 font-semibold bg-zinc-50 dark:bg-zinc-900 opacity-50 pointer-events-none">
-        Secondary Weapons
-      </button>
+      <h3 class="text-lg font-semibold">
+        Select Secondary Weapon
+      </h3>
 
-      <div id="secondary-accordion-content"
-        class="hidden transition-opacity duration-200 opacity-0">
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="bg-zinc-100 dark:bg-zinc-800">
-              <tr>
-                <th class="p-2 text-left">Name</th>
-                <th class="p-2 text-left">Trait</th>
-                <th class="p-2 text-left">Reach</th>
-                <th class="p-2 text-left">Damage</th>
-                <th class="p-2 text-left">Burden</th>
-                <th class="p-2 text-left">Feature</th>
-              </tr>
-            </thead>
-            <tbody id="secondary-weapon-table"></tbody>
-          </table>
-        </div>
-
+      <div class="overflow-x-auto border rounded">
+        <table class="w-full text-sm">
+          <thead class="bg-zinc-100 dark:bg-zinc-800">
+            <tr>
+              <th class="p-2 text-left">Name</th>
+              <th class="p-2 text-left">Trait</th>
+              <th class="p-2 text-left">Reach</th>
+              <th class="p-2 text-left">Damage</th>
+              <th class="p-2 text-left">Burden</th>
+              <th class="p-2 text-left">Feature</th>
+            </tr>
+          </thead>
+          <tbody id="secondary-weapon-table"></tbody>
+        </table>
       </div>
+
+    </div>
+
+    <!-- Two-Handed Message -->
+    <div id="two-handed-message"
+      class="hidden text-sm text-zinc-500 italic">
+      This weapon is two-handed. Secondary weapons cannot be equipped.
     </div>
 
     <!-- Error -->
@@ -416,4 +393,5 @@
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/character_new.js') }}"></script>
+<script src="{{ url_for('static', filename='js/step6_weapons.js') }}"></script>
 {% endblock %}
