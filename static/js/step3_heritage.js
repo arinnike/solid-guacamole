@@ -138,6 +138,17 @@ function selectAncestry(id) {
 
   wizardState.ancestry_id = id;
 
+  // Enable community section once ancestry is selected
+  const communitySection =
+    document.getElementById("community-section");
+
+  if (communitySection) {
+    communitySection.classList.remove(
+      "opacity-50",
+      "pointer-events-none"
+    );
+  }
+
   document.querySelectorAll("#ancestry-list button")
     .forEach(btn => {
       btn.classList.remove(
