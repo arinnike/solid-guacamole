@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     completeStep(3);
-    openStep(4);
+    openStep(4, renderTraits);
   });
 
 });
