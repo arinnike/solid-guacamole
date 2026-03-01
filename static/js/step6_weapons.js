@@ -1,9 +1,12 @@
 /* =========================================
-   STEP 6 – Weapons (Clean Version)
+   STEP 6 – Weapons (Performance Clean Build)
 ========================================= */
 
 let cachedPrimaryWeapons = [];
 let cachedSecondaryWeapons = [];
+
+let selectedPrimaryRow = null;
+let selectedSecondaryRow = null;
 
 /* ---------- Load + Tier Filter ---------- */
 
@@ -26,13 +29,14 @@ async function loadWeapons() {
   const tierInfo =
     document.getElementById("weapon-tier-info");
 
-  tierInfo.classList.remove("hidden");
-  tierInfo.textContent =
-    `Showing Tier ${tier} weapons based on Level ${level}.`;
+  if (tierInfo) {
+    tierInfo.classList.remove("hidden");
+    tierInfo.textContent =
+      `Showing Tier ${tier} weapons based on Level ${level}.`;
+  }
 
   renderPrimaryTable();
   renderSecondaryTable();
-
   resetWeaponState();
 }
 
@@ -93,12 +97,33 @@ function selectPrimaryWeapon(id) {
   const selected =
     cachedPrimaryWeapons.find(w => Number(w.id) === Number(id));
 
+  if (!selected) return;
+
   wizardState.weapons.primary = selected;
   wizardState.weapons.secondary = null;
 
-  highlightRow("primary-weapon-table", id);
-  clearSecondaryHighlight();
+  const row =
+    document.querySelector(
+      `#primary-weapon-table tr[data-id="${id}"]`
+    );
 
+  if (selectedPrimaryRow) {
+    selectedPrimaryRow.classList.remove(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  if (row) {
+    row.classList.add(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  selectedPrimaryRow = row;
+
+  clearSecondarySelection();
   updateSecondaryEligibility();
 }
 
@@ -112,9 +137,30 @@ function selectSecondaryWeapon(id) {
   const selected =
     cachedSecondaryWeapons.find(w => Number(w.id) === Number(id));
 
+  if (!selected) return;
+
   wizardState.weapons.secondary = selected;
 
-  highlightRow("secondary-weapon-table", id);
+  const row =
+    document.querySelector(
+      `#secondary-weapon-table tr[data-id="${id}"]`
+    );
+
+  if (selectedSecondaryRow) {
+    selectedSecondaryRow.classList.remove(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  if (row) {
+    row.classList.add(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  selectedSecondaryRow = row;
 }
 
 /* ---------- Eligibility ---------- */
@@ -127,58 +173,61 @@ function updateSecondaryEligibility() {
   const primary =
     wizardState.weapons.primary;
 
-  if (!primary) {
-    section.classList.add("opacity-50","pointer-events-none");
-    return;
-  }
+  if (!section) return;
 
-  if (primary.burden === "Two-handed") {
-    section.classList.add("opacity-50","pointer-events-none");
-    return;
-  }
+  if (!primary || primary.burden === "Two-handed") {
 
-  section.classList.remove("opacity-50","pointer-events-none");
+    section.classList.add(
+      "opacity-50",
+      "pointer-events-none"
+    );
+
+  } else {
+
+    section.classList.remove(
+      "opacity-50",
+      "pointer-events-none"
+    );
+  }
 }
+
+/* ---------- Reset ---------- */
 
 function resetWeaponState() {
 
   wizardState.weapons.primary = null;
   wizardState.weapons.secondary = null;
 
-  clearSecondaryHighlight();
+  if (selectedPrimaryRow) {
+    selectedPrimaryRow.classList.remove(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  if (selectedSecondaryRow) {
+    selectedSecondaryRow.classList.remove(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
+
+  selectedPrimaryRow = null;
+  selectedSecondaryRow = null;
+
   updateSecondaryEligibility();
 }
 
-/* ---------- Highlight Helpers ---------- */
+function clearSecondarySelection() {
 
-function highlightRow(tableId, id) {
+  if (selectedSecondaryRow) {
+    selectedSecondaryRow.classList.remove(
+      "bg-zinc-200",
+      "dark:bg-zinc-700"
+    );
+  }
 
-  document.querySelectorAll(`#${tableId} tr`)
-    .forEach(row => {
-
-      row.classList.remove(
-        "bg-zinc-200",
-        "dark:bg-zinc-700"
-      );
-
-      if (Number(row.dataset.id) === Number(id)) {
-        row.classList.add(
-          "bg-zinc-200",
-          "dark:bg-zinc-700"
-        );
-      }
-    });
-}
-
-function clearSecondaryHighlight() {
-
-  document.querySelectorAll("#secondary-weapon-table tr")
-    .forEach(row => {
-      row.classList.remove(
-        "bg-zinc-200",
-        "dark:bg-zinc-700"
-      );
-    });
+  selectedSecondaryRow = null;
 }
 
 /* ---------- Validation ---------- */
@@ -221,12 +270,22 @@ document.addEventListener("DOMContentLoaded", () => {
 /* ---------- Error Helpers ---------- */
 
 function showWeaponError(msg) {
-  const el = document.getElementById("weapon-error");
+
+  const el =
+    document.getElementById("weapon-error");
+
+  if (!el) return;
+
   el.textContent = msg;
   el.classList.remove("hidden");
 }
 
 function hideWeaponError() {
-  document.getElementById("weapon-error")
-    .classList.add("hidden");
+
+  const el =
+    document.getElementById("weapon-error");
+
+  if (!el) return;
+
+  el.classList.add("hidden");
 }
