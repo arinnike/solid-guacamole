@@ -963,24 +963,16 @@ function wireWeaponAccordions() {
   const secondaryToggle =
     document.getElementById("secondary-accordion-toggle");
 
-  const primaryContent =
-    document.getElementById("primary-accordion-content");
+  primaryToggle.onclick = () => {
 
-  const secondaryContent =
-    document.getElementById("secondary-accordion-content");
+    const primaryContent =
+      document.getElementById("primary-accordion-content");
 
-  // Remove existing listeners safely
-  const newPrimary = primaryToggle.cloneNode(true);
-  primaryToggle.parentNode.replaceChild(newPrimary, primaryToggle);
-
-  const newSecondary = secondaryToggle.cloneNode(true);
-  secondaryToggle.parentNode.replaceChild(newSecondary, secondaryToggle);
-
-  // --- PRIMARY TOGGLE ---
-  newPrimary.addEventListener("click", () => {
+    const secondaryContent =
+      document.getElementById("secondary-accordion-content");
 
     const isExpanded =
-      primaryContent.classList.contains("max-h-[1000px]");
+      !primaryContent.classList.contains("hidden");
 
     if (isExpanded) {
       collapseAccordion("primary-accordion-content");
@@ -988,21 +980,24 @@ function wireWeaponAccordions() {
       expandAccordion("primary-accordion-content");
       collapseAccordion("secondary-accordion-content");
     }
-  });
+  };
 
-  // --- SECONDARY TOGGLE ---
-  newSecondary.addEventListener("click", () => {
+  secondaryToggle.onclick = () => {
 
     const primary =
       wizardState.weapons.primary;
 
-    // Hard eligibility guard
-    if (!primary || primary.burden === "Two-handed") {
+    if (!primary || primary.burden === "Two-handed")
       return;
-    }
+
+    const secondaryContent =
+      document.getElementById("secondary-accordion-content");
+
+    const primaryContent =
+      document.getElementById("primary-accordion-content");
 
     const isExpanded =
-      secondaryContent.classList.contains("max-h-[1000px]");
+      !secondaryContent.classList.contains("hidden");
 
     if (isExpanded) {
       collapseAccordion("secondary-accordion-content");
@@ -1010,18 +1005,7 @@ function wireWeaponAccordions() {
       expandAccordion("secondary-accordion-content");
       collapseAccordion("primary-accordion-content");
     }
-  });
-
-  // --- Reapply Disabled State Based on Primary ---
-  const primary =
-    wizardState.weapons.primary;
-
-  if (!primary || primary.burden === "Two-handed") {
-    newSecondary.classList.add("opacity-50","pointer-events-none");
-    collapseAccordion("secondary-accordion-content");
-  } else {
-    newSecondary.classList.remove("opacity-50","pointer-events-none");
-  }
+  };
 
   updateSecondaryEligibility();
 }
