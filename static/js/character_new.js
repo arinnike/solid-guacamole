@@ -1110,6 +1110,7 @@ function selectPrimaryWeapon(id) {
 
   // Single source of truth for eligibility
   updateSecondaryEligibility();
+  console.log("Primary selected");
 }
 
 function selectSecondaryWeapon(id) {
