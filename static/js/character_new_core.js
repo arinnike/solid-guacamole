@@ -47,10 +47,12 @@ const wizardState = {
 };
 
 /* =========================================
-   SESSION INIT
+   DOM READY – Session + Step Toggle
 ========================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+  /* ---------- SESSION INIT ---------- */
 
   const { data } =
     await window.supabase.auth.getSession();
@@ -61,6 +63,29 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   cachedSession = data.session;
+
+  /* ---------- STEP TOGGLE (Editable Steps) ---------- */
+
+  document.querySelectorAll(".wizard-toggle")
+    .forEach(toggle => {
+
+      toggle.addEventListener("click", () => {
+
+        const step =
+          toggle.closest(".wizard-step");
+
+        if (!step) return;
+
+        const content =
+          step.querySelector(".wizard-content");
+
+        if (!content) return;
+
+        content.classList.toggle("hidden");
+      });
+
+    });
+
 });
 
 /* =========================================
@@ -126,7 +151,6 @@ function openStep(stepNumber, loaderFn) {
 
   content.classList.remove("hidden");
 
-  // Only load once
   if (loaderFn && !content.dataset.loaded) {
     loaderFn();
     content.dataset.loaded = "true";
