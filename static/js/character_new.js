@@ -209,7 +209,23 @@ function renderClasses(classes) {
     </button>
   `).join("");
 
-  detailPanel.classList.add("hidden");
+  renderClassEmptyState();
+}
+
+function renderClassEmptyState() {
+  const panel = document.getElementById("class-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-3 max-w-md">
+      <div class="text-xl font-semibold">
+        Choose a Class
+      </div>
+      <div class="text-sm text-zinc-500">
+        Your class determines your core features, starting stats, and overall playstyle.
+        Select one from the list to view its details.
+      </div>
+    </div>
+  `;
 }
 
 function selectClass(classId) {
@@ -232,6 +248,9 @@ function selectClass(classId) {
 
 function renderClassDetail(c) {
   const panel = document.getElementById("class-detail-panel");
+
+  // Remove empty-state centering classes
+  panel.classList.remove("flex","items-center","justify-center","text-center");
 
   panel.innerHTML = `
     <div class="space-y-6">
