@@ -58,7 +58,7 @@ function renderClassEmptyState() {
   if (!panel) return;
 
   panel.innerHTML = `
-    <div class="space-y-3 max-w-md text-center">
+    <div class="space-y-3 max-w-md">
       <div class="text-xl font-semibold">
         Select a Class
       </div>
