@@ -7,6 +7,9 @@ let portraitFile = null;
 let uploadedPortraitPath = null;
 let cachedWeapons = [];
 
+let cachedClasses = [];
+let selectedClassId = null;
+
 /* ===============================
    Wizard State
 ================================ */
@@ -190,72 +193,100 @@ async function loadClasses() {
 }
 
 function renderClasses(classes) {
+  cachedClasses = classes;
+
   document.getElementById("class-loading").classList.add("hidden");
-  const grid = document.getElementById("class-grid");
-  grid.classList.remove("hidden");
 
-  grid.innerHTML = classes.map(c => `
-    <div class="border rounded bg-white dark:bg-zinc-800 overflow-hidden transition-all duration-200"
-         data-class-id="${c.id}">
+  const list = document.getElementById("class-list");
+  const detailPanel = document.getElementById("class-detail-panel");
 
-      <button
-        class="w-full text-left px-4 py-3 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-700"
-        onclick="toggleClassCard(${c.id})">
-
-        <span class="font-semibold text-lg">${c.name}</span>
-        <span class="text-sm opacity-60">+</span>
-      </button>
-
-      <div class="class-content hidden px-4 pb-4 space-y-4">
-
-            <p class="text-sm text-zinc-500">
-                ${c.class_description || ""}
-            </p>
-
-            <div class="grid grid-cols-2 gap-4 text-sm">
-
-                <div>
-                <span class="font-semibold">Starting HP:</span>
-                <div>${c.starting_hp ?? "-"}</div>
-                </div>
-
-                <div>
-                <span class="font-semibold">Starting Evasion:</span>
-                <div>${c.starting_evasion ?? "-"}</div>
-                </div>
-
-                <div class="col-span-2">
-                <span class="font-semibold">Starting Items:</span>
-                <div class="text-zinc-500">${c.starting_items ?? "-"}</div>
-                </div>
-
-                <div class="col-span-2">
-                <span class="font-semibold">Hope Feature:</span>
-                <div class="text-zinc-500">${c.hope_feature ?? "-"}</div>
-                </div>
-
-                <div class="col-span-2">
-                <span class="font-semibold">Class Feature:</span>
-                <div class="text-zinc-500">${c.class_feature ?? "-"}</div>
-                </div>
-
-            </div>
-
-            <div class="pt-2 border-t border-zinc-200 dark:border-zinc-700">
-                <div class="text-sm font-semibold mb-2">Choose Subclass</div>
-                <div class="space-y-2">
-                ${c.subclasses?.map(s => `
-                    <button
-                    class="w-full border rounded py-2 px-3 text-sm text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-                    onclick="selectSubclass(${c.id}, ${s.id})">
-                    ${s.subclass_name}
-                    </button>
-                `).join("")}
-                </div>
-            </div>
-        </div>
-    </div>
+  list.innerHTML = classes.map(c => `
+    <button
+      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+      data-class-id="${c.id}"
+      onclick="selectClass(${c.id})">
+      <div class="font-semibold">${c.name}</div>
+    </button>
   `).join("");
+
+  detailPanel.classList.add("hidden");
+}
+
+function selectClass(classId) {
+  selectedClassId = classId;
+
+  // Highlight selected
+  document.querySelectorAll("#class-list button")
+    .forEach(btn => {
+      btn.classList.remove("ring-2","ring-blue-500");
+      if (parseInt(btn.dataset.classId) === classId) {
+        btn.classList.add("ring-2","ring-blue-500");
+      }
+    });
+
+  const selectedClass =
+    cachedClasses.find(c => c.id === classId);
+
+  renderClassDetail(selectedClass);
+}
+
+function renderClassDetail(c) {
+  const panel = document.getElementById("class-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-6">
+
+      <div>
+        <h2 class="text-2xl font-bold mb-2">${c.name}</h2>
+        <p class="text-zinc-500">${c.class_description || ""}</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+
+        <div>
+          <div class="font-semibold">Starting HP</div>
+          <div>${c.starting_hp ?? "-"}</div>
+        </div>
+
+        <div>
+          <div class="font-semibold">Starting Evasion</div>
+          <div>${c.starting_evasion ?? "-"}</div>
+        </div>
+
+        <div class="col-span-2">
+          <div class="font-semibold">Starting Items</div>
+          <div class="text-zinc-500">${c.starting_items ?? "-"}</div>
+        </div>
+
+        <div class="col-span-2">
+          <div class="font-semibold">Hope Feature</div>
+          <div class="text-zinc-500">${c.hope_feature ?? "-"}</div>
+        </div>
+
+        <div class="col-span-2">
+          <div class="font-semibold">Class Feature</div>
+          <div class="text-zinc-500">${c.class_feature ?? "-"}</div>
+        </div>
+
+      </div>
+
+      <div>
+        <div class="font-semibold mb-2">Choose Subclass</div>
+        <div class="space-y-2">
+          ${c.subclasses.map(s => `
+            <button
+              class="w-full border rounded py-2 px-3 text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+              onclick="selectSubclass(${c.id}, ${s.id})">
+              ${s.subclass_name}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  panel.classList.remove("hidden");
 }
 
 function selectSubclass(classId, subclassId) {
