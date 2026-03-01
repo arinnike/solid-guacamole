@@ -413,16 +413,40 @@ function renderAncestryEmptyState() {
 }
 
 function renderCommunities(data) {
-  const grid = document.getElementById("community-grid");
-  grid.classList.remove("hidden");
+  cachedCommunities = data;
 
-  grid.innerHTML = data.map(c => `
-    <button class="border rounded p-4 text-left hover:bg-zinc-100 dark:hover:bg-zinc-700"
+  document.getElementById("community-loading")
+    .classList.add("hidden");
+
+  const list = document.getElementById("community-list");
+
+  list.innerHTML = data.map(c => `
+    <button
+      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+      data-community-id="${c.id}"
       onclick="selectCommunity(${c.id})">
-      <h4 class="font-semibold">${c.name}</h4>
-      <p class="text-sm text-zinc-500">${c.description}</p>
+      <div class="font-semibold">${c.name}</div>
     </button>
   `).join("");
+
+  renderCommunityEmptyState();
+}
+
+function renderCommunityEmptyState() {
+  const panel =
+    document.getElementById("community-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-3 max-w-md">
+      <div class="text-xl font-semibold">
+        Select a Community
+      </div>
+      <div class="text-sm text-zinc-500">
+        Your community reflects your upbringing,
+        culture, and social background.
+      </div>
+    </div>
+  `;
 }
 
 function selectAncestry(id) {
@@ -506,6 +530,32 @@ function selectCommunity(id) {
 
   completeStep(3);
   openStep(4, renderTraits);
+}
+
+function renderCommunityDetail(c) {
+  const panel =
+    document.getElementById("community-detail-panel");
+
+  panel.classList.remove("flex","items-center","justify-center","text-center");
+
+  panel.innerHTML = `
+    <div class="space-y-4">
+      <h2 class="text-2xl font-bold">${c.name}</h2>
+      <p class="text-zinc-500">${c.description}</p>
+
+      <div class="text-sm space-y-3">
+        <div>
+          <span class="font-semibold">Adjectives:</span>
+          <div class="text-zinc-500">${c.adjectives}</div>
+        </div>
+
+        <div>
+          <span class="font-semibold">Community Feature:</span>
+          <div class="text-zinc-500">${c.community_feature}</div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 /* ===============================
