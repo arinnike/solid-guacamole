@@ -478,13 +478,15 @@ function renderCommunityEmptyState() {
 }
 
 function selectAncestry(id) {
-  selectedAncestryId = id;
+
+  wizardState.ancestry_id = id;
 
   document.querySelectorAll("#ancestry-list button")
     .forEach(btn => {
-      btn.classList.remove("ring-2","ring-blue-500");
+      btn.classList.remove("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
+
       if (Number(btn.dataset.ancestryId) === Number(id)) {
-        btn.classList.add("ring-2","ring-blue-500");
+        btn.classList.add("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
       }
     });
 
@@ -493,10 +495,20 @@ function selectAncestry(id) {
 
   renderAncestryDetail(selected);
 
-  // Enable community section
+  // Unlock community
   const communitySection =
     document.getElementById("community-section");
 
+  communitySection.classList.remove("opacity-50","pointer-events-none");
+
+  wizardState.community_id = null;
+
+    document.querySelectorAll("#community-list button")
+    .forEach(btn => {
+        btn.classList.remove("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
+    });
+
+    renderCommunityEmptyState();
 }
 
 function renderAncestryDetail(a) {
@@ -532,41 +544,20 @@ function renderAncestryDetail(a) {
           <div class="text-zinc-500">${a.lifespan}</div>
         </div>
       </div>
-
-      <button
-        class="mt-4 px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-        onclick="confirmAncestry(${a.id})">
-        Choose ${a.name}
-      </button>
-
     </div>
   `;
 }
 
-function confirmAncestry(id) {
-
-  wizardState.ancestry_id = id;
-
-  const communitySection =
-    document.getElementById("community-section");
-
-  communitySection.classList.remove("opacity-50","pointer-events-none");
-
-  communitySection.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}
-
 function selectCommunity(id) {
 
-  selectedCommunityId = id;
+  wizardState.community_id = id;
 
   document.querySelectorAll("#community-list button")
     .forEach(btn => {
-      btn.classList.remove("ring-2","ring-blue-500");
+      btn.classList.remove("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
+
       if (Number(btn.dataset.communityId) === Number(id)) {
-        btn.classList.add("ring-2","ring-blue-500");
+        btn.classList.add("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
       }
     });
 
@@ -603,19 +594,10 @@ function renderCommunityDetail(c) {
         </div>
       </div>
 
-      <button
-        class="mt-4 px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-        onclick="confirmCommunity(${c.id})">
-        Choose ${c.name}
-      </button>
-
     </div>
   `;
 }
 
-function confirmCommunity(id) {
-  wizardState.community_id = id;
-}
 
 /* ===============================
    STEP 4 – Traits (Pool Enforced)
