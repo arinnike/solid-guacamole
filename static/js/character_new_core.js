@@ -177,16 +177,26 @@ function completeStep(stepNumber) {
   }
 
   if (status) {
-    status.textContent = "Complete";
+
+    status.innerHTML = `
+      <span class="text-green-600">Complete</span>
+      <button
+        type="button"
+        class="ml-2 text-xs text-blue-600 hover:underline"
+        onclick="editStep(${stepNumber})">
+        Edit
+      </button>
+    `;
+
     status.classList.remove("text-zinc-500");
-    status.classList.add("text-green-600");
   }
 }
 
 /* =========================================
-   TIER HELPER (Shared by Armor + Weapons)
+   TIER HELPERS
 ========================================= */
 
+//Shared by Armor + Weapons
 function getTierFromLevel(level) {
 
   if (level <= 1) return 1;
@@ -195,4 +205,22 @@ function getTierFromLevel(level) {
   if (level >= 8 && level <= 10) return 4;
 
   return 1;
+}
+
+// Reopens a completed step for editing without reloading its data
+function editStep(stepNumber) {
+
+  const step =
+    document.querySelector(
+      `[data-step="${stepNumber}"]`
+    );
+
+  if (!step) return;
+
+  const content =
+    step.querySelector(".wizard-content");
+
+  if (!content) return;
+
+  content.classList.remove("hidden");
 }
