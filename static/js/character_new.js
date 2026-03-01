@@ -81,23 +81,33 @@ async function apiFetch(endpoint) {
 function openStep(stepNumber, loaderFn) {
   const allSteps = document.querySelectorAll("[data-step]");
 
-  // Close all steps
   allSteps.forEach(step => {
-    step.classList.add("hidden");
-    step.querySelector(".wizard-content")
-      .classList.add("hidden");
+    const currentStepNumber = Number(step.dataset.step);
+    const content = step.querySelector(".wizard-content");
+
+    if (currentStepNumber > stepNumber) {
+      // Hide future steps completely
+      step.classList.add("hidden");
+    } else {
+      // Show this step container
+      step.classList.remove("hidden");
+
+      // Collapse content by default
+      content.classList.add("hidden");
+    }
   });
 
-  const step = document.querySelector(`[data-step="${stepNumber}"]`);
-  const content = step.querySelector(".wizard-content");
+  const currentStep =
+    document.querySelector(`[data-step="${stepNumber}"]`);
+  const currentContent =
+    currentStep.querySelector(".wizard-content");
 
-  // Show this step
-  step.classList.remove("hidden");
-  content.classList.remove("hidden");
+  // Expand current step
+  currentContent.classList.remove("hidden");
 
-  if (loaderFn && !content.dataset.loaded) {
+  if (loaderFn && !currentContent.dataset.loaded) {
     loaderFn();
-    content.dataset.loaded = "true";
+    currentContent.dataset.loaded = "true";
   }
 }
 
