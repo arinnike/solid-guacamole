@@ -257,58 +257,67 @@
     </div>
 
     <!-- PRIMARY TABLE -->
-    <div>
-      <h3 class="font-semibold mb-3">Primary Weapon</h3>
+    <div id="primary-section" class="space-y-3">
 
-      <div class="overflow-x-auto border rounded">
-        <table class="w-full text-sm">
-          <thead class="bg-zinc-100 dark:bg-zinc-800">
-            <tr>
-              <th class="p-2 text-left">Name</th>
-              <th class="p-2 text-left">Trait</th>
-              <th class="p-2 text-left">Reach</th>
-              <th class="p-2 text-left">Damage</th>
-              <th class="p-2 text-left">Burden</th>
-              <th class="p-2 text-left">Feature</th>
-              <th class="p-2 text-right">Select</th>
-            </tr>
-          </thead>
-          <tbody id="primary-weapon-table"></tbody>
-        </table>
-      </div>
+  <button type="button"
+    id="primary-toggle"
+    class="w-full text-left mb-3 font-semibold">
+    Primary Weapon
+  </button>
+
+  <div id="primary-content">
+
+    <div class="overflow-x-auto border rounded">
+      <table class="w-full text-sm">
+        <thead class="bg-zinc-100 dark:bg-zinc-800">
+          <tr>
+            <th class="p-2 text-left">Name</th>
+            <th class="p-2 text-left">Trait</th>
+            <th class="p-2 text-left">Reach</th>
+            <th class="p-2 text-left">Damage</th>
+            <th class="p-2 text-left">Burden</th>
+            <th class="p-2 text-left">Feature</th>
+            <th class="p-2 text-right">Select</th>
+          </tr>
+        </thead>
+        <tbody id="primary-weapon-table"></tbody>
+      </table>
     </div>
+
+  </div>
+</div>
 
     <!-- SECONDARY TABLE -->
-    <div id="secondary-section">
-      <h3 class="font-semibold mb-3">Secondary Weapon</h3>
+    <div id="secondary-section" class="space-y-3">
 
-      <div class="overflow-x-auto border rounded">
-        <table class="w-full text-sm">
-          <thead class="bg-zinc-100 dark:bg-zinc-800">
-            <tr>
-              <th class="p-2 text-left">Name</th>
-              <th class="p-2 text-left">Trait</th>
-              <th class="p-2 text-left">Reach</th>
-              <th class="p-2 text-left">Damage</th>
-              <th class="p-2 text-left">Burden</th>
-              <th class="p-2 text-left">Feature</th>
-              <th class="p-2 text-right">Select</th>
-            </tr>
-          </thead>
-          <tbody id="secondary-weapon-table"></tbody>
-        </table>
-      </div>
+  <button type="button"
+    id="secondary-toggle"
+    class="w-full text-left mb-3 font-semibold">
+    Secondary Weapon
+  </button>
+
+  <div id="secondary-content" class="hidden">
+
+    <div id="secondary-notice"
+      class="hidden text-sm text-amber-600 dark:text-amber-400 mb-3">
     </div>
 
-    <div id="weapon-error"
-      class="hidden text-red-600 text-sm">
+    <div class="overflow-x-auto border rounded">
+      <table class="w-full text-sm">
+        <thead class="bg-zinc-100 dark:bg-zinc-800">
+          <tr>
+            <th class="p-2 text-left">Name</th>
+            <th class="p-2 text-left">Trait</th>
+            <th class="p-2 text-left">Reach</th>
+            <th class="p-2 text-left">Damage</th>
+            <th class="p-2 text-left">Burden</th>
+            <th class="p-2 text-left">Feature</th>
+            <th class="p-2 text-right">Select</th>
+          </tr>
+        </thead>
+        <tbody id="secondary-weapon-table"></tbody>
+      </table>
     </div>
-
-    <button type="button"
-      id="step6-complete"
-      class="px-4 py-2 border rounded">
-      Continue
-    </button>
 
   </div>
 </div>
