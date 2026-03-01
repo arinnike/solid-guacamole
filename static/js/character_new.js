@@ -296,6 +296,13 @@ function renderClassDetail(c) {
           <div>${c.starting_evasion ?? "-"}</div>
         </div>
 
+        <div>
+            <div class="font-semibold">Spellcast Trait</div>
+            <div class="text-zinc-500 capitalize">
+                ${c.spellcast_trait ?? "None"}
+            </div>
+        </div>
+
         <div class="col-span-2">
           <div class="font-semibold">Starting Items</div>
           <div class="text-zinc-500">${c.starting_items ?? "-"}</div>
@@ -369,6 +376,12 @@ function renderClassDetail(c) {
 function selectSubclass(classId, subclassId) {
   wizardState.class_id = classId;
   wizardState.subclass_id = subclassId;
+
+  const selectedClass =
+  cachedClasses.find(c => Number(c.id) === Number(classId));
+
+  wizardState.spellcast_trait =
+    selectedClass?.spellcast_trait || null;
 
   completeStep(2);
   openStep(3, async () => {
@@ -609,16 +622,47 @@ const TRAITS = ["agility","presence","knowledge","strength","finesse","instinct"
 function renderTraits() {
   const grid = document.getElementById("trait-grid");
 
-  grid.innerHTML = TRAITS.map(trait => `
-    <div class="border rounded p-3 bg-white dark:bg-zinc-800">
-      <label class="block text-sm mb-1 capitalize">${trait}</label>
-      <select class="w-full border p-1 rounded dark:bg-zinc-700"
-        data-trait="${trait}">
-      </select>
+  const spellcastInfo =
+    wizardState.spellcast_trait
+      ? `
+        <div class="mb-6 p-4 border rounded bg-zinc-100 dark:bg-zinc-800 text-sm">
+          <strong>${getSelectedClassName()}</strong> Spellcast Trait:
+          <span class="capitalize font-semibold">
+            ${wizardState.spellcast_trait}
+          </span>
+        </div>
+      `
+      : "";
+
+  grid.innerHTML = `
+    ${spellcastInfo}
+    <div class="grid sm:grid-cols-2 gap-4">
+      ${TRAITS.map(trait => `
+        <div class="border rounded p-3 ${
+          trait === wizardState.spellcast_trait
+            ? "ring-2 ring-blue-500"
+            : ""
+        } bg-white dark:bg-zinc-800">
+          <label class="block text-sm mb-1 capitalize">${trait}</label>
+          <select
+            class="w-full border p-1 rounded dark:bg-zinc-700"
+            data-trait="${trait}">
+          </select>
+        </div>
+      `).join("")}
     </div>
-  `).join("");
+  `;
 
   updateTraitDropdowns();
+}
+
+function getSelectedClassName() {
+  const selected =
+    cachedClasses.find(c =>
+      Number(c.id) === Number(wizardState.class_id)
+    );
+
+  return selected?.name || "";
 }
 
 function updateTraitDropdowns() {
