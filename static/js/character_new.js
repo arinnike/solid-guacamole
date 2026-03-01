@@ -43,6 +43,7 @@ const wizardState = {
   background: ""
 };
 
+
 /* ===============================
    Init Session
 ================================ */
@@ -131,6 +132,14 @@ function completeStep(stepNumber) {
       Edit
     </button>
   `;
+}
+
+function getTierFromLevel(level) {
+  if (level === 1) return 1;
+  if (level >= 2 && level <= 4) return 2;
+  if (level >= 5 && level <= 7) return 3;
+  if (level >= 8 && level <= 10) return 4;
+  return 1; // fallback safety
 }
 
 /* ===============================
@@ -646,38 +655,145 @@ document.getElementById("step4-complete")
    STEP 5 – Armor
 ================================ */
 
-async function loadArmor(){
-  const armor = await apiFetch("/armor");
-  renderArmor(armor);
+let cachedArmor = [];
+let selectedArmorId = null;
+
+async function loadArmor() {
+
+  // Reset selection when loading
+  wizardState.armor_id = null;
+  selectedArmorId = null;
+
+  const allArmor = await apiFetch("/armor");
+
+  const characterTier =
+    getTierFromLevel(wizardState.level);
+
+  const filteredArmor =
+    allArmor.filter(a => Number(a.tier) === characterTier);
+
+  cachedArmor = filteredArmor;
+
+  renderArmor(filteredArmor);
 }
 
-function renderArmor(data){
-  document.getElementById("armor-loading").classList.add("hidden");
-  const container = document.getElementById("armor-table");
-  container.classList.remove("hidden");
+function renderArmor(data) {
 
-  container.innerHTML = `
-    <table class="w-full border text-sm">
-      <tbody>
-        ${data.map(a=>`
-          <tr class="border-t">
-            <td class="p-2">${a.name}</td>
-            <td class="p-2">${a.tier}</td>
-            <td class="p-2">
-              <button class="border px-2 py-1 rounded"
-                onclick="wizardState.armor_id=${a.id}">
-                Equip
-              </button>
-            </td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
+  document.getElementById("armor-loading")
+    .classList.add("hidden");
+
+  const selector =
+    document.getElementById("armor-selector");
+
+  selector.classList.remove("hidden");
+
+  const tier = getTierFromLevel(wizardState.level);
+
+  const tierMessage =
+    document.getElementById("armor-tier-message");
+
+  tierMessage.textContent =
+    `Showing Tier ${tier} armor based on Level ${wizardState.level}.`;
+
+  tierMessage.classList.remove("hidden");
+
+  const list =
+    document.getElementById("armor-list");
+
+  list.innerHTML = data.length === 0
+    ? `<div class="text-sm text-zinc-500">No armor available for this tier.</div>`
+    : data.map(a => `
+        <button
+          class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+          data-armor-id="${a.id}"
+          onclick="selectArmor(${a.id})">
+          <div class="font-semibold">${a.name}</div>
+          <div class="text-xs text-zinc-500">Tier ${a.tier}</div>
+        </button>
+      `).join("");
+
+  renderArmorEmptyState();
+}
+
+function renderArmorEmptyState() {
+  const panel =
+    document.getElementById("armor-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-3 max-w-md">
+      <div class="text-xl font-semibold">
+        Select Armor (Optional)
+      </div>
+      <div class="text-sm text-zinc-500">
+        Armor modifies your defensive thresholds and may grant special features.
+        You may also choose to proceed without armor.
+      </div>
+    </div>
+  `;
+}
+
+function selectArmor(id) {
+
+  selectedArmorId = id;
+  wizardState.armor_id = id;
+
+  document.querySelectorAll("#armor-list button")
+    .forEach(btn => {
+      btn.classList.remove("ring-2","ring-blue-500");
+      if (Number(btn.dataset.armorId) === Number(id)) {
+        btn.classList.add("ring-2","ring-blue-500");
+      }
+    });
+
+  const selected =
+    cachedArmor.find(a => Number(a.id) === Number(id));
+
+  renderArmorDetail(selected);
+}
+
+function renderArmorDetail(a) {
+
+  const panel =
+    document.getElementById("armor-detail-panel");
+
+  panel.classList.remove("flex","items-center","justify-center","text-center");
+
+  panel.innerHTML = `
+    <div class="space-y-4">
+      <h2 class="text-2xl font-bold">${a.name}</h2>
+
+      <div class="text-sm space-y-3">
+
+        <div>
+          <span class="font-semibold">Tier:</span>
+          <div class="text-zinc-500">${a.tier}</div>
+        </div>
+
+        <div>
+          <span class="font-semibold">Base Score:</span>
+          <div class="text-zinc-500">${a.base_score}</div>
+        </div>
+
+        <div>
+          <span class="font-semibold">Base Thresholds:</span>
+          <div class="text-zinc-500">${a.base_thresholds}</div>
+        </div>
+
+        <div>
+          <span class="font-semibold">Feature:</span>
+          <div class="text-zinc-500">${a.feature}</div>
+        </div>
+
+      </div>
+    </div>
   `;
 }
 
 document.getElementById("step5-complete")
-?.addEventListener("click",()=>{
+?.addEventListener("click", () => {
+
+  // Optional step — no validation required
+
   completeStep(5);
   openStep(6, loadWeapons);
 });

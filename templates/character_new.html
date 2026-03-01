@@ -189,23 +189,52 @@
     </div>
   </div>
 
-  <!-- ================= STEP 5 ================= -->
-  <div class="wizard-step border rounded hidden" data-step="5">
-    <button type="button"
-      class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
-      <span class="font-semibold">Step 5: Armor (Optional)</span>
-      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
-    </button>
-    <div class="wizard-content p-4 space-y-6 hidden">
-      <div id="armor-loading" class="text-zinc-500">Loading armor...</div>
-      <div id="armor-table" class="hidden overflow-x-auto"></div>
-      <button type="button"
-        id="step5-complete"
-        class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-        Continue
-      </button>
+<!-- ================= STEP 5 ================= -->
+<div class="wizard-step border rounded hidden" data-step="5">
+
+  <button type="button"
+    class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+    <span class="font-semibold">Step 5: Armor (Optional)</span>
+    <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+  </button>
+
+  <div class="wizard-content p-4 space-y-6 hidden">
+
+    <!-- Loading -->
+    <div id="armor-loading" class="text-zinc-500">
+      Loading armor...
     </div>
+
+    <!-- Tier Message -->
+    <div id="armor-tier-message"
+         class="hidden text-sm text-zinc-500">
+    </div>
+
+    <!-- Armor Selector -->
+    <div id="armor-selector"
+         class="hidden grid md:grid-cols-3 gap-6">
+
+      <!-- Left: Armor List -->
+      <div id="armor-list"
+           class="space-y-2 md:col-span-1">
+      </div>
+
+      <!-- Right: Armor Detail Panel -->
+      <div id="armor-detail-panel"
+           class="md:col-span-2 border rounded p-6 bg-white dark:bg-zinc-800 flex items-center justify-center text-center">
+      </div>
+
+    </div>
+
+    <!-- Continue -->
+    <button type="button"
+      id="step5-complete"
+      class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+      Continue
+    </button>
+
   </div>
+</div>
 
   <!-- ================= STEP 6 ================= -->
   <div class="wizard-step border rounded hidden" data-step="6">
