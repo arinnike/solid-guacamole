@@ -259,11 +259,25 @@
     <!-- PRIMARY TABLE -->
     <div id="primary-section" class="space-y-3">
 
-  <button type="button"
-    id="primary-toggle"
-    class="w-full text-left mb-3 font-semibold">
-    Primary Weapon
-  </button>
+    <button type="button"
+      id="primary-toggle"
+      class="w-full flex justify-between items-center mb-3 font-semibold
+            hover:text-indigo-600 transition-colors">
+
+      <span>Primary Weapon</span>
+
+      <svg id="primary-chevron"
+        class="w-4 h-4 transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7" />
+      </svg>
+
+    </button>
 
   <div id="primary-content">
 
@@ -290,10 +304,24 @@
     <!-- SECONDARY TABLE -->
     <div id="secondary-section" class="space-y-3">
 
-  <button type="button"
-    id="secondary-toggle"
-    class="w-full text-left mb-3 font-semibold">
-    Secondary Weapon
+    <button type="button"
+      id="secondary-toggle"
+      class="w-full flex justify-between items-center mb-3 font-semibold
+            hover:text-indigo-600 transition-colors">
+
+      <span>Secondary Weapon</span>
+
+      <svg id="secondary-chevron"
+        class="w-4 h-4 transition-transform"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24">
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7" />
+      </svg>
+
   </button>
 
   <div id="secondary-content" class="hidden">

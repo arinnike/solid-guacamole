@@ -43,19 +43,33 @@ async function loadWeapons() {
 /* ---------- Accordion ---------- */
 
 function expandPrimary() {
+
   document.getElementById("primary-content")
     .classList.remove("hidden");
 
   document.getElementById("secondary-content")
     .classList.add("hidden");
+
+  document.getElementById("primary-chevron")
+    .classList.add("rotate-180");
+
+  document.getElementById("secondary-chevron")
+    .classList.remove("rotate-180");
 }
 
 function expandSecondary() {
+
   document.getElementById("secondary-content")
     .classList.remove("hidden");
 
   document.getElementById("primary-content")
     .classList.add("hidden");
+
+  document.getElementById("secondary-chevron")
+    .classList.add("rotate-180");
+
+  document.getElementById("primary-chevron")
+    .classList.remove("rotate-180");
 }
 
 /* ---------- Render ---------- */
@@ -320,6 +334,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 });
+
+
 
 /* ---------- Error Helpers ---------- */
 
