@@ -559,8 +559,8 @@ function confirmAncestry(id) {
 }
 
 function selectCommunity(id) {
+
   selectedCommunityId = id;
-  wizardState.community_id = id;
 
   document.querySelectorAll("#community-list button")
     .forEach(btn => {
@@ -574,21 +574,22 @@ function selectCommunity(id) {
     cachedCommunities.find(c => Number(c.id) === Number(id));
 
   renderCommunityDetail(selected);
-
-  completeStep(3);
-  openStep(4, renderTraits);
 }
 
 function renderCommunityDetail(c) {
+
   const panel =
     document.getElementById("community-detail-panel");
 
   panel.classList.remove("flex","items-center","justify-center","text-center");
 
   panel.innerHTML = `
-    <div class="space-y-4">
-      <h2 class="text-2xl font-bold">${c.name}</h2>
-      <p class="text-zinc-500">${c.description}</p>
+    <div class="space-y-6">
+
+      <div>
+        <h2 class="text-2xl font-bold">${c.name}</h2>
+        <p class="text-zinc-500">${c.description}</p>
+      </div>
 
       <div class="text-sm space-y-3">
         <div>
@@ -601,8 +602,19 @@ function renderCommunityDetail(c) {
           <div class="text-zinc-500">${c.community_feature}</div>
         </div>
       </div>
+
+      <button
+        class="mt-4 px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+        onclick="confirmCommunity(${c.id})">
+        Choose ${c.name}
+      </button>
+
     </div>
   `;
+}
+
+function confirmCommunity(id) {
+  wizardState.community_id = id;
 }
 
 /* ===============================
@@ -674,6 +686,18 @@ function updateTraitDropdowns() {
     };
   });
 }
+
+document.getElementById("step3-complete")
+?.addEventListener("click", () => {
+
+  if (!wizardState.ancestry_id || !wizardState.community_id) {
+    alert("Please choose both an ancestry and a community.");
+    return;
+  }
+
+  completeStep(3);
+  openStep(4, renderTraits);
+});
 
 document.getElementById("step4-complete")
 ?.addEventListener("click", () => {
