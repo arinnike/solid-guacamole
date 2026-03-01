@@ -1,9 +1,8 @@
 /* =========================================
-   STEP 5 – Armor (Table Version)
+   STEP 5 – Armor (Simple Table Version)
 ========================================= */
 
 let cachedArmor = [];
-let filteredArmor = [];
 
 /* ---------- Load + Tier Filter ---------- */
 
@@ -11,49 +10,20 @@ async function loadArmor() {
 
   const allArmor = await apiFetch("/armor");
 
-  const tier = getTierFromLevel(wizardState.level);
+  const level = Number(wizardState.level) || 1;
+  const tier = getTierFromLevel(level);
 
   cachedArmor =
     allArmor.filter(a => Number(a.tier) === tier);
 
-  filteredArmor = [...cachedArmor];
-
   const tierInfo =
     document.getElementById("armor-tier-info");
 
-  tierInfo.classList.remove("hidden");
-  tierInfo.textContent =
-    `Showing Tier ${tier} armor based on Level ${wizardState.level}.`;
-
-  wireArmorFilters();
-  renderArmorTable();
-  console.log("Armor loaded:", cachedArmor);
-}
-
-/* ---------- Filters ---------- */
-
-function wireArmorFilters() {
-
-  const nameInput =
-    document.getElementById("armor-filter-name");
-
-  if (!nameInput) return;
-
-  nameInput.addEventListener("input", () => {
-    applyArmorFilters();
-  });
-}
-
-function applyArmorFilters() {
-
-  const nameValue =
-    document.getElementById("armor-filter-name")
-      .value
-      .toLowerCase();
-
-  filteredArmor = cachedArmor.filter(a =>
-    a.name.toLowerCase().includes(nameValue)
-  );
+  if (tierInfo) {
+    tierInfo.classList.remove("hidden");
+    tierInfo.textContent =
+      `Showing Tier ${tier} armor based on Level ${level}.`;
+  }
 
   renderArmorTable();
 }
@@ -67,19 +37,19 @@ function renderArmorTable() {
 
   if (!tbody) return;
 
-  if (filteredArmor.length === 0) {
+  if (cachedArmor.length === 0) {
     tbody.innerHTML = `
       <tr>
         <td colspan="5"
           class="p-4 text-center text-zinc-500">
-          No armor matches filters.
+          No armor available for this tier.
         </td>
       </tr>
     `;
     return;
   }
 
-  tbody.innerHTML = filteredArmor.map(a => `
+  tbody.innerHTML = cachedArmor.map(a => `
     <tr
       class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
       data-id="${a.id}"
@@ -129,8 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!btn) return;
 
   btn.addEventListener("click", () => {
-
-    // Optional step — no validation required
 
     completeStep(5);
     openStep(6, loadWeapons);
