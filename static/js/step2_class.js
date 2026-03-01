@@ -194,6 +194,16 @@ function renderClassDetail(c) {
   `;
 }
 
+//Step 4 helper to get class name for spellcast trait display
+function getSelectedClassName() {
+  const selected =
+    cachedClasses.find(
+      c => Number(c.id) === Number(wizardState.class_id)
+    );
+
+  return selected?.name || "";
+}
+
 /* ---------- Select Subclass ---------- */
 
 function selectSubclass(classId, subclassId) {

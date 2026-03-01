@@ -25,11 +25,14 @@ function renderTraits() {
   const spellcast =
     wizardState.spellcast_trait;
 
+  const className =
+    getSelectedClassName?.() || "";
+
   const spellcastInfo =
     spellcast
       ? `
-        <div class="mb-4 p-3 border rounded bg-zinc-100 dark:bg-zinc-800 text-sm">
-          <strong>Spellcast Trait:</strong>
+        <div class="mb-6 p-4 border rounded bg-zinc-100 dark:bg-zinc-800 text-sm">
+          <strong>${className} Spellcast Trait:</strong>
           <span class="capitalize font-semibold">
             ${spellcast}
           </span>
@@ -39,18 +42,19 @@ function renderTraits() {
 
   container.innerHTML = `
     ${spellcastInfo}
+
     <div class="grid sm:grid-cols-2 gap-4">
       ${TRAITS.map(trait => `
-        <div class="border rounded p-3 ${
+        <div class="border rounded p-4 ${
           trait === spellcast
             ? "ring-2 ring-blue-500"
             : ""
         } bg-white dark:bg-zinc-800">
-          <label class="block text-sm mb-1 capitalize">
+          <label class="block text-sm mb-2 capitalize font-medium">
             ${trait}
           </label>
           <select
-            class="w-full border p-1 rounded dark:bg-zinc-700"
+            class="w-full border p-2 rounded dark:bg-zinc-700"
             data-trait="${trait}">
           </select>
         </div>
