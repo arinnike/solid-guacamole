@@ -902,7 +902,7 @@ let cachedSecondaryWeapons = [];
 /* ---------- Load + Tier Filter ---------- */
 
 async function loadWeapons() {
-
+console.log("loadWeapons running");
   const allWeapons = await apiFetch("/weapons");
 
   const tier = getTierFromLevel(wizardState.level);
