@@ -91,8 +91,11 @@ function renderSecondaryTable() {
 }
 
 /* ---------- Selection Logic ---------- */
-
 function selectPrimaryWeapon(id) {
+  console.log("Clicked primary", id);
+}
+
+/*function selectPrimaryWeapon(id) {
 
   const selected =
     cachedPrimaryWeapons.find(w => Number(w.id) === Number(id));
@@ -125,7 +128,7 @@ function selectPrimaryWeapon(id) {
 
   clearSecondarySelection();
   updateSecondaryEligibility();
-}
+}*/
 
 function selectSecondaryWeapon(id) {
 
