@@ -1052,7 +1052,7 @@ function updateSecondaryEligibility() {
 /* ---------- Table Rendering ---------- */
 
 function renderPrimaryTable() {
-
+    console.log("renderPrimaryTable called");
   const tbody =
     document.getElementById("primary-weapon-table");
 
