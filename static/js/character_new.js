@@ -213,6 +213,9 @@ document.getElementById("step1-complete")
 
 async function loadClasses() {
   const classes = await apiFetch("/classes");
+  
+  cachedClasses = classes;
+
   renderClasses(classes);
 }
 
@@ -374,11 +377,14 @@ function renderClassDetail(c) {
 }
 
 function selectSubclass(classId, subclassId) {
+
   wizardState.class_id = classId;
   wizardState.subclass_id = subclassId;
 
   const selectedClass =
-  cachedClasses.find(c => Number(c.id) === Number(classId));
+    cachedClasses.find(c =>
+      Number(c.id) === Number(classId)
+    );
 
   wizardState.spellcast_trait =
     selectedClass?.spellcast_trait || null;
@@ -388,6 +394,8 @@ function selectSubclass(classId, subclassId) {
     await loadAncestries();
     await loadCommunities();
   });
+
+  console.log("Stored spellcast:", wizardState.spellcast_trait);
 }
 
 /* ===============================
