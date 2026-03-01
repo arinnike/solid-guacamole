@@ -249,19 +249,15 @@
     <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
   </button>
 
-  <div class="wizard-content p-4 space-y-8 hidden">
+  <div class="wizard-content p-6 space-y-6 hidden">
 
-    <!-- Tier Info -->
     <div id="weapon-tier-info"
       class="text-sm text-zinc-500 hidden">
     </div>
 
-    <!-- PRIMARY SECTION -->
+    <!-- PRIMARY TABLE -->
     <div>
-      <h3 class="text-lg font-semibold mb-3">
-        Select Primary Weapon
-      </h3>
-
+      <h3 class="font-semibold mb-2">Primary Weapon</h3>
       <div class="overflow-x-auto border rounded">
         <table class="w-full text-sm">
           <thead class="bg-zinc-100 dark:bg-zinc-800">
@@ -279,13 +275,9 @@
       </div>
     </div>
 
-    <!-- SECONDARY SECTION -->
-    <div id="secondary-section" class="hidden space-y-4">
-
-      <h3 class="text-lg font-semibold">
-        Select Secondary Weapon
-      </h3>
-
+    <!-- SECONDARY TABLE -->
+    <div id="secondary-section" class="opacity-50 pointer-events-none">
+      <h3 class="font-semibold mb-2">Secondary Weapon</h3>
       <div class="overflow-x-auto border rounded">
         <table class="w-full text-sm">
           <thead class="bg-zinc-100 dark:bg-zinc-800">
@@ -301,16 +293,8 @@
           <tbody id="secondary-weapon-table"></tbody>
         </table>
       </div>
-
     </div>
 
-    <!-- Two-Handed Message -->
-    <div id="two-handed-message"
-      class="hidden text-sm text-zinc-500 italic">
-      This weapon is two-handed. Secondary weapons cannot be equipped.
-    </div>
-
-    <!-- Error -->
     <div id="weapon-error"
       class="hidden text-red-600 text-sm">
     </div>
