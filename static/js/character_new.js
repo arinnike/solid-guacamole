@@ -76,10 +76,17 @@ async function apiFetch(endpoint) {
 }
 
 function openStep(stepNumber, loaderFn) {
-  const step = document.querySelector(`[data-step="${stepNumber}"]`);
-  step.classList.remove("hidden");
+  const allSteps = document.querySelectorAll("[data-step]");
 
+  // Close all steps first
+  allSteps.forEach(step => {
+    step.querySelector(".wizard-content")
+      .classList.add("hidden");
+  });
+
+  const step = document.querySelector(`[data-step="${stepNumber}"]`);
   const content = step.querySelector(".wizard-content");
+
   content.classList.remove("hidden");
 
   if (loaderFn && !content.dataset.loaded) {
@@ -94,9 +101,15 @@ function completeStep(stepNumber) {
   const status = step.querySelector(".wizard-status");
 
   content.classList.add("hidden");
-  status.textContent = "Complete";
-  status.classList.remove("text-zinc-500");
-  status.classList.add("text-green-600");
+
+  status.innerHTML = `
+    <span class="text-green-600 font-medium">Complete</span>
+    <button
+      class="ml-3 text-sm text-blue-500 hover:underline"
+      onclick="editStep(${stepNumber})">
+      Edit
+    </button>
+  `;
 }
 
 /* ===============================
@@ -179,15 +192,65 @@ function renderClasses(classes) {
   grid.classList.remove("hidden");
 
   grid.innerHTML = classes.map(c => `
-    <div class="border rounded p-4 space-y-3 bg-white dark:bg-zinc-800">
-      <h3 class="font-semibold text-lg">${c.name}</h3>
-      <p class="text-sm text-zinc-500">${c.class_description || ""}</p>
-      ${c.subclasses?.map(s => `
-        <button class="w-full border rounded py-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 text-sm"
-          onclick="selectSubclass(${c.id}, ${s.id})">
-          ${s.subclass_name}
-        </button>
-      `).join("")}
+    <div class="border rounded bg-white dark:bg-zinc-800 overflow-hidden transition-all duration-200"
+         data-class-id="${c.id}">
+
+      <button
+        class="w-full text-left px-4 py-3 flex justify-between items-center hover:bg-zinc-50 dark:hover:bg-zinc-700"
+        onclick="toggleClassCard(${c.id})">
+
+        <span class="font-semibold text-lg">${c.name}</span>
+        <span class="text-sm opacity-60">+</span>
+      </button>
+
+      <div class="class-content hidden px-4 pb-4 space-y-4">
+
+            <p class="text-sm text-zinc-500">
+                ${c.class_description || ""}
+            </p>
+
+            <div class="grid grid-cols-2 gap-4 text-sm">
+
+                <div>
+                <span class="font-semibold">Starting HP:</span>
+                <div>${c.starting_hp ?? "-"}</div>
+                </div>
+
+                <div>
+                <span class="font-semibold">Starting Evasion:</span>
+                <div>${c.starting_evasion ?? "-"}</div>
+                </div>
+
+                <div class="col-span-2">
+                <span class="font-semibold">Starting Items:</span>
+                <div class="text-zinc-500">${c.starting_items ?? "-"}</div>
+                </div>
+
+                <div class="col-span-2">
+                <span class="font-semibold">Hope Feature:</span>
+                <div class="text-zinc-500">${c.hope_feature ?? "-"}</div>
+                </div>
+
+                <div class="col-span-2">
+                <span class="font-semibold">Class Feature:</span>
+                <div class="text-zinc-500">${c.class_feature ?? "-"}</div>
+                </div>
+
+            </div>
+
+            <div class="pt-2 border-t border-zinc-200 dark:border-zinc-700">
+                <div class="text-sm font-semibold mb-2">Choose Subclass</div>
+                <div class="space-y-2">
+                ${c.subclasses?.map(s => `
+                    <button
+                    class="w-full border rounded py-2 px-3 text-sm text-left hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+                    onclick="selectSubclass(${c.id}, ${s.id})">
+                    ${s.subclass_name}
+                    </button>
+                `).join("")}
+                </div>
+            </div>
+        </div>
     </div>
   `).join("");
 }
@@ -493,6 +556,63 @@ document.getElementById("step8-complete")
   renderReview();
 });
 
+function editStep(stepNumber) {
+  resetFromStep(stepNumber);
+  openStep(stepNumber);
+}
+
+function resetFromStep(stepNumber) {
+
+  const totalSteps = 9;
+
+  for (let i = stepNumber; i <= totalSteps; i++) {
+    const step = document.querySelector(`[data-step="${i}"]`);
+    const status = step.querySelector(".wizard-status");
+
+    status.textContent = "";
+  }
+
+  // Reset wizardState downstream
+
+  if (stepNumber <= 2) {
+    wizardState.class_id = null;
+    wizardState.subclass_id = null;
+  }
+
+  if (stepNumber <= 3) {
+    wizardState.ancestry_id = null;
+    wizardState.community_id = null;
+  }
+
+  if (stepNumber <= 4) {
+    wizardState.traits = {
+      agility: null,
+      presence: null,
+      knowledge: null,
+      strength: null,
+      finesse: null,
+      instinct: null
+    };
+  }
+
+  if (stepNumber <= 5) {
+    wizardState.armor_id = null;
+  }
+
+  if (stepNumber <= 6) {
+    wizardState.weapons = { primary: null, secondary: null };
+  }
+
+  if (stepNumber <= 7) {
+    wizardState.experiences = [];
+  }
+
+  if (stepNumber <= 8) {
+    wizardState.appearance = "";
+    wizardState.background = "";
+  }
+}
+
 /* ===============================
    STEP 9 – Review + Submit
 ================================ */
@@ -567,3 +687,33 @@ document.getElementById("confirm-character")
     isSubmitting=false;
   }
 });
+
+function toggleClassCard(classId) {
+  const allCards = document.querySelectorAll("[data-class-id]");
+
+  allCards.forEach(card => {
+    const content = card.querySelector(".class-content");
+    const icon = card.querySelector("button span:last-child");
+
+    if (parseInt(card.dataset.classId) === classId) {
+      const isHidden = content.classList.contains("hidden");
+
+      // Collapse all first
+      document.querySelectorAll(".class-content")
+        .forEach(c => c.classList.add("hidden"));
+
+      document.querySelectorAll("[data-class-id] button span:last-child")
+        .forEach(i => i.textContent = "+");
+
+      if (isHidden) {
+        content.classList.remove("hidden");
+        icon.textContent = "–";
+      }
+
+    } else {
+      content.classList.add("hidden");
+      icon.textContent = "+";
+    }
+  });
+}
+
