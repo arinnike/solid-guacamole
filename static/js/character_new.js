@@ -660,9 +660,6 @@ function renderTraits() {
   `;
 
   updateTraitDropdowns();
-
-  //debug
-  console.log("Spellcast trait:", wizardState.spellcast_trait);
 }
 
 function getSelectedClassName() {
@@ -899,67 +896,211 @@ document.getElementById("step5-complete")
    STEP 6 – Weapons
 ================================ */
 
-async function loadWeapons(){
-  cachedWeapons = await apiFetch("/weapons");
-  renderWeaponTables();
+async function loadWeapons() {
+  const allWeapons = await apiFetch("/weapons");
+
+  const tier = getTierFromLevel(wizardState.level);
+
+  const filtered =
+    allWeapons.filter(w => Number(w.tier) === tier);
+
+  cachedWeapons = filtered;
+
+  document.getElementById("weapon-tier-info")
+    .classList.remove("hidden");
+
+  document.getElementById("weapon-tier-info")
+    .textContent =
+      `Showing Tier ${tier} weapons based on Level ${wizardState.level}.`;
+
+  renderPrimaryWeapons();
+  renderWeaponEmptyState();
 }
 
-function renderWeaponTables(){
-  const primary = cachedWeapons.filter(w=>w.weapon_type==="primary");
-  const secondary = cachedWeapons.filter(w=>w.weapon_type==="secondary");
+function renderPrimaryWeapons() {
+  const list = document.getElementById("primary-weapon-list");
 
-  document.getElementById("primary-weapon-table")
-    .innerHTML = buildWeaponTable(primary,"primary");
+  const primaries =
+    cachedWeapons.filter(w => w.weapon_type === "primary");
 
-  document.getElementById("secondary-weapon-table")
-    .innerHTML = buildWeaponTable(secondary,"secondary");
+  list.innerHTML = primaries.map(w => `
+    <button
+      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+      data-weapon-id="${w.id}"
+      onclick="selectPrimaryWeapon(${w.id})">
+      <div class="font-semibold">${w.name}</div>
+    </button>
+  `).join("");
 }
 
-function buildWeaponTable(data,type){
-  return `
-    <table class="w-full border text-sm">
-      <tbody>
-        ${data.map(w=>`
-          <tr class="border-t">
-            <td class="p-2">${w.name}</td>
-            <td class="p-2">${w.damage}</td>
-            <td class="p-2">
-              <button class="border px-2 py-1 rounded"
-                onclick="selectWeapon(${w.id},'${type}','${w.burden}')">
-                Select
-              </button>
-            </td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
+function renderSecondaryWeapons() {
+  const list = document.getElementById("secondary-weapon-list");
+
+  const secondaries =
+    cachedWeapons.filter(w => w.weapon_type === "secondary");
+
+  list.innerHTML = secondaries.map(w => `
+    <button
+      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+      data-weapon-id="${w.id}"
+      onclick="selectSecondaryWeapon(${w.id})">
+      <div class="font-semibold">${w.name}</div>
+    </button>
+  `).join("");
+}
+
+function selectPrimaryWeapon(id) {
+
+  const selected =
+    cachedWeapons.find(w => Number(w.id) === Number(id));
+
+  wizardState.weapons.primary = selected;
+
+  highlightSelection("#primary-weapon-list", id);
+
+  renderWeaponDetail(selected);
+
+  const secondarySection =
+    document.getElementById("secondary-section");
+
+  const twoHandedMessage =
+    document.getElementById("two-handed-message");
+
+  if (selected.burden === "Two-handed") {
+
+    wizardState.weapons.secondary = null;
+
+    secondarySection.classList.add("hidden");
+
+    twoHandedMessage.classList.remove("hidden");
+    twoHandedMessage.textContent =
+      "This weapon is two-handed. Secondary weapons cannot be equipped.";
+
+  } else {
+
+    twoHandedMessage.classList.add("hidden");
+
+    secondarySection.classList.remove("hidden");
+
+    renderSecondaryWeapons();
+  }
+}
+
+function selectSecondaryWeapon(id) {
+
+  const selected =
+    cachedWeapons.find(w => Number(w.id) === Number(id));
+
+  wizardState.weapons.secondary = selected;
+
+  highlightSelection("#secondary-weapon-list", id);
+
+  renderWeaponDetail(selected);
+}
+
+function highlightSelection(containerSelector, id) {
+  document.querySelectorAll(`${containerSelector} button`)
+    .forEach(btn => {
+      btn.classList.remove("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
+
+      if (Number(btn.dataset.weaponId) === Number(id)) {
+        btn.classList.add("ring-2","ring-blue-500","bg-zinc-100","dark:bg-zinc-700");
+      }
+    });
+}
+
+function renderWeaponDetail(w) {
+
+  const panel =
+    document.getElementById("weapon-detail-panel");
+
+  panel.classList.remove("flex","items-center","justify-center","text-center");
+
+  panel.innerHTML = `
+    <div class="space-y-6 text-left">
+
+      <div>
+        <h2 class="text-2xl font-bold">${w.name}</h2>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 text-sm">
+
+        <div>
+          <div class="font-semibold">Trait</div>
+          <div class="capitalize text-zinc-500">${w.trait}</div>
+        </div>
+
+        <div>
+          <div class="font-semibold">Reach</div>
+          <div class="text-zinc-500">${w.reach}</div>
+        </div>
+
+        <div>
+          <div class="font-semibold">Damage</div>
+          <div class="text-zinc-500">${w.damage}</div>
+        </div>
+
+        <div>
+          <div class="font-semibold">Burden</div>
+          <div class="text-zinc-500">${w.burden}</div>
+        </div>
+
+        <div class="col-span-2">
+          <div class="font-semibold">Feature</div>
+          <div class="text-zinc-500">${w.feature}</div>
+        </div>
+
+      </div>
+
+    </div>
   `;
 }
 
-function selectWeapon(id,type,burden){
-  wizardState.weapons[type]={id,burden};
+function renderWeaponEmptyState() {
+  const panel =
+    document.getElementById("weapon-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-3 max-w-md">
+      <div class="text-xl font-semibold">
+        Select a Weapon
+      </div>
+      <div class="text-sm text-zinc-500">
+        Choose your primary weapon to begin.
+      </div>
+    </div>
+  `;
 }
 
 document.getElementById("step6-complete")
-?.addEventListener("click",()=>{
-  const p = wizardState.weapons.primary;
-  const s = wizardState.weapons.secondary;
+?.addEventListener("click", () => {
 
-  if (!p) {
-    document.getElementById("weapon-error").textContent =
-      "Primary weapon required.";
-    document.getElementById("weapon-error").classList.remove("hidden");
+  const primary =
+    wizardState.weapons.primary;
+
+  const secondary =
+    wizardState.weapons.secondary;
+
+  if (!primary) {
+    document.getElementById("weapon-error")
+      .classList.remove("hidden");
+    document.getElementById("weapon-error")
+      .textContent = "You must select a primary weapon.";
     return;
   }
 
-  if (p.burden==="Two-handed" && s){
-    document.getElementById("weapon-error").textContent =
-      "Two-handed weapon cannot equip secondary.";
-    document.getElementById("weapon-error").classList.remove("hidden");
+  if (primary.burden === "One-handed" && !secondary) {
+    document.getElementById("weapon-error")
+      .classList.remove("hidden");
+    document.getElementById("weapon-error")
+      .textContent =
+        "This weapon is one-handed. Please select a secondary weapon.";
     return;
   }
 
-  document.getElementById("weapon-error").classList.add("hidden");
+  document.getElementById("weapon-error")
+    .classList.add("hidden");
+
   completeStep(6);
   openStep(7);
 });

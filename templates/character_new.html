@@ -244,29 +244,66 @@
 </div>
 
   <!-- ================= STEP 6 ================= -->
-  <div class="wizard-step border rounded hidden" data-step="6">
-    <button type="button"
-      class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
-      <span class="font-semibold">Step 6: Weapons</span>
-      <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
-    </button>
-    <div class="wizard-content p-4 space-y-6 hidden">
-      <div>
-        <h3 class="font-semibold mb-2">Primary Weapon</h3>
-        <div id="primary-weapon-table"></div>
-      </div>
-      <div>
-        <h3 class="font-semibold mb-2">Secondary Weapon</h3>
-        <div id="secondary-weapon-table"></div>
-      </div>
-      <div id="weapon-error" class="text-red-600 text-sm hidden"></div>
-      <button type="button"
-        id="step6-complete"
-        class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
-        Continue
-      </button>
+<div class="wizard-step border rounded hidden" data-step="6">
+
+  <button type="button"
+    class="w-full text-left p-4 flex justify-between items-center wizard-toggle">
+    <span class="font-semibold">Step 6: Weapons</span>
+    <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
+  </button>
+
+  <div class="wizard-content p-4 space-y-8 hidden">
+
+    <!-- Tier Info -->
+    <div id="weapon-tier-info"
+      class="text-sm text-zinc-500 hidden">
     </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+
+      <!-- LEFT COLUMN -->
+      <div class="md:col-span-1 space-y-8">
+
+        <!-- PRIMARY -->
+        <div>
+          <h3 class="font-semibold mb-3">Primary Weapon</h3>
+          <div id="primary-weapon-list" class="space-y-2"></div>
+        </div>
+
+        <!-- SECONDARY -->
+        <div id="secondary-section" class="hidden">
+          <h3 class="font-semibold mb-3">Secondary Weapon</h3>
+          <div id="secondary-weapon-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Two-Handed Message -->
+        <div id="two-handed-message"
+          class="hidden text-sm text-zinc-500">
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div id="weapon-detail-panel"
+        class="md:col-span-2 border rounded p-6 bg-white dark:bg-zinc-800 flex items-center justify-center text-center">
+      </div>
+
+    </div>
+
+    <!-- Error -->
+    <div id="weapon-error"
+      class="hidden text-red-600 text-sm">
+    </div>
+
+    <!-- Continue -->
+    <button type="button"
+      id="step6-complete"
+      class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
+      Continue
+    </button>
+
   </div>
+</div>
 
   <!-- ================= STEP 7 ================= -->
   <div class="wizard-step border rounded hidden" data-step="7">
