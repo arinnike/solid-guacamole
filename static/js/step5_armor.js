@@ -1,5 +1,5 @@
 /* =========================================
-   STEP 5 – Armor (Simple Table Version)
+   STEP 5 – Armor (Button Select Version)
 ========================================= */
 
 let cachedArmor = [];
@@ -25,6 +25,14 @@ async function loadArmor() {
       `Showing Tier ${tier} armor based on Level ${level}.`;
   }
 
+  // If previously selected armor is no longer valid, clear it
+  if (
+    wizardState.armor_id &&
+    !cachedArmor.some(a => Number(a.id) === Number(wizardState.armor_id))
+  ) {
+    wizardState.armor_id = null;
+  }
+
   renderArmorTable();
 }
 
@@ -40,7 +48,7 @@ function renderArmorTable() {
   if (cachedArmor.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="5"
+        <td colspan="6"
           class="p-4 text-center text-zinc-500">
           No armor available for this tier.
         </td>
@@ -51,43 +59,107 @@ function renderArmorTable() {
 
   tbody.innerHTML = cachedArmor.map(a => `
     <tr
-      class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
-      data-id="${a.id}"
-      onclick="selectArmor(${a.id})">
+      class="border-t transition-colors"
+      data-id="${a.id}">
 
-      <td class="p-2">${a.name}</td>
+      <td class="p-2 font-medium">${a.name}</td>
       <td class="p-2">${a.tier}</td>
       <td class="p-2">${a.base_thresholds}</td>
       <td class="p-2">${a.base_score}</td>
-      <td class="p-2">${a.feature}</td>
+      <td class="p-2">${a.feature ?? ""}</td>
+
+      <td class="p-2 text-right">
+        <button
+          type="button"
+          class="armor-select-btn px-3 py-1 rounded-md border border-indigo-600 text-indigo-600 transition-colors">
+          Select
+        </button>
+      </td>
 
     </tr>
   `).join("");
+
+  // Restore selected state if one exists
+  if (wizardState.armor_id) {
+    updateArmorSelectionUI(wizardState.armor_id);
+  }
 }
 
-/* ---------- Selection ---------- */
+/* ---------- Selection UI ---------- */
 
-function selectArmor(id) {
+function updateArmorSelectionUI(selectedId) {
 
-  wizardState.armor_id = id;
-
-  document.querySelectorAll("#armor-table-body tr")
+  document
+    .querySelectorAll("#armor-table-body tr")
     .forEach(row => {
 
-      row.classList.remove(
-        "bg-zinc-200",
-        "dark:bg-zinc-700"
-      );
+      const btn =
+        row.querySelector(".armor-select-btn");
 
-      if (Number(row.dataset.id) === Number(id)) {
+      if (!btn) return;
+
+      const rowId =
+        Number(row.dataset.id);
+
+      if (rowId === Number(selectedId)) {
+
         row.classList.add(
-          "bg-zinc-200",
-          "dark:bg-zinc-700"
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
         );
+
+        btn.classList.remove(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
+
+        btn.classList.add(
+          "bg-indigo-600",
+          "text-white"
+        );
+
+        btn.textContent = "Selected";
+
+      } else {
+
+        row.classList.remove(
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
+        );
+
+        btn.classList.add(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
+
+        btn.classList.remove(
+          "bg-indigo-600",
+          "text-white"
+        );
+
+        btn.textContent = "Select";
       }
 
     });
 }
+
+/* ---------- Click Delegation ---------- */
+
+document.addEventListener("click", (e) => {
+
+  const btn = e.target.closest(".armor-select-btn");
+  if (!btn) return;
+
+  const row = btn.closest("tr");
+  if (!row) return;
+
+  const id = Number(row.dataset.id);
+
+  wizardState.armor_id = id;
+
+  updateArmorSelectionUI(id);
+
+});
 
 /* ---------- Continue ---------- */
 
