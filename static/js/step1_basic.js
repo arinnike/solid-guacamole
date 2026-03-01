@@ -39,6 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
     completeStep(1);
 
     // Step 2 will define its own loader
-    openStep(2);
+    openStep(2, loadClasses);
   });
 });
