@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     completeStep(4);
-    openStep(5);
+    openStep(5, loadArmor);
   });
 
 });
