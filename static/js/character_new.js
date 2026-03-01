@@ -893,10 +893,16 @@ document.getElementById("step5-complete")
 });
 
 /* ===============================
-   STEP 6 – Weapons
+   STEP 6 – Weapons (Animated Table Version)
 ================================ */
 
+let cachedPrimaryWeapons = [];
+let cachedSecondaryWeapons = [];
+
+/* ---------- Load + Tier Filter ---------- */
+
 async function loadWeapons() {
+
   const allWeapons = await apiFetch("/weapons");
 
   const tier = getTierFromLevel(wizardState.level);
@@ -904,7 +910,11 @@ async function loadWeapons() {
   const filtered =
     allWeapons.filter(w => Number(w.tier) === tier);
 
-  cachedWeapons = filtered;
+  cachedPrimaryWeapons =
+    filtered.filter(w => w.weapon_type === "primary");
+
+  cachedSecondaryWeapons =
+    filtered.filter(w => w.weapon_type === "secondary");
 
   document.getElementById("weapon-tier-info")
     .classList.remove("hidden");
@@ -913,87 +923,199 @@ async function loadWeapons() {
     .textContent =
       `Showing Tier ${tier} weapons based on Level ${wizardState.level}.`;
 
-  renderPrimaryWeapons();
-  renderWeaponEmptyState();
+  renderPrimaryTable();
+  renderSecondaryTable();
+
+  // Initial state
+  expandAccordion("primary-accordion-content");
+  collapseAccordion("secondary-accordion-content");
+
+  document.getElementById("secondary-accordion-toggle")
+    .classList.add("opacity-50","pointer-events-none");
 }
 
-function renderPrimaryWeapons() {
-  const list = document.getElementById("primary-weapon-list");
+/* ---------- Accordion Controls ---------- */
 
-  const primaries =
-    cachedWeapons.filter(w => w.weapon_type === "primary");
+function expandAccordion(id) {
+  const el = document.getElementById(id);
+  el.classList.remove("max-h-0");
+  el.classList.add("max-h-[1000px]");
+}
 
-  list.innerHTML = primaries.map(w => `
-    <button
-      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-      data-weapon-id="${w.id}"
+function collapseAccordion(id) {
+  const el = document.getElementById(id);
+  el.classList.remove("max-h-[1000px]");
+  el.classList.add("max-h-0");
+}
+
+/* ---------- Table Rendering ---------- */
+
+function renderPrimaryTable() {
+
+  const tbody =
+    document.getElementById("primary-weapon-table");
+
+  tbody.innerHTML = cachedPrimaryWeapons.map(w => `
+    <tr
+      class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
+      data-id="${w.id}"
       onclick="selectPrimaryWeapon(${w.id})">
-      <div class="font-semibold">${w.name}</div>
-    </button>
+      <td class="p-2">${w.name}</td>
+      <td class="p-2 capitalize">${w.trait}</td>
+      <td class="p-2">${w.reach}</td>
+      <td class="p-2">${w.damage}</td>
+      <td class="p-2">${w.burden}</td>
+      <td class="p-2">${w.feature}</td>
+    </tr>
   `).join("");
 }
 
-function renderSecondaryWeapons() {
-  const list = document.getElementById("secondary-weapon-list");
+function renderSecondaryTable() {
 
-  const secondaries =
-    cachedWeapons.filter(w => w.weapon_type === "secondary");
+  const tbody =
+    document.getElementById("secondary-weapon-table");
 
-  list.innerHTML = secondaries.map(w => `
-    <button
-      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
-      data-weapon-id="${w.id}"
+  tbody.innerHTML = cachedSecondaryWeapons.map(w => `
+    <tr
+      class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
+      data-id="${w.id}"
       onclick="selectSecondaryWeapon(${w.id})">
-      <div class="font-semibold">${w.name}</div>
-    </button>
+      <td class="p-2">${w.name}</td>
+      <td class="p-2 capitalize">${w.trait}</td>
+      <td class="p-2">${w.reach}</td>
+      <td class="p-2">${w.damage}</td>
+      <td class="p-2">${w.burden}</td>
+      <td class="p-2">${w.feature}</td>
+    </tr>
   `).join("");
 }
+
+/* ---------- Selection Logic ---------- */
 
 function selectPrimaryWeapon(id) {
 
   const selected =
-    cachedWeapons.find(w => Number(w.id) === Number(id));
+    cachedPrimaryWeapons.find(w => Number(w.id) === Number(id));
 
   wizardState.weapons.primary = selected;
 
-  highlightSelection("#primary-weapon-list", id);
+  highlightRow("primary-weapon-table", id);
 
-  renderWeaponDetail(selected);
-
-  const secondarySection =
-    document.getElementById("secondary-section");
-
-  const secondaryList =
-    document.getElementById("secondary-weapon-list");
-
-  const twoHandedMessage =
-    document.getElementById("two-handed-message");
-
+  // Two-handed logic
   if (selected.burden === "Two-handed") {
 
-    // 🔥 Clear secondary state
     wizardState.weapons.secondary = null;
+    clearSecondaryHighlight();
 
-    // 🔥 Remove secondary buttons completely
-    secondaryList.innerHTML = "";
+    collapseAccordion("secondary-accordion-content");
 
-    // 🔥 Hide secondary section
-    secondarySection.classList.add("hidden");
-
-    // 🔥 Show message
-    twoHandedMessage.classList.remove("hidden");
-    twoHandedMessage.textContent =
-      "This weapon is two-handed. Secondary weapons cannot be equipped.";
+    document.getElementById("secondary-accordion-toggle")
+      .classList.add("opacity-50","pointer-events-none");
 
   } else {
 
-    // 🔥 Allow secondary again
-    twoHandedMessage.classList.add("hidden");
+    document.getElementById("secondary-accordion-toggle")
+      .classList.remove("opacity-50","pointer-events-none");
 
-    secondarySection.classList.remove("hidden");
-
-    renderSecondaryWeapons();
+    collapseAccordion("primary-accordion-content");
+    expandAccordion("secondary-accordion-content");
   }
+}
+
+function selectSecondaryWeapon(id) {
+
+  const primary =
+    wizardState.weapons.primary;
+
+  // Hard eligibility guard
+  if (!primary || primary.burden === "Two-handed")
+    return;
+
+  const selected =
+    cachedSecondaryWeapons.find(w => Number(w.id) === Number(id));
+
+  wizardState.weapons.secondary = selected;
+
+  highlightRow("secondary-weapon-table", id);
+}
+
+/* ---------- Highlight Helpers ---------- */
+
+function highlightRow(tableId, id) {
+
+  document.querySelectorAll(`#${tableId} tr`)
+    .forEach(row => {
+
+      row.classList.remove(
+        "bg-zinc-200",
+        "dark:bg-zinc-700"
+      );
+
+      if (Number(row.dataset.id) === Number(id)) {
+        row.classList.add(
+          "bg-zinc-200",
+          "dark:bg-zinc-700"
+        );
+      }
+    });
+}
+
+function clearSecondaryHighlight() {
+
+  document.querySelectorAll("#secondary-weapon-table tr")
+    .forEach(row => {
+      row.classList.remove(
+        "bg-zinc-200",
+        "dark:bg-zinc-700"
+      );
+    });
+}
+
+/* ---------- Continue Validation ---------- */
+
+document.getElementById("step6-complete")
+?.addEventListener("click", () => {
+
+  const primary =
+    wizardState.weapons.primary;
+
+  const secondary =
+    wizardState.weapons.secondary;
+
+  if (!primary) {
+    showWeaponError("You must select a primary weapon.");
+    return;
+  }
+
+  if (
+    primary.burden === "One-handed"
+    && !secondary
+  ) {
+    showWeaponError(
+      "This weapon is one-handed. Please select a secondary weapon."
+    );
+    return;
+  }
+
+  hideWeaponError();
+
+  completeStep(6);
+  openStep(7);
+});
+
+/* ---------- Error Helpers ---------- */
+
+function showWeaponError(msg) {
+  const el =
+    document.getElementById("weapon-error");
+
+  el.textContent = msg;
+  el.classList.remove("hidden");
+}
+
+function hideWeaponError() {
+  document.getElementById("weapon-error")
+    .classList.add("hidden");
 }
 
 function selectSecondaryWeapon(id) {

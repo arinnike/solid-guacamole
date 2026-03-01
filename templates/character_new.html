@@ -252,42 +252,88 @@
     <span class="wizard-status text-sm text-zinc-500">Incomplete</span>
   </button>
 
-  <div class="wizard-content p-4 space-y-8 hidden">
+  <div class="wizard-content p-4 space-y-6 hidden">
 
-    <!-- Tier Info -->
+    <!-- Tier Message -->
     <div id="weapon-tier-info"
       class="text-sm text-zinc-500 hidden">
     </div>
 
-    <div class="grid md:grid-cols-3 gap-6">
+    <!-- PRIMARY ACCORDION -->
+    <div class="border rounded">
 
-      <!-- LEFT COLUMN -->
-      <div class="md:col-span-1 space-y-8">
+      <button type="button"
+        id="primary-accordion-toggle"
+        class="w-full text-left px-4 py-3 font-semibold bg-zinc-50 dark:bg-zinc-900">
+        Primary Weapons
+      </button>
 
-        <!-- PRIMARY -->
-        <div>
-          <h3 class="font-semibold mb-3">Primary Weapon</h3>
-          <div id="primary-weapon-list" class="space-y-2"></div>
+      <div id="primary-accordion-content"
+        class="overflow-hidden transition-all duration-300 max-h-[1000px]">
+
+        <!-- Filters -->
+        <div class="p-4 space-y-3 border-b bg-white dark:bg-zinc-800">
+          <input type="text"
+            id="primary-filter-name"
+            placeholder="Filter by name"
+            class="w-full border rounded p-2 text-sm dark:bg-zinc-700">
+
+          <div class="grid grid-cols-3 gap-2">
+            <select id="primary-filter-trait" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
+            <select id="primary-filter-reach" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
+            <select id="primary-filter-burden" class="border rounded p-2 text-sm dark:bg-zinc-700"></select>
+          </div>
         </div>
 
-        <!-- SECONDARY -->
-        <div id="secondary-section" class="hidden">
-          <h3 class="font-semibold mb-3">Secondary Weapon</h3>
-          <div id="secondary-weapon-list" class="space-y-2"></div>
-        </div>
-
-        <!-- Two-Handed Message -->
-        <div id="two-handed-message"
-          class="hidden text-sm text-zinc-500">
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-zinc-100 dark:bg-zinc-800">
+              <tr>
+                <th class="p-2 text-left">Name</th>
+                <th class="p-2 text-left">Trait</th>
+                <th class="p-2 text-left">Reach</th>
+                <th class="p-2 text-left">Damage</th>
+                <th class="p-2 text-left">Burden</th>
+                <th class="p-2 text-left">Feature</th>
+              </tr>
+            </thead>
+            <tbody id="primary-weapon-table"></tbody>
+          </table>
         </div>
 
       </div>
+    </div>
 
-      <!-- RIGHT COLUMN -->
-      <div id="weapon-detail-panel"
-        class="md:col-span-2 border rounded p-6 bg-white dark:bg-zinc-800 flex items-center justify-center text-center">
+    <!-- SECONDARY ACCORDION -->
+    <div class="border rounded">
+
+      <button type="button"
+        id="secondary-accordion-toggle"
+        class="w-full text-left px-4 py-3 font-semibold bg-zinc-50 dark:bg-zinc-900 opacity-50 pointer-events-none">
+        Secondary Weapons
+      </button>
+
+      <div id="secondary-accordion-content"
+        class="overflow-hidden transition-all duration-300 max-h-0">
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="bg-zinc-100 dark:bg-zinc-800">
+              <tr>
+                <th class="p-2 text-left">Name</th>
+                <th class="p-2 text-left">Trait</th>
+                <th class="p-2 text-left">Reach</th>
+                <th class="p-2 text-left">Damage</th>
+                <th class="p-2 text-left">Burden</th>
+                <th class="p-2 text-left">Feature</th>
+              </tr>
+            </thead>
+            <tbody id="secondary-weapon-table"></tbody>
+          </table>
+        </div>
+
       </div>
-
     </div>
 
     <!-- Error -->
@@ -295,7 +341,6 @@
       class="hidden text-red-600 text-sm">
     </div>
 
-    <!-- Continue -->
     <button type="button"
       id="step6-complete"
       class="px-4 py-2 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700">
