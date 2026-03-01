@@ -1017,6 +1017,31 @@ function wireWeaponAccordions() {
   } else {
     newSecondary.classList.remove("opacity-50","pointer-events-none");
   }
+
+  updateSecondaryEligibility();
+}
+
+function updateSecondaryEligibility() {
+
+  const secondaryToggle =
+    document.getElementById("secondary-accordion-toggle");
+
+  const primary =
+    wizardState.weapons.primary;
+
+  if (!primary || primary.burden === "Two-handed") {
+
+    wizardState.weapons.secondary = null;
+    clearSecondaryHighlight();
+
+    secondaryToggle.classList.add("opacity-50","pointer-events-none");
+
+    collapseAccordion("secondary-accordion-content");
+
+  } else {
+
+    secondaryToggle.classList.remove("opacity-50","pointer-events-none");
+  }
 }
 
 /* ---------- Table Rendering ---------- */
@@ -1072,25 +1097,19 @@ function selectPrimaryWeapon(id) {
 
   highlightRow("primary-weapon-table", id);
 
-  // Two-handed logic
-  if (selected.burden === "Two-handed") {
-
-    wizardState.weapons.secondary = null;
-    clearSecondaryHighlight();
-
-    collapseAccordion("secondary-accordion-content");
-
-    document.getElementById("secondary-accordion-toggle")
-      .classList.add("opacity-50","pointer-events-none");
-
-  } else {
-
-    document.getElementById("secondary-accordion-toggle")
-      .classList.remove("opacity-50","pointer-events-none");
+  // Accordion behavior
+  if (selected.burden === "One-handed") {
 
     collapseAccordion("primary-accordion-content");
     expandAccordion("secondary-accordion-content");
+
+  } else {
+
+    collapseAccordion("secondary-accordion-content");
   }
+
+  // Single source of truth for eligibility
+  updateSecondaryEligibility();
 }
 
 function selectSecondaryWeapon(id) {
