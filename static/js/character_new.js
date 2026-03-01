@@ -1089,6 +1089,7 @@ function renderSecondaryTable() {
 /* ---------- Selection Logic ---------- */
 
 function selectPrimaryWeapon(id) {
+    console.log("PRIMARY CLICKED");
 
   const selected =
     cachedPrimaryWeapons.find(w => Number(w.id) === Number(id));
