@@ -27,6 +27,7 @@ async function loadArmor() {
 
   wireArmorFilters();
   renderArmorTable();
+  console.log("Armor loaded:", cachedArmor);
 }
 
 /* ---------- Filters ---------- */
