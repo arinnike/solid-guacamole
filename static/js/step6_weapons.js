@@ -1,12 +1,9 @@
 /* =========================================
-   STEP 6 – Weapons (Performance Clean Build)
+   STEP 6 – Weapons (Button Select Version)
 ========================================= */
 
 let cachedPrimaryWeapons = [];
 let cachedSecondaryWeapons = [];
-
-let selectedPrimaryRow = null;
-let selectedSecondaryRow = null;
 
 /* ---------- Load + Tier Filter ---------- */
 
@@ -52,16 +49,23 @@ function renderPrimaryTable() {
   tbody.innerHTML =
     cachedPrimaryWeapons.map(w => `
       <tr
-        class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
-        data-id="${w.id}"
-        onclick="selectPrimaryWeapon(${w.id})">
+        class="border-t transition-colors"
+        data-id="${w.id}">
 
-        <td class="p-2">${w.name}</td>
+        <td class="p-2 font-medium">${w.name}</td>
         <td class="p-2 capitalize">${w.trait}</td>
         <td class="p-2">${w.reach}</td>
         <td class="p-2">${w.damage}</td>
         <td class="p-2">${w.burden}</td>
-        <td class="p-2">${w.feature}</td>
+        <td class="p-2">${w.feature ?? ""}</td>
+
+        <td class="p-2 text-right">
+          <button
+            type="button"
+            class="primary-select-btn px-3 py-1 rounded-md border border-indigo-600 text-indigo-600 transition-colors">
+            Select
+          </button>
+        </td>
       </tr>
     `).join("");
 }
@@ -76,114 +80,227 @@ function renderSecondaryTable() {
   tbody.innerHTML =
     cachedSecondaryWeapons.map(w => `
       <tr
-        class="cursor-pointer border-t hover:bg-zinc-100 dark:hover:bg-zinc-800"
-        data-id="${w.id}"
-        onclick="selectSecondaryWeapon(${w.id})">
+        class="border-t transition-colors"
+        data-id="${w.id}">
 
-        <td class="p-2">${w.name}</td>
+        <td class="p-2 font-medium">${w.name}</td>
         <td class="p-2 capitalize">${w.trait}</td>
         <td class="p-2">${w.reach}</td>
         <td class="p-2">${w.damage}</td>
         <td class="p-2">${w.burden}</td>
-        <td class="p-2">${w.feature}</td>
+        <td class="p-2">${w.feature ?? ""}</td>
+
+        <td class="p-2 text-right">
+          <button
+            type="button"
+            class="secondary-select-btn px-3 py-1 rounded-md border border-indigo-600 text-indigo-600 transition-colors">
+            Select
+          </button>
+        </td>
       </tr>
     `).join("");
 }
 
-/* ---------- Selection Logic ---------- */
-function selectPrimaryWeapon(id) {
-  console.log("Clicked primary", id);
+/* ---------- Selection UI Helpers ---------- */
+
+function updatePrimarySelectionUI(selectedId) {
+
+  document
+    .querySelectorAll("#primary-weapon-table tr")
+    .forEach(row => {
+
+      const btn =
+        row.querySelector(".primary-select-btn");
+
+      if (!btn) return;
+
+      const rowId = Number(row.dataset.id);
+
+      if (rowId === Number(selectedId)) {
+
+        row.classList.add(
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
+        );
+
+        btn.classList.remove(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
+
+        btn.classList.add(
+          "bg-indigo-600",
+          "text-white"
+        );
+
+        btn.textContent = "Selected";
+
+      } else {
+
+        row.classList.remove(
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
+        );
+
+        btn.classList.add(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
+
+        btn.classList.remove(
+          "bg-indigo-600",
+          "text-white"
+        );
+
+        btn.textContent = "Select";
+      }
+
+    });
 }
 
-/*function selectPrimaryWeapon(id) {
+function updateSecondarySelectionUI(selectedId) {
 
-  const selected =
-    cachedPrimaryWeapons.find(w => Number(w.id) === Number(id));
+  document
+    .querySelectorAll("#secondary-weapon-table tr")
+    .forEach(row => {
 
-  if (!selected) return;
+      const btn =
+        row.querySelector(".secondary-select-btn");
 
-  wizardState.weapons.primary = selected;
-  wizardState.weapons.secondary = null;
+      if (!btn) return;
 
-  const row =
-    document.querySelector(
-      `#primary-weapon-table tr[data-id="${id}"]`
-    );
+      const rowId = Number(row.dataset.id);
 
-  if (selectedPrimaryRow) {
-    selectedPrimaryRow.classList.remove(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
+      if (rowId === Number(selectedId)) {
 
-  if (row) {
-    row.classList.add(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
+        row.classList.add(
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
+        );
 
-  selectedPrimaryRow = row;
+        btn.classList.remove(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
 
-  clearSecondarySelection();
-  updateSecondaryEligibility();
-}*/
+        btn.classList.add(
+          "bg-indigo-600",
+          "text-white"
+        );
 
-function selectSecondaryWeapon(id) {
+        btn.textContent = "Selected";
 
-  const primary = wizardState.weapons.primary;
+      } else {
 
-  if (!primary || primary.burden === "Two-handed")
-    return;
+        row.classList.remove(
+          "bg-indigo-50",
+          "dark:bg-indigo-900/40"
+        );
 
-  const selected =
-    cachedSecondaryWeapons.find(w => Number(w.id) === Number(id));
+        btn.classList.add(
+          "border-indigo-600",
+          "text-indigo-600"
+        );
 
-  if (!selected) return;
+        btn.classList.remove(
+          "bg-indigo-600",
+          "text-white"
+        );
 
-  wizardState.weapons.secondary = selected;
+        btn.textContent = "Select";
+      }
 
-  const row =
-    document.querySelector(
-      `#secondary-weapon-table tr[data-id="${id}"]`
-    );
-
-  if (selectedSecondaryRow) {
-    selectedSecondaryRow.classList.remove(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
-
-  if (row) {
-    row.classList.add(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
-
-  selectedSecondaryRow = row;
+    });
 }
+
+/* ---------- Selection Logic (Delegated) ---------- */
+
+document.addEventListener("click", (e) => {
+
+  const primaryBtn =
+    e.target.closest(".primary-select-btn");
+
+  const secondaryBtn =
+    e.target.closest(".secondary-select-btn");
+
+  if (primaryBtn) {
+
+    const row =
+      primaryBtn.closest("tr");
+
+    const id =
+      Number(row.dataset.id);
+
+    const selected =
+      cachedPrimaryWeapons.find(
+        w => Number(w.id) === id
+      );
+
+    if (!selected) return;
+
+    wizardState.weapons.primary_id = id;
+    wizardState.weapons.secondary_id = null;
+
+    updatePrimarySelectionUI(id);
+    updateSecondarySelectionUI(null);
+
+    updateSecondaryEligibility(selected);
+
+    hideWeaponError();
+  }
+
+  if (secondaryBtn) {
+
+    const row =
+      secondaryBtn.closest("tr");
+
+    const id =
+      Number(row.dataset.id);
+
+    const primaryId =
+      wizardState.weapons.primary_id;
+
+    const primary =
+      cachedPrimaryWeapons.find(
+        w => Number(w.id) === Number(primaryId)
+      );
+
+    if (!primary || primary.burden === "Two-handed")
+      return;
+
+    wizardState.weapons.secondary_id = id;
+
+    updateSecondarySelectionUI(id);
+
+    hideWeaponError();
+  }
+
+});
 
 /* ---------- Eligibility ---------- */
 
-function updateSecondaryEligibility() {
+function updateSecondaryEligibility(primaryWeapon) {
 
   const section =
     document.getElementById("secondary-section");
 
-  const primary =
-    wizardState.weapons.primary;
+  const info =
+    document.getElementById("weapon-tier-info");
 
   if (!section) return;
 
-  if (!primary || primary.burden === "Two-handed") {
+  if (!primaryWeapon ||
+      primaryWeapon.burden === "Two-handed") {
 
     section.classList.add(
       "opacity-50",
       "pointer-events-none"
     );
+
+    if (primaryWeapon?.burden === "Two-handed" && info) {
+      info.textContent +=
+        " Two-handed weapons prevent secondary selection.";
+    }
 
   } else {
 
@@ -198,39 +315,13 @@ function updateSecondaryEligibility() {
 
 function resetWeaponState() {
 
-  wizardState.weapons.primary = null;
-  wizardState.weapons.secondary = null;
+  wizardState.weapons.primary_id = null;
+  wizardState.weapons.secondary_id = null;
 
-  if (selectedPrimaryRow) {
-    selectedPrimaryRow.classList.remove(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
+  updatePrimarySelectionUI(null);
+  updateSecondarySelectionUI(null);
 
-  if (selectedSecondaryRow) {
-    selectedSecondaryRow.classList.remove(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
-
-  selectedPrimaryRow = null;
-  selectedSecondaryRow = null;
-
-  updateSecondaryEligibility();
-}
-
-function clearSecondarySelection() {
-
-  if (selectedSecondaryRow) {
-    selectedSecondaryRow.classList.remove(
-      "bg-zinc-200",
-      "dark:bg-zinc-700"
-    );
-  }
-
-  selectedSecondaryRow = null;
+  updateSecondaryEligibility(null);
 }
 
 /* ---------- Validation ---------- */
@@ -244,18 +335,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btn.addEventListener("click", () => {
 
-    const primary =
-      wizardState.weapons.primary;
+    const primaryId =
+      wizardState.weapons.primary_id;
 
-    const secondary =
-      wizardState.weapons.secondary;
+    const secondaryId =
+      wizardState.weapons.secondary_id;
 
-    if (!primary) {
-      showWeaponError("You must select a primary weapon.");
+    if (!primaryId) {
+      showWeaponError(
+        "You must select a primary weapon."
+      );
       return;
     }
 
-    if (primary.burden === "One-handed" && !secondary) {
+    const primary =
+      cachedPrimaryWeapons.find(
+        w => Number(w.id) === Number(primaryId)
+      );
+
+    if (
+      primary?.burden === "One-handed" &&
+      !secondaryId
+    ) {
       showWeaponError(
         "This weapon is one-handed. Please select a secondary weapon."
       );
