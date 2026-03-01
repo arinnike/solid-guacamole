@@ -10,6 +10,11 @@ let cachedWeapons = [];
 let cachedClasses = [];
 let selectedClassId = null;
 
+let cachedAncestries = [];
+let cachedCommunities = [];
+let selectedAncestryId = null;
+let selectedCommunityId = null;
+
 /* ===============================
    Wizard State
 ================================ */
@@ -376,17 +381,35 @@ async function loadCommunities() {
 }
 
 function renderAncestries(data) {
-  document.getElementById("ancestry-loading").classList.add("hidden");
-  const grid = document.getElementById("ancestry-grid");
-  grid.classList.remove("hidden");
+  cachedAncestries = data;
 
-  grid.innerHTML = data.map(a => `
-    <button class="border rounded p-4 text-left hover:bg-zinc-100 dark:hover:bg-zinc-700"
+  const list = document.getElementById("ancestry-list");
+
+  list.innerHTML = data.map(a => `
+    <button
+      class="w-full text-left px-4 py-3 border rounded hover:bg-zinc-100 dark:hover:bg-zinc-700 transition"
+      data-ancestry-id="${a.id}"
       onclick="selectAncestry(${a.id})">
-      <h4 class="font-semibold">${a.name}</h4>
-      <p class="text-sm text-zinc-500">${a.description}</p>
+      <div class="font-semibold">${a.name}</div>
     </button>
   `).join("");
+
+  renderAncestryEmptyState();
+}
+
+function renderAncestryEmptyState() {
+  const panel = document.getElementById("ancestry-detail-panel");
+
+  panel.innerHTML = `
+    <div class="space-y-3 max-w-md">
+      <div class="text-xl font-semibold">
+        Select an Ancestry
+      </div>
+      <div class="text-sm text-zinc-500">
+        Your ancestry influences your physical traits and heritage features.
+      </div>
+    </div>
+  `;
 }
 
 function renderCommunities(data) {
@@ -403,20 +426,87 @@ function renderCommunities(data) {
 }
 
 function selectAncestry(id) {
+  selectedAncestryId = id;
   wizardState.ancestry_id = id;
-  document.getElementById("community-grid")
-    .classList.remove("opacity-50","pointer-events-none");
+
+  document.querySelectorAll("#ancestry-list button")
+    .forEach(btn => {
+      btn.classList.remove("ring-2","ring-blue-500");
+      if (Number(btn.dataset.ancestryId) === Number(id)) {
+        btn.classList.add("ring-2","ring-blue-500");
+      }
+    });
+
+  const selected =
+    cachedAncestries.find(a => Number(a.id) === Number(id));
+
+  renderAncestryDetail(selected);
+
+  // Enable community section
+  const communitySection =
+    document.getElementById("community-section");
+
+  communitySection.classList.remove("opacity-50","pointer-events-none");
+
+  // ADD SCROLL HERE
+  communitySection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function renderAncestryDetail(a) {
+  const panel = document.getElementById("ancestry-detail-panel");
+
+  panel.classList.remove("flex","items-center","justify-center","text-center");
+
+  panel.innerHTML = `
+    <div class="space-y-4">
+      <h2 class="text-2xl font-bold">${a.name}</h2>
+      <p class="text-zinc-500">${a.description}</p>
+
+      <div class="text-sm space-y-3">
+        <div>
+          <span class="font-semibold">Feature 1:</span>
+          <div class="text-zinc-500">${a.feature_1}</div>
+        </div>
+        <div>
+          <span class="font-semibold">Feature 2:</span>
+          <div class="text-zinc-500">${a.feature_2}</div>
+        </div>
+        <div>
+          <span class="font-semibold">Height:</span>
+          <div class="text-zinc-500">${a.height}</div>
+        </div>
+        <div>
+          <span class="font-semibold">Lifespan:</span>
+          <div class="text-zinc-500">${a.lifespan}</div>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function selectCommunity(id) {
+  selectedCommunityId = id;
   wizardState.community_id = id;
+
+  document.querySelectorAll("#community-list button")
+    .forEach(btn => {
+      btn.classList.remove("ring-2","ring-blue-500");
+      if (Number(btn.dataset.communityId) === Number(id)) {
+        btn.classList.add("ring-2","ring-blue-500");
+      }
+    });
+
+  const selected =
+    cachedCommunities.find(c => Number(c.id) === Number(id));
+
+  renderCommunityDetail(selected);
+
   completeStep(3);
   openStep(4, renderTraits);
 }
-
-/* ===============================
-   STEP 4 – Traits
-================================ */
 
 /* ===============================
    STEP 4 – Traits (Pool Enforced)
