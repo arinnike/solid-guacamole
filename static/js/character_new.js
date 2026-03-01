@@ -940,14 +940,19 @@ console.log("loadWeapons running");
 
 function expandAccordion(id) {
   const el = document.getElementById(id);
-  el.classList.remove("max-h-0");
-  el.classList.add("max-h-[1000px]");
+  el.classList.remove("hidden");
+  el.classList.remove("opacity-0");
+  el.classList.add("opacity-100");
 }
 
 function collapseAccordion(id) {
   const el = document.getElementById(id);
-  el.classList.remove("max-h-[1000px]");
-  el.classList.add("max-h-0");
+  el.classList.remove("opacity-100");
+  el.classList.add("opacity-0");
+
+  setTimeout(() => {
+    el.classList.add("hidden");
+  }, 200);
 }
 
 function wireWeaponAccordions() {
