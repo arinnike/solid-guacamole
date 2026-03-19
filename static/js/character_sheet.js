@@ -45,11 +45,26 @@ function renderCharacter(char) {
     `Level ${char.level}`;
 
   document.getElementById("char-stats").innerHTML = `
-    <div class="border rounded p-4">
-      <p>HP: ${char.current_hit_points ?? "—"}</p>
-      <p>Class: ${char.class_id ?? "—"}</p>
+    <div class="grid grid-cols-2 gap-2 border rounded p-4">
+
+      <p><strong>HP:</strong> ${char.current_hit_points}</p>
+      <p><strong>Hope:</strong> ${char.hope}</p>
+
+      <p>Agility: ${char.agility}</p>
+      <p>Strength: ${char.strength}</p>
+      <p>Presence: ${char.presence}</p>
+      <p>Instinct: ${char.instinct}</p>
+      <p>Knowledge: ${char.knowledge}</p>
+      <p>Finesse: ${char.finesse}</p>
+
     </div>
   `;
 }
+
+const portrait = char.portrait_url
+  ? `<img src="${char.portrait_url}" class="w-24 h-24 rounded object-cover">`
+  : `<div class="w-24 h-24 bg-zinc-300 flex items-center justify-center text-xl">
+       ${char.name.charAt(0)}
+     </div>`;
 
 loadCharacter();
