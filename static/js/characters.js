@@ -93,7 +93,7 @@ function renderCharacters(characters) {
 }
 
 function viewCharacter(id) {
-  window.location.href = `/characters/${id}`;
+  window.location.href = `/character.html?id=${id}`;
 }
 
 
