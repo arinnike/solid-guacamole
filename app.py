@@ -109,10 +109,10 @@ def characters():
 def new_character():
     return render_template("character_new.html")
 
-@application.route("/characters/<character_id>")
+@application.route("/characters/<uuid:character_id>")
 @login_required
 def character_sheet(character_id):
-    return render_template("character_sheet.html", character_id=character_id)
+    return render_template("character_sheet.html", character_id=str(character_id))
 
 # ------------------------
 # Supabase → Flask Session Sync
@@ -224,9 +224,3 @@ def loot_api():
     conn.close()
 
     return jsonify(rows)
-
-print(application.url_map)
-
-@application.route("/test/<thing>")
-def test_route(thing):
-    return f"Test works: {thing}"
