@@ -224,3 +224,5 @@ def loot_api():
     conn.close()
 
     return jsonify(rows)
+
+print(application.url_map)
