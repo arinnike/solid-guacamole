@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+
+  <div id="character-loading" class="text-zinc-500">
+    Loading character...
+  </div>
+
+  <div id="character-sheet" class="hidden">
+
+    <h1 id="char-name" class="text-2xl font-bold"></h1>
+    <p id="char-meta" class="text-zinc-500"></p>
+
+    <div id="char-stats" class="mt-4"></div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const CHARACTER_ID = "{{ character_id }}";
+</script>
+<script src="{{ url_for('static', filename='js/character_sheet.js') }}"></script>
+{% endblock %}

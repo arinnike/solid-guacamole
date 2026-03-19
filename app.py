@@ -109,6 +109,11 @@ def characters():
 def new_character():
     return render_template("character_new.html")
 
+@application.route("/characters/<character_id>")
+@login_required
+def character_sheet(character_id):
+    return render_template("character_sheet.html", character_id=character_id)
+
 # ------------------------
 # Supabase → Flask Session Sync
 # ------------------------
