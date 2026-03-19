@@ -224,3 +224,9 @@ def loot_api():
     conn.close()
 
     return jsonify(rows)
+
+print(application.url_map)
+
+@application.route("/test/<thing>")
+def test_route(thing):
+    return f"Test works: {thing}"
