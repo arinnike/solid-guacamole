@@ -105,18 +105,17 @@ function renderCharacter(char) {
     <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
 
       <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
-        ATTRIBUTES
+        TRAITS
       </h2>
 
-      <div class="grid grid-cols-3 gap-4 text-center">
+      <div class="grid grid-cols-6 gap-3 text-center">
 
-        ${statBox("AGI", char.agility)}
-        ${statBox("STR", char.strength)}
-        ${statBox("FIN", char.finesse)}
-
-        ${statBox("PRE", char.presence)}
-        ${statBox("INS", char.instinct)}
-        ${statBox("KNO", char.knowledge)}
+        ${statBox("Agility", char.agility)}
+        ${statBox("Strength", char.strength)}
+        ${statBox("Finesse", char.finesse)}
+        ${statBox("Presence", char.presence)}
+        ${statBox("Instinct", char.instinct)}
+        ${statBox("Knowledge", char.knowledge)}
 
       </div>
 
@@ -129,9 +128,9 @@ function renderCharacter(char) {
 
 function statBox(label, value) {
   return `
-    <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900">
-      <div class="text-xs text-zinc-500 tracking-widest">${label}</div>
-      <div class="text-xl font-bold">${value ?? "—"}</div>
+    <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900 flex flex-col justify-between h-20">
+      <div class="text-xs text-zinc-500">${label}</div>
+      <div class="text-2xl font-bold">${value ?? "—"}</div>
     </div>
   `;
 }
