@@ -145,6 +145,13 @@ function renderCharacter(char) {
 
     </div>
 
+    <!-- TABS SECTION -->
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
+
+      ${tabsSection(char)}
+
+    </div>
+
   `;
 
   //Debug
@@ -382,6 +389,89 @@ function renderExperiences(experiences) {
 
     </div>
   `;
+}
+
+function tabsSection(char) {
+
+  const tabs = [
+    { key: "combat", label: "Combat" },
+    { key: "inventory", label: "Inventory" },
+    { key: "appearance", label: "Appearance" },
+  ];
+
+  // Conditional tabs
+  if (char.class_name?.toLowerCase() === "ranger") {
+    tabs.splice(2, 0, { key: "companion", label: "Companion" });
+  }
+
+  if (char.class_name?.toLowerCase() === "druid") {
+    tabs.splice(2, 0, { key: "beastforms", label: "Beastforms" });
+  }
+
+  return `
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-800 shadow">
+
+      <!-- TAB HEADERS -->
+      <div class="flex border-b border-zinc-200 dark:border-zinc-700">
+
+        ${tabs.map((tab, i) => `
+          <button
+            class="tab-button px-4 py-2 text-sm font-medium
+                   ${i === 0 ? "border-b-2 border-zinc-900 dark:border-white" : "text-zinc-500"}"
+            onclick="switchTab('${tab.key}', this)"
+          >
+            ${tab.label}
+          </button>
+        `).join("")}
+
+      </div>
+
+      <!-- TAB CONTENT -->
+      <div id="tab-content" class="p-4 min-h-[150px]">
+        ${renderTabContent("combat")}
+      </div>
+
+    </div>
+  `;
+}
+
+function switchTab(tabKey, el) {
+
+  // Update active tab styles
+  document.querySelectorAll(".tab-button").forEach(btn => {
+    btn.classList.remove("border-b-2", "border-zinc-900", "dark:border-white");
+    btn.classList.add("text-zinc-500");
+  });
+
+  el.classList.add("border-b-2", "border-zinc-900", "dark:border-white");
+  el.classList.remove("text-zinc-500");
+
+  // Update content
+  document.getElementById("tab-content").innerHTML = renderTabContent(tabKey);
+}
+
+function renderTabContent(tab) {
+
+  switch (tab) {
+
+    case "combat":
+      return `<div class="text-sm text-zinc-400">Combat details coming soon</div>`;
+
+    case "inventory":
+      return `<div class="text-sm text-zinc-400">Inventory coming soon</div>`;
+
+    case "companion":
+      return `<div class="text-sm text-zinc-400">Companion details coming soon</div>`;
+
+    case "beastforms":
+      return `<div class="text-sm text-zinc-400">Beastforms coming soon</div>`;
+
+    case "appearance":
+      return `<div class="text-sm text-zinc-400">Appearance details coming soon</div>`;
+
+    default:
+      return `<div></div>`;
+  }
 }
 
 /*
