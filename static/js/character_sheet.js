@@ -371,14 +371,16 @@ function renderExperiences(experiences) {
   }
 
   return `
-    <ul class="space-y-1 text-sm">
-      ${experiences.map(exp => `
-        <li class="flex items-start gap-2">
-          <span class="text-zinc-400">•</span>
-          <span>${exp}</span>
-        </li>
+    <div class="text-sm flex flex-wrap gap-x-3 gap-y-1">
+
+      ${experiences.map((exp, i) => `
+        <span class="whitespace-nowrap">
+          ${exp} <span class="font-semibold text-zinc-700 dark:text-zinc-300">+2</span>
+          ${i < experiences.length - 1 ? '<span class="text-zinc-400 ml-2">•</span>' : ''}
+        </span>
       `).join("")}
-    </ul>
+
+    </div>
   `;
 }
 
