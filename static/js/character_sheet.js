@@ -127,6 +127,15 @@ function renderCharacter(char) {
   console.log("CHAR DATA:", char);
 }
 
+function statBox(label, value) {
+  return `
+    <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900">
+      <div class="text-xs text-zinc-500 tracking-widest">${label}</div>
+      <div class="text-xl font-bold">${value ?? "—"}</div>
+    </div>
+  `;
+}
+
 /*
 ================================
 Init
