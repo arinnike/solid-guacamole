@@ -108,10 +108,10 @@ function renderCharacter(char) {
         COMBAT
       </h2>
 
-      ${counterRow("Health", char.current_hit_points, 20, "health")}
-      ${counterRow("Hope", char.hope, 6, "hope")}
-      ${counterRow("Stress", char.stress ?? 0, 6, "stress")}
-      ${counterRow("Armor", char.armor ?? 0, 5, "armor")}
+      ${counterRow("Health", char.current_hit_points, 10, "health", "health")}
+      ${counterRow("Hope", char.hope, 6, "hope", "hope")}
+      ${counterRow("Stress", char.stress, 6, "stress", "stress")}
+      ${counterRow("Armor", char.armor_slots, 5, "armor", "armor")}
 
     </div>
 
@@ -151,29 +151,82 @@ function statBox(label, value) {
   `;
 }
 
-function counterRow(label, value, max, key) {
+function counterRow(label, value, max, key, type) {
   return `
-    <div>
-      <div class="text-sm text-zinc-500 mb-1">${label}</div>
+    <div class="flex items-center justify-between gap-4">
 
-      <div class="flex flex-wrap gap-1">
+      <div class="text-sm text-zinc-500 w-20">
+        ${label.toUpperCase()}
+      </div>
+
+      <div class="flex gap-1 flex-wrap items-center">
+
         ${Array.from({ length: max }, (_, i) => {
           const filled = i < (value ?? 0);
 
           return `
             <button
-              class="w-5 h-5 rounded-full border
-                ${filled
-                  ? "bg-zinc-800 dark:bg-zinc-200"
-                  : "bg-transparent"}
-              "
               onclick="updateCounter('${key}', ${i + 1})"
-            ></button>
+              class="transition"
+            >
+              ${renderPip(type, filled)}
+            </button>
           `;
         }).join("")}
+
       </div>
+
     </div>
   `;
+}
+
+function renderPip(type, filled) {
+  switch (type) {
+
+    case "health":
+      return `
+        <div class="
+          w-5 h-5 rounded-md border
+          ${filled
+            ? "bg-red-500 border-red-600"
+            : "bg-transparent border-zinc-400"}
+        "></div>
+      `;
+
+    case "hope":
+      return `
+        <div class="
+          w-5 h-5 rotate-45 border
+          ${filled
+            ? "bg-green-500 border-green-600"
+            : "bg-transparent border-zinc-400"}
+        "></div>
+      `;
+
+    case "stress":
+      return `
+        <div class="
+          w-5 h-5 rotate-45 border
+          ${filled
+            ? "bg-purple-500 border-purple-600"
+            : "bg-transparent border-zinc-400"}
+        "></div>
+      `;
+
+    case "armor":
+      return `
+        <div class="
+          w-5 h-6 border
+          ${filled
+            ? "bg-blue-400 border-blue-500"
+            : "bg-transparent border-zinc-400"}
+          clip-shield
+        "></div>
+      `;
+
+    default:
+      return `<div class="w-5 h-5 border"></div>`;
+  }
 }
 
 function updateCounter(type, newValue) {

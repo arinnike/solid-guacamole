@@ -191,3 +191,15 @@ html {
   margin: 0 auto;
   width: 60%;
 }
+
+/*Shield Icon*/
+.clip-shield {
+  clip-path: polygon(
+    50% 0%,
+    90% 20%,
+    90% 60%,
+    50% 100%,
+    10% 60%,
+    10% 20%
+  );
+}
