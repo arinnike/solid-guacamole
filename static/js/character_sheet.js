@@ -122,3 +122,6 @@ Init
 ================================
 */
 loadCharacter();
+
+//Debug
+console.log("CHAR DATA:", char);
