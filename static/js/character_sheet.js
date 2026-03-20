@@ -104,7 +104,7 @@ function renderCharacter(char) {
   document.getElementById("char-stats").innerHTML = `
 
     <!-- TRAITS -->
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow -mt-3 mb-4">
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
 
       <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
         TRAITS
