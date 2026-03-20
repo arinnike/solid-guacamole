@@ -182,7 +182,7 @@ function counterRow(label, value, max, key, type) {
 
 function renderPip(type, filled) {
 
-  const base = "w-5 h-5 rounded-md border transition";
+  const base = "w-6 h-4 rounded-full border transition";
 
   const styles = {
     health: filled
