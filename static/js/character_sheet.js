@@ -110,8 +110,8 @@ function renderCharacter(char) {
 
       ${counterRow("Health", char.current_hit_points, 10, "health", "health")}
       ${counterRow("Hope", char.hope, 6, "hope", "hope")}
-      ${counterRow("Stress", char.stress, 6, "stress", "stress")}
-      ${counterRow("Armor", char.armor_slots, 5, "armor", "armor")}
+      ${counterRow("Stress", char.stress ?? 3, 6, "stress", "stress")}
+      ${counterRow("Armor", char.armor_slots ?? 2, 5, "armor", "armor")}
 
     </div>
 
@@ -159,7 +159,7 @@ function counterRow(label, value, max, key, type) {
         ${label.toUpperCase()}
       </div>
 
-      <div class="flex gap-1.5 flex-wrap items-center">
+      <div class="flex gap-0.5 flex-wrap items-center">
 
         ${Array.from({ length: max }, (_, i) => {
           const filled = i < (value ?? 0);
