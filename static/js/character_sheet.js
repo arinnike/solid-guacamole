@@ -79,9 +79,18 @@ function renderCharacter(char) {
   document.getElementById("char-meta").textContent =
     `Level ${char.level}`;
 
-  // Placeholder for future joins
+  // Ancestry, Class, Community
+  const classPart = char.class_name
+    ? `${char.class_name}${char.subclass_name ? ` (${char.subclass_name})` : ""}`
+    : "Unknown Class";
+
+  const ancestryPart = char.ancestry_name || "Unknown Ancestry";
+  const communityPart = char.community_name || null;
+
   document.getElementById("char-lineage").textContent =
-    `${char.class_id ?? "Class"} • ${char.ancestry_id ?? "Ancestry"}`;
+    communityPart
+      ? `${classPart} • ${ancestryPart} • ${communityPart}`
+      : `${classPart} • ${ancestryPart}`;
 
   const portraitHTML = char.portrait_url
     ? `<img src="${char.portrait_url}" class="w-full h-full object-cover">`
