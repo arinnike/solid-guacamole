@@ -102,9 +102,8 @@ function renderCharacter(char) {
 
   // Character Stats
   document.getElementById("char-stats").innerHTML = `
-
-    <!-- TRAITS -->
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
+    <!-- TRAITS (slightly closer to header) -->
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow -mt-2">
 
       <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
         TRAITS
@@ -123,8 +122,8 @@ function renderCharacter(char) {
 
     </div>
 
-    <!-- STATUS + DEFENSE -->
-    <div class="grid grid-cols-2 gap-4">
+    <!-- STATUS + DEFENSE (normal spacing below traits) -->
+    <div class="grid grid-cols-2 gap-4 mt-6">
 
       ${statusPanel(char)}
 
