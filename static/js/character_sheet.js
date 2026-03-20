@@ -124,7 +124,7 @@ function renderCharacter(char) {
     </div>
 
     <!-- STATUS + DEFENSE -->
-    <div class="grid grid-cols-2 gap-4 mt-3">
+    <div class="grid grid-cols-2 gap-4 mt-5">
 
       ${statusPanel(char)}
 
