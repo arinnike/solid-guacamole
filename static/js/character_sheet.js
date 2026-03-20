@@ -103,18 +103,11 @@ function renderCharacter(char) {
   // Character Stats
   document.getElementById("char-stats").innerHTML = `
 
-    ${combatSummary(char)}
+    <div class="grid grid-cols-2 gap-4">
 
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow space-y-4">
+      ${statusPanel(char)}
 
-      <h2 class="text-sm font-semibold text-zinc-500 tracking-widest">
-        COMBAT
-      </h2>
-
-      ${counterRow("Health", char.current_hit_points, 10, "health", "health")}
-      ${counterRow("Hope", char.hope, 6, "hope", "hope")}
-      ${counterRow("Stress", char.stress || 3, 6, "stress", "stress")}
-      ${counterRow("Armor", char.armor_slots || 2, 5, "armor", "armor")}
+      ${defensePanel(char)}
 
     </div>
 
@@ -254,6 +247,99 @@ function combatSummary(char) {
           </div>
         </div>
 
+      </div>
+
+    </div>
+  `;
+}
+
+function statusPanel(char) {
+  return `
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow space-y-4">
+
+      <h2 class="text-sm font-semibold text-zinc-500 tracking-widest">
+        STATUS
+      </h2>
+
+      ${counterRow("Health", char.current_hit_points, 10, "health", "health")}
+      ${counterRow("Hope", char.hope, 6, "hope", "hope")}
+      ${counterRow("Stress", char.stress || 3, 6, "stress", "stress")}
+      ${counterRow("Armor", char.armor_slots || 2, 5, "armor", "armor")}
+
+    </div>
+  `;
+}
+
+function defensePanel(char) {
+  return `
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow space-y-4">
+
+      <h2 class="text-sm font-semibold text-zinc-500 tracking-widest">
+        DEFENSE
+      </h2>
+
+      <!-- EVASION -->
+      <div class="text-center">
+        <div class="text-xs text-zinc-500 tracking-widest mb-1">
+          EVASION
+        </div>
+        <div class="text-3xl font-bold">
+          ${char.evasion ?? "—"}
+        </div>
+      </div>
+
+      ${thresholdPanel(char)}
+
+      ${resistancePanel(char)}
+
+    </div>
+  `;
+}
+
+function thresholdPanel(char) {
+  return `
+    <div class="border rounded-md p-3 bg-zinc-50 dark:bg-zinc-900">
+
+      <div class="text-xs text-zinc-500 tracking-widest mb-2 text-center">
+        DAMAGE THRESHOLDS
+      </div>
+
+      <div class="grid grid-cols-3 text-center gap-2">
+
+        <div>
+          <div class="text-xs text-zinc-500">Minor</div>
+          <div class="font-semibold">${char.level ?? "—"}</div>
+          <div class="text-[10px] text-zinc-400">Mark 1 HP</div>
+        </div>
+
+        <div>
+          <div class="text-xs text-zinc-500">Major</div>
+          <div class="font-semibold">${char.major_threshold ?? "—"}</div>
+          <div class="text-[10px] text-zinc-400">Mark 2 HP</div>
+        </div>
+
+        <div>
+          <div class="text-xs text-zinc-500">Severe</div>
+          <div class="font-semibold">${char.severe_threshold ?? "—"}</div>
+          <div class="text-[10px] text-zinc-400">Mark 3 HP</div>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+function resistancePanel(char) {
+  return `
+    <div>
+
+      <div class="text-xs text-zinc-500 tracking-widest mb-1">
+        RESISTANCES
+      </div>
+
+      <div class="text-sm text-zinc-400 italic">
+        None
       </div>
 
     </div>
