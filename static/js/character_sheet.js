@@ -121,6 +121,19 @@ function renderCharacter(char) {
 
       </div>
 
+      <!-- DIVIDER -->
+      <div class="my-4 border-t border-zinc-200 dark:border-zinc-700"></div>
+
+      <!-- EXPERIENCES -->
+      <div>
+        <div class="text-xs text-zinc-500 tracking-widest mb-2">
+          EXPERIENCES
+        </div>
+
+        ${renderExperiences(char.experiences)}
+
+      </div>
+
     </div>
 
     <!-- STATUS + DEFENSE -->
@@ -345,6 +358,27 @@ function resistancePanel(char) {
       </div>
 
     </div>
+  `;
+}
+
+function renderExperiences(experiences) {
+  if (!experiences || experiences.length === 0) {
+    return `
+      <div class="text-sm text-zinc-400 italic">
+        None
+      </div>
+    `;
+  }
+
+  return `
+    <ul class="space-y-1 text-sm">
+      ${experiences.map(exp => `
+        <li class="flex items-start gap-2">
+          <span class="text-zinc-400">•</span>
+          <span>${exp}</span>
+        </li>
+      `).join("")}
+    </ul>
   `;
 }
 
