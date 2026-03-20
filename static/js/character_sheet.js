@@ -159,7 +159,7 @@ function counterRow(label, value, max, key, type) {
         ${label.toUpperCase()}
       </div>
 
-      <div class="flex gap-1 flex-wrap items-center">
+      <div class="flex gap-1.5 flex-wrap items-center">
 
         ${Array.from({ length: max }, (_, i) => {
           const filled = i < (value ?? 0);
@@ -167,7 +167,7 @@ function counterRow(label, value, max, key, type) {
           return `
             <button
               onclick="updateCounter('${key}', ${i + 1})"
-              class="transition"
+              class="transition hover:scale-105"
             >
               ${renderPip(type, filled)}
             </button>
@@ -181,52 +181,28 @@ function counterRow(label, value, max, key, type) {
 }
 
 function renderPip(type, filled) {
-  switch (type) {
 
-    case "health":
-      return `
-        <div class="
-          w-5 h-5 rounded-md border
-          ${filled
-            ? "bg-red-500 border-red-600"
-            : "bg-transparent border-zinc-400"}
-        "></div>
-      `;
+  const base = "w-5 h-5 rounded-md border transition";
 
-    case "hope":
-      return `
-        <div class="
-          w-5 h-5 rotate-45 border
-          ${filled
-            ? "bg-green-500 border-green-600"
-            : "bg-transparent border-zinc-400"}
-        "></div>
-      `;
+  const styles = {
+    health: filled
+      ? "bg-red-500 border-red-600"
+      : "bg-transparent border-zinc-400",
 
-    case "stress":
-      return `
-        <div class="
-          w-5 h-5 rotate-45 border
-          ${filled
-            ? "bg-purple-500 border-purple-600"
-            : "bg-transparent border-zinc-400"}
-        "></div>
-      `;
+    hope: filled
+      ? "bg-green-500 border-green-600"
+      : "bg-transparent border-zinc-400",
 
-    case "armor":
-      return `
-        <div class="
-          w-5 h-6 border
-          ${filled
-            ? "bg-blue-400 border-blue-500"
-            : "bg-transparent border-zinc-400"}
-          clip-shield
-        "></div>
-      `;
+    stress: filled
+      ? "bg-purple-500 border-purple-600"
+      : "bg-transparent border-zinc-400",
 
-    default:
-      return `<div class="w-5 h-5 border"></div>`;
-  }
+    armor: filled
+      ? "bg-blue-400 border-blue-500"
+      : "bg-transparent border-zinc-400",
+  };
+
+  return `<div class="${base} ${styles[type] || ""}"></div>`;
 }
 
 function updateCounter(type, newValue) {
