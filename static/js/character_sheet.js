@@ -100,18 +100,26 @@ function renderCharacter(char) {
 
   document.getElementById("char-portrait").innerHTML = portraitHTML;
 
-  // Keep stats for now (we'll upgrade next)
+  // Character Stats
   document.getElementById("char-stats").innerHTML = `
-    <div class="grid grid-cols-2 gap-2 border rounded p-4 bg-white dark:bg-zinc-800">
-      <p><strong>HP:</strong> ${char.current_hit_points ?? "—"}</p>
-      <p><strong>Hope:</strong> ${char.hope ?? "—"}</p>
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
 
-      <p>Agility: ${char.agility ?? "—"}</p>
-      <p>Strength: ${char.strength ?? "—"}</p>
-      <p>Presence: ${char.presence ?? "—"}</p>
-      <p>Instinct: ${char.instinct ?? "—"}</p>
-      <p>Knowledge: ${char.knowledge ?? "—"}</p>
-      <p>Finesse: ${char.finesse ?? "—"}</p>
+      <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
+        ATTRIBUTES
+      </h2>
+
+      <div class="grid grid-cols-3 gap-4 text-center">
+
+        ${statBox("AGI", char.agility)}
+        ${statBox("STR", char.strength)}
+        ${statBox("FIN", char.finesse)}
+
+        ${statBox("PRE", char.presence)}
+        ${statBox("INS", char.instinct)}
+        ${statBox("KNO", char.knowledge)}
+
+      </div>
+
     </div>
   `;
 
