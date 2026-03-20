@@ -102,6 +102,9 @@ function renderCharacter(char) {
 
   // Character Stats
   document.getElementById("char-stats").innerHTML = `
+
+    ${combatSummary(char)}
+
     <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow space-y-4">
 
       <h2 class="text-sm font-semibold text-zinc-500 tracking-widest">
@@ -110,8 +113,8 @@ function renderCharacter(char) {
 
       ${counterRow("Health", char.current_hit_points, 10, "health", "health")}
       ${counterRow("Hope", char.hope, 6, "hope", "hope")}
-      ${counterRow("Stress", char.stress ?? 3, 6, "stress", "stress")}
-      ${counterRow("Armor", char.armor_slots ?? 2, 5, "armor", "armor")}
+      ${counterRow("Stress", char.stress || 3, 6, "stress", "stress")}
+      ${counterRow("Armor", char.armor_slots || 2, 5, "armor", "armor")}
 
     </div>
 
@@ -210,6 +213,51 @@ function updateCounter(type, newValue) {
 
   // For now: just reload UI with new value (temporary hack)
   // We'll replace this with real state + API call next step
+}
+
+function combatSummary(char) {
+  return `
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
+
+      <div class="grid grid-cols-3 gap-4 items-center text-center">
+
+        <!-- EVASION -->
+        <div>
+          <div class="text-xs text-zinc-500 tracking-widest mb-1">
+            EVASION
+          </div>
+          <div class="text-3xl font-bold">
+            ${char.evasion ?? "—"}
+          </div>
+        </div>
+
+        <!-- HP (placeholder for now) -->
+        <div>
+          <div class="text-xs text-zinc-500 tracking-widest mb-1">
+            HP
+          </div>
+          <div class="text-3xl font-bold">
+            ${char.current_hit_points ?? "—"}
+          </div>
+        </div>
+
+        <!-- THRESHOLDS -->
+        <div>
+          <div class="text-xs text-zinc-500 tracking-widest mb-1">
+            THRESHOLDS
+          </div>
+          <div class="text-sm">
+            <span class="font-semibold">Major:</span> ${char.major_threshold ?? "—"}
+          </div>
+          <div class="text-sm">
+            <span class="font-semibold">Severe:</span> ${char.severe_threshold ?? "—"}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  `;
 }
 
 /*
