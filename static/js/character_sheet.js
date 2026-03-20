@@ -130,7 +130,7 @@ function statBox(label, value) {
   return `
     <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900 flex flex-col justify-between h-24">
       <div class="text-sm text-zinc-500">${label}</div>
-      <div class="text-3xl font-extrabold tracking-wide">
+      <div class="text-2xl font-bold">
         ${value ?? "—"}
       </div>
     </div>
