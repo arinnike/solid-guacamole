@@ -114,6 +114,9 @@ function renderCharacter(char) {
       <p>Finesse: ${char.finesse ?? "—"}</p>
     </div>
   `;
+
+  //Debug
+  console.log("CHAR DATA:", char);
 }
 
 /*
@@ -122,6 +125,3 @@ Init
 ================================
 */
 loadCharacter();
-
-//Debug
-console.log("CHAR DATA:", char);
