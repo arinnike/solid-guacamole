@@ -128,7 +128,7 @@ function renderCharacter(char) {
 
 function statBox(label, value) {
   return `
-    <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900 flex flex-col items-center justify-center gap-1 h-20">
+    <div class="border rounded-lg p-3 bg-zinc-50 dark:bg-zinc-900 flex flex-col items-center justify-center gap-0.5 h-20">
       <div class="text-sm text-zinc-500">${label}</div>
       <div class="text-2xl font-bold">
         ${value ?? "—"}
