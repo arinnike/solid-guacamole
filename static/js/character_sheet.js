@@ -79,22 +79,24 @@ function renderCharacter(char) {
   document.getElementById("char-meta").textContent =
     `Level ${char.level}`;
 
-  const portrait = char.portrait_url
-    ? `<img src="${char.portrait_url}" class="w-24 h-24 rounded object-cover">`
-    : `<div class="w-24 h-24 bg-zinc-300 flex items-center justify-center text-xl">
+  // Placeholder for future joins
+  document.getElementById("char-lineage").textContent =
+    `${char.class_id ?? "Class"} • ${char.ancestry_id ?? "Ancestry"}`;
+
+  const portraitHTML = char.portrait_url
+    ? `<img src="${char.portrait_url}" class="w-full h-full object-cover">`
+    : `<span class="text-xl font-bold text-zinc-500">
          ${char.name?.charAt(0).toUpperCase() || "?"}
-       </div>`;
+       </span>`;
 
+  document.getElementById("char-portrait").innerHTML = portraitHTML;
+
+  // Keep stats for now (we'll upgrade next)
   document.getElementById("char-stats").innerHTML = `
-    <div class="flex items-center gap-4 mb-4">
-      ${portrait}
-      <div>
-        <p><strong>HP:</strong> ${char.current_hit_points ?? "—"}</p>
-        <p><strong>Hope:</strong> ${char.hope ?? "—"}</p>
-      </div>
-    </div>
+    <div class="grid grid-cols-2 gap-2 border rounded p-4 bg-white dark:bg-zinc-800">
+      <p><strong>HP:</strong> ${char.current_hit_points ?? "—"}</p>
+      <p><strong>Hope:</strong> ${char.hope ?? "—"}</p>
 
-    <div class="grid grid-cols-2 gap-2 border rounded p-4">
       <p>Agility: ${char.agility ?? "—"}</p>
       <p>Strength: ${char.strength ?? "—"}</p>
       <p>Presence: ${char.presence ?? "—"}</p>

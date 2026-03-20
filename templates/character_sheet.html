@@ -7,14 +7,35 @@
     Loading character...
   </div>
 
-  <div id="character-sheet" class="hidden">
+  <div id="character-sheet" class="hidden space-y-6">
 
-    <h1 id="char-name" class="text-2xl font-bold"></h1>
-    <p id="char-meta" class="text-zinc-500"></p>
+        <!-- CHARACTER HEADER -->
+        <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
 
-    <div id="char-stats" class="mt-4"></div>
+            <div class="flex gap-4 items-center">
 
-  </div>
+            <!-- Portrait -->
+            <div id="char-portrait"
+                class="w-24 h-24 rounded border bg-zinc-200 dark:bg-zinc-700 flex items-center justify-center overflow-hidden">
+            </div>
+
+            <!-- Identity -->
+            <div>
+                <h1 id="char-name" class="text-2xl font-bold tracking-wide"></h1>
+
+                <p id="char-meta" class="text-sm text-zinc-500"></p>
+
+                <p id="char-lineage" class="text-sm text-zinc-400 italic"></p>
+            </div>
+
+            </div>
+
+        </div>
+
+        <!-- STATS SECTION (we'll upgrade next) -->
+        <div id="char-stats"></div>
+
+    </div>
 
 </div>
 {% endblock %}
