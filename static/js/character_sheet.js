@@ -377,7 +377,7 @@ function renderTabContent(tab, char) {
       return `<div class="text-sm text-zinc-400">Combat coming soon</div>`;
 
     case "inventory":
-      return `<div class="text-sm text-zinc-400">Inventory coming soon</div>`;
+      return inventoryPanel(char);
 
     case "companion":
       return `<div class="text-sm text-zinc-400">Companion coming soon</div>`;
@@ -419,6 +419,48 @@ function traitsPanel(char) {
 
         ${renderExperiences(char.experiences)}
       </div>
+
+    </div>
+  `;
+}
+
+function inventoryPanel(char) {
+
+  const equipment = char.equipment || [];
+
+  const weapons = equipment.filter(e => e.weapon_name);
+  const armor = equipment.filter(e => e.armor_name);
+  const items = equipment.filter(e => e.item_name);
+
+  return `
+    <div class="space-y-4">
+
+      ${inventorySection("Weapons", weapons.map(e => e.weapon_name))}
+      ${inventorySection("Armor", armor.map(e => e.armor_name))}
+      ${inventorySection("Items", items.map(e => e.item_name))}
+
+    </div>
+  `;
+}
+
+function inventorySection(title, list) {
+
+  return `
+    <div class="border rounded-lg p-4 bg-zinc-50 dark:bg-zinc-900">
+
+      <div class="text-xs text-zinc-500 tracking-widest mb-2">
+        ${title.toUpperCase()}
+      </div>
+
+      ${
+        list.length === 0
+          ? `<div class="text-sm text-zinc-400 italic">None</div>`
+          : `
+            <ul class="text-sm space-y-1">
+              ${list.map(item => `<li>• ${item}</li>`).join("")}
+            </ul>
+          `
+      }
 
     </div>
   `;
