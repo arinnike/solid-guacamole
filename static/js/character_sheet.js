@@ -336,7 +336,7 @@ function tabsSection(char) {
       </div>
 
       <!-- TAB CONTENT -->
-      <div id="tab-content-${char.id}" class="p-4">
+      <div id="tab-content" class="p-4">
         ${renderTabContent("attributes", char)}
       </div>
 
@@ -346,6 +346,7 @@ function tabsSection(char) {
 
 function switchTab(tabKey, el) {
 
+  // Update tab styles
   document.querySelectorAll(".tab-button").forEach(btn => {
     btn.classList.remove("border-b-2", "border-zinc-900", "dark:border-white");
     btn.classList.add("text-zinc-500");
@@ -354,8 +355,15 @@ function switchTab(tabKey, el) {
   el.classList.add("border-b-2", "border-zinc-900", "dark:border-white");
   el.classList.remove("text-zinc-500");
 
-  document.getElementById("tab-content").innerHTML =
-    renderTabContent(tabKey, window.currentCharacter);
+  // SAFETY CHECK
+  const container = document.getElementById("tab-content");
+
+  if (!container) {
+    console.error("tab-content not found in DOM");
+    return;
+  }
+
+  container.innerHTML = renderTabContent(tabKey, window.currentCharacter);
 }
 
 function renderTabContent(tab, char) {
