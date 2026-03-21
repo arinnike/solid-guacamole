@@ -73,7 +73,10 @@ async function loadCharacter() {
 Render Character
 ================================
 */
+
 function renderCharacter(char) {
+  window.currentCharacter = char;
+
   document.getElementById("char-name").textContent = char.name;
 
   document.getElementById("char-meta").textContent =
@@ -102,56 +105,7 @@ function renderCharacter(char) {
 
   // Character Stats
   document.getElementById("char-stats").innerHTML = `
-
-    <!-- TRAITS -->
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
-
-      <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
-        TRAITS
-      </h2>
-
-      <div class="grid grid-cols-6 gap-3 text-center">
-
-        ${statBox("Agility", char.agility)}
-        ${statBox("Strength", char.strength)}
-        ${statBox("Finesse", char.finesse)}
-        ${statBox("Presence", char.presence)}
-        ${statBox("Instinct", char.instinct)}
-        ${statBox("Knowledge", char.knowledge)}
-
-      </div>
-
-      <!-- DIVIDER -->
-      <div class="my-4 border-t border-zinc-200 dark:border-zinc-700"></div>
-
-      <!-- EXPERIENCES -->
-      <div>
-        <div class="text-xs text-zinc-500 tracking-widest mb-2">
-          EXPERIENCES
-        </div>
-
-        ${renderExperiences(char.experiences)}
-
-      </div>
-
-    </div>
-
-    <!-- STATUS + DEFENSE -->
-    <div class="grid grid-cols-2 gap-4 mt-6">
-
-      ${statusPanel(char)}
-
-      ${defensePanel(char)}
-
-    </div>
-
-    <!-- TABS SECTION -->
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
-
-      ${tabsSection(char)}
-
-    </div>
-
+    ${tabsSection(char)}
   `;
 
   //Debug
@@ -228,51 +182,6 @@ function updateCounter(type, newValue) {
 
   // For now: just reload UI with new value (temporary hack)
   // We'll replace this with real state + API call next step
-}
-
-function combatSummary(char) {
-  return `
-    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
-
-      <div class="grid grid-cols-3 gap-4 items-center text-center">
-
-        <!-- EVASION -->
-        <div>
-          <div class="text-xs text-zinc-500 tracking-widest mb-1">
-            EVASION
-          </div>
-          <div class="text-3xl font-bold">
-            ${char.evasion ?? "—"}
-          </div>
-        </div>
-
-        <!-- HP (placeholder for now) -->
-        <div>
-          <div class="text-xs text-zinc-500 tracking-widest mb-1">
-            HP
-          </div>
-          <div class="text-3xl font-bold">
-            ${char.current_hit_points ?? "—"}
-          </div>
-        </div>
-
-        <!-- THRESHOLDS -->
-        <div>
-          <div class="text-xs text-zinc-500 tracking-widest mb-1">
-            THRESHOLDS
-          </div>
-          <div class="text-sm">
-            <span class="font-semibold">Major:</span> ${char.major_threshold ?? "—"}
-          </div>
-          <div class="text-sm">
-            <span class="font-semibold">Severe:</span> ${char.severe_threshold ?? "—"}
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-  `;
 }
 
 function statusPanel(char) {
@@ -394,18 +303,18 @@ function renderExperiences(experiences) {
 function tabsSection(char) {
 
   const tabs = [
+    { key: "attributes", label: "Attributes" },
     { key: "combat", label: "Combat" },
     { key: "inventory", label: "Inventory" },
     { key: "appearance", label: "Appearance" },
   ];
 
-  // Conditional tabs
   if (char.class_name?.toLowerCase() === "ranger") {
-    tabs.splice(2, 0, { key: "companion", label: "Companion" });
+    tabs.push({ key: "companion", label: "Companion" });
   }
 
   if (char.class_name?.toLowerCase() === "druid") {
-    tabs.splice(2, 0, { key: "beastforms", label: "Beastforms" });
+    tabs.push({ key: "beastforms", label: "Beastforms" });
   }
 
   return `
@@ -427,8 +336,8 @@ function tabsSection(char) {
       </div>
 
       <!-- TAB CONTENT -->
-      <div id="tab-content" class="p-4 min-h-[150px]">
-        ${renderTabContent("combat")}
+      <div id="tab-content-${char.id}" class="p-4">
+        ${renderTabContent("attributes", char)}
       </div>
 
     </div>
@@ -437,7 +346,6 @@ function tabsSection(char) {
 
 function switchTab(tabKey, el) {
 
-  // Update active tab styles
   document.querySelectorAll(".tab-button").forEach(btn => {
     btn.classList.remove("border-b-2", "border-zinc-900", "dark:border-white");
     btn.classList.add("text-zinc-500");
@@ -446,32 +354,74 @@ function switchTab(tabKey, el) {
   el.classList.add("border-b-2", "border-zinc-900", "dark:border-white");
   el.classList.remove("text-zinc-500");
 
-  // Update content
-  document.getElementById("tab-content").innerHTML = renderTabContent(tabKey);
+  document.getElementById("tab-content").innerHTML =
+    renderTabContent(tabKey, window.currentCharacter);
 }
 
-function renderTabContent(tab) {
+function renderTabContent(tab, char) {
 
   switch (tab) {
 
+    case "attributes":
+      return `
+        ${traitsPanel(char)}
+        <div class="mt-6">
+          <div class="grid grid-cols-2 gap-4">
+            ${statusPanel(char)}
+            ${defensePanel(char)}
+          </div>
+        </div>
+      `;
+
     case "combat":
-      return `<div class="text-sm text-zinc-400">Combat details coming soon</div>`;
+      return `<div class="text-sm text-zinc-400">Combat coming soon</div>`;
 
     case "inventory":
       return `<div class="text-sm text-zinc-400">Inventory coming soon</div>`;
 
     case "companion":
-      return `<div class="text-sm text-zinc-400">Companion details coming soon</div>`;
+      return `<div class="text-sm text-zinc-400">Companion coming soon</div>`;
 
     case "beastforms":
       return `<div class="text-sm text-zinc-400">Beastforms coming soon</div>`;
 
     case "appearance":
-      return `<div class="text-sm text-zinc-400">Appearance details coming soon</div>`;
+      return `<div class="text-sm text-zinc-400">Appearance coming soon</div>`;
 
     default:
-      return `<div></div>`;
+      return "";
   }
+}
+
+function traitsPanel(char) {
+  return `
+    <div class="border-2 border-zinc-300 dark:border-zinc-700 rounded-lg p-4 bg-white dark:bg-zinc-800 shadow">
+
+      <h2 class="text-sm font-semibold text-zinc-500 mb-3 tracking-widest">
+        TRAITS
+      </h2>
+
+      <div class="grid grid-cols-6 gap-3 text-center">
+        ${statBox("Agility", char.agility)}
+        ${statBox("Strength", char.strength)}
+        ${statBox("Finesse", char.finesse)}
+        ${statBox("Presence", char.presence)}
+        ${statBox("Instinct", char.instinct)}
+        ${statBox("Knowledge", char.knowledge)}
+      </div>
+
+      <div class="my-4 border-t border-zinc-200 dark:border-zinc-700"></div>
+
+      <div>
+        <div class="text-xs text-zinc-500 tracking-widest mb-2">
+          EXPERIENCES
+        </div>
+
+        ${renderExperiences(char.experiences)}
+      </div>
+
+    </div>
+  `;
 }
 
 /*
