@@ -37,8 +37,8 @@ const wizardState = {
   armor_id: null,
 
   weapons: {
-    primary: null,
-    secondary: null
+    primary_id: null,
+    secondary_id: null
   },
 
   experiences: [],

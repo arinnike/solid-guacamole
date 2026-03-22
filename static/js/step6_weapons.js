@@ -309,35 +309,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btn.addEventListener("click", () => {
 
-    const primaryId =
-      wizardState.weapons.primary_id;
+  const primaryId =
+    wizardState.weapons.primary_id;
 
-    const secondaryId =
-      wizardState.weapons.secondary_id;
+  const secondaryId =
+    wizardState.weapons.secondary_id;
 
-    if (!primaryId) {
-      showWeaponError(
-        "You must select a primary weapon."
-      );
-      return;
-    }
+  console.log("PRIMARY:", primaryId);
+  console.log("SECONDARY:", secondaryId);
 
-    const primary =
-      cachedPrimaryWeapons.find(
-        w => Number(w.id) === Number(primaryId)
-      );
+  if (!primaryId) {
+    showWeaponError(
+      "You must select a primary weapon."
+    );
+    return;
+  }
 
-    if (primary?.burden === "1H" && !secondaryId) {
-      showWeaponError(
-        "This weapon is one-handed. Please select a secondary weapon."
-      );
-      return;
-    }
+  const primary =
+    cachedPrimaryWeapons.find(
+      w => Number(w.id) === Number(primaryId)
+    );
 
-    hideWeaponError();
-    completeStep(6);
-    openStep(7);
-  });
+  if (primary?.burden === "1H" && !secondaryId) {
+    showWeaponError(
+      "This weapon is one-handed. Please select a secondary weapon."
+    );
+    return;
+  }
+
+  hideWeaponError();
+  completeStep(6);
+  openStep(7);
+});
 
 });
 
