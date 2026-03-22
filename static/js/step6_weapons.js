@@ -221,7 +221,7 @@ function applyBurdenRules(primaryWeapon) {
     buttons.forEach(btn => btn.disabled = true);
 
     notice.textContent =
-      "Two-handed weapon selected — secondary weapon disabled.";
+    "Two-handed weapon selected — secondary weapon disabled.";
     notice.classList.remove("hidden");
 
     expandPrimary();
@@ -238,19 +238,23 @@ function applyBurdenRules(primaryWeapon) {
 
 /* ---------- Click Handling ---------- */
 
+/* ---------- Click Handling ---------- */
+
 document.addEventListener("click", (e) => {
 
   const primaryToggle =
-  e.target.closest("#primary-toggle");
+    e.target.closest("#primary-toggle");
 
   const secondaryToggle =
     e.target.closest("#secondary-toggle");
 
-  if (primaryToggle)
+  if (primaryToggle) {
     // expandPrimary(); // optional UX removal
+  }
 
-  if (secondaryToggle)
+  if (secondaryToggle) {
     // expandSecondary(); // optional UX removal
+  }
 
   const primaryBtn =
     e.target.closest(".primary-select-btn");
@@ -276,9 +280,24 @@ document.addEventListener("click", (e) => {
 
     applyBurdenRules(selected);
 
-    // ✅ NEW: clear any previous error
+    // ✅ clear any previous error
     hideWeaponError();
   }
+
+  if (secondaryBtn && !secondaryBtn.disabled) {
+
+    const id =
+      Number(secondaryBtn.closest("tr").dataset.id);
+
+    wizardState.weapons.secondary_id = id;
+
+    updateSecondarySelectionUI(id);
+
+    // ✅ clear error when user fixes issue
+    hideWeaponError();
+  }
+
+});
 
   if (secondaryBtn && !secondaryBtn.disabled) {
 
