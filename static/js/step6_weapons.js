@@ -299,21 +299,6 @@ document.addEventListener("click", (e) => {
 
 });
 
-  if (secondaryBtn && !secondaryBtn.disabled) {
-
-    const id =
-      Number(secondaryBtn.closest("tr").dataset.id);
-
-    wizardState.weapons.secondary_id = id;
-
-    updateSecondarySelectionUI(id);
-
-    // ✅ NEW: clear error if now valid
-    hideWeaponError();
-  }
-
-});
-
 /* ---------- Reset ---------- */
 
 function resetWeaponState() {
