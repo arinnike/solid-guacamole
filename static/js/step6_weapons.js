@@ -221,7 +221,7 @@ function applyBurdenRules(primaryWeapon) {
     buttons.forEach(btn => btn.disabled = true);
 
     notice.textContent =
-      "Secondary weapons cannot be equipped with a two-handed weapon.";
+      "Two-handed weapon selected — secondary weapon disabled.";
     notice.classList.remove("hidden");
 
     expandPrimary();
@@ -247,10 +247,10 @@ document.addEventListener("click", (e) => {
     e.target.closest("#secondary-toggle");
 
   if (primaryToggle)
-    expandPrimary();
+    // expandPrimary(); // optional UX removal
 
   if (secondaryToggle)
-    expandSecondary();
+    // expandSecondary(); // optional UX removal
 
   const primaryBtn =
     e.target.closest(".primary-select-btn");
@@ -275,6 +275,9 @@ document.addEventListener("click", (e) => {
     updateSecondarySelectionUI(null);
 
     applyBurdenRules(selected);
+
+    // ✅ NEW: clear any previous error
+    hideWeaponError();
   }
 
   if (secondaryBtn && !secondaryBtn.disabled) {
@@ -285,6 +288,9 @@ document.addEventListener("click", (e) => {
     wizardState.weapons.secondary_id = id;
 
     updateSecondarySelectionUI(id);
+
+    // ✅ NEW: clear error if now valid
+    hideWeaponError();
   }
 
 });
