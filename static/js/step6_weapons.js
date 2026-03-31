@@ -280,7 +280,7 @@ document.addEventListener("click", (e) => {
 
     applyBurdenRules(selected);
 
-    // ✅ clear any previous error
+    //clear any previous error
     hideWeaponError();
   }
 
@@ -293,7 +293,7 @@ document.addEventListener("click", (e) => {
 
     updateSecondarySelectionUI(id);
 
-    // ✅ clear error when user fixes issue
+    // clear error when user fixes issue
     hideWeaponError();
   }
 
